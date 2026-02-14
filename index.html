@@ -161,7 +161,7 @@ function search(){
   let q=document.getElementById("query").value.toLowerCase();
   history.unshift(q);
   renderHistory();
-  document.getElementById("answer").innerText=data[q] || "Answer not found","www.google.com",;
+  document.getElementById("answer").innerText=data[q] || "Answer not found",;
   goPage(3);
 }
 
