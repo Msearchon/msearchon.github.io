@@ -23,11 +23,13 @@ body{
   align-items:center;
   z-index:1000;
 }
-#splashLogo{
-  font-size:52px;
-  font-weight:bold;
+
+/* SPLASH IMAGE LOGO */
+#splash img{
+  width:140px;
+  height:140px;
+  border-radius:50%;
 }
-#splashLogo span{ color:#4285F4; }
 
 /* COMMON */
 .page{ display:none; padding:22px; }
@@ -93,17 +95,19 @@ body{
   color:#aaa;
 }
 </style>
+
 </head>
 
 <body>
 
-<!-- SPLASH -->
+<!-- SPLASH WITH YOUR IMAGE -->
 <div id="splash">
-  <img src="Screenshot_2026-02-16-18-46-58-87_96b26121e545231a3c569311a54cda96~2.jpg" width="140">
+  <img src="Screenshot_2026-02-16-18-46-58-87_96b26121e545231a3c569311a54cda96~2.jpg">
 </div>
 
 <!-- PAGE 1 -->
 <div id="page1" class="page show">
+
   <div class="header">
     <h1>M Search</h1>
   </div>
@@ -119,36 +123,47 @@ body{
     <h2>Mini Search Engine</h2>
     <p>A simple and fast search experience built for learning.</p>
   </div>
-  
-    <div class="big-box">
-    <h2>🌐 M SEARCH </h2>
-    <p> ALL File information.</p>
+
+  <div class="big-box">
+    <h2>🌐 M SEARCH</h2>
+    <p>All file information.</p>
   </div>
+
 </div>
 
 <!-- PAGE 2 -->
 <div id="page2" class="page">
+
   <input id="query" class="search-pad" placeholder="Search">
+
   <button class="search-btn" onclick="search()">Search</button>
 
   <div class="history" id="history"></div>
+
 </div>
 
 <!-- PAGE 3 -->
 <div id="page3" class="page">
+
   <h2>M Search Result</h2>
-  <p style="font-size:20px"><b>Answer:</b> <span id="answer"></span></p>
+
+  <p style="font-size:20px">
+    <b>Answer:</b> <span id="answer"></span>
+  </p>
+
   <button class="search-btn" onclick="goPage(1)">Back</button>
+
 </div>
 
 <script>
+
 const data={
   "what is python":"Python is a programming language.",
   "what is google":"Google is a search engine.",
   "what is computer":"A computer is an electronic machine.",
-  "what is m search":"🌐 M search is a mini search engine.",
-  "who is m.h":"M.H is a ceo of M Search.",
-  "who create m search":"M.H created M search in 2023."
+  "what is m search":"🌐 M Search is a mini search engine.",
+  "who is m.h":"M.H is the CEO of M Search.",
+  "who create m search":"M.H created M Search in 2023."
 };
 
 let history=[];
@@ -177,9 +192,11 @@ function renderHistory(){
   });
 }
 
+/* SPLASH HIDE AFTER 2 SEC */
 setTimeout(()=>{
   document.getElementById("splash").style.display="none";
 },2000);
+
 </script>
 
 </body>
