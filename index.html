@@ -13,7 +13,7 @@ body{
   color:white;
 }
 
-/* SPLASH */
+/* SPLASH SCREEN */
 #splash{
   position:fixed;
   inset:0;
@@ -21,19 +21,25 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  z-index:1000;
+  z-index:9999;
 }
 
-/* SPLASH IMAGE LOGO */
+/* BIG SPLASH LOGO */
 #splash img{
-  width:140px;
-  height:140px;
+  width:320px;
+  height:320px;
   border-radius:50%;
+  object-fit:cover;
 }
 
 /* COMMON */
-.page{ display:none; padding:22px; }
-.show{ display:block; }
+.page{
+  display:none;
+  padding:22px;
+}
+.show{
+  display:block;
+}
 
 /* HEADER */
 .header{
@@ -78,31 +84,49 @@ body{
   padding:26px;
   margin-top:22px;
 }
+
 .big-box h2{
   font-size:24px;
   margin:0 0 10px;
 }
+
 .big-box p{
   font-size:18px;
   color:#ccc;
 }
 
 /* HISTORY */
-.history{ margin-top:20px; }
+.history{
+  margin-top:20px;
+}
+
 .history-item{
-  padding:10px;
-  font-size:16px;
+  padding:12px;
+  font-size:18px;
   color:#aaa;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+}
+
+/* BLUE DOT */
+.history-item::before{
+  content:"";
+  width:10px;
+  height:10px;
+  background:#4285F4;
+  border-radius:50%;
+  margin-right:12px;
 }
 </style>
-
 </head>
 
 <body>
 
-<!-- SPLASH WITH YOUR IMAGE -->
+<!-- SPLASH SCREEN -->
 <div id="splash">
-  <img src="Screenshot_2026-02-16-18-46-58-87_96b26121e545231a3c569311a54cda96~2.jpg">
+  <!-- YOUR LOGO FILE NAME -->
+  <img src="logo.jpg">
 </div>
 
 <!-- PAGE 1 -->
@@ -148,7 +172,8 @@ body{
   <h2>M Search Result</h2>
 
   <p style="font-size:20px">
-    <b>Answer:</b> <span id="answer"></span>
+  <b>Answer:</b> 
+  <span id="answer"></span>
   </p>
 
   <button class="search-btn" onclick="goPage(1)">Back</button>
@@ -158,43 +183,66 @@ body{
 <script>
 
 const data={
-  "what is python":"Python is a programming language.",
-  "what is google":"Google is a search engine.",
-  "what is computer":"A computer is an electronic machine.",
-  "what is m search":"🌐 M Search is a mini search engine.",
-  "who is m.h":"M.H is the CEO of M Search.",
-  "who create m search":"M.H created M Search in 2023."
+"what is python":"Python is a programming language.",
+"what is google":"Google is a search engine.",
+"what is computer":"A computer is an electronic machine.",
+"what is m search":"M Search is a mini search engine.",
+"who is m.h":"M.H is CEO of M Search.",
+"who create m search":"M.H created M Search in 2023."
 };
 
 let history=[];
 
 function goPage(n){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
-  document.getElementById("page"+n).classList.add("show");
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+document.getElementById("page"+n).classList.add("show");
 }
 
 function search(){
-  let q=document.getElementById("query").value.toLowerCase();
-  history.unshift(q);
-  renderHistory();
-  document.getElementById("answer").innerText=data[q] || "Answer not found";
-  goPage(3);
+
+let q=document.getElementById("query").value.toLowerCase();
+
+if(q==="") return;
+
+history.unshift(q);
+
+renderHistory();
+
+document.getElementById("answer").innerText=
+data[q] || "Answer not found";
+
+goPage(3);
+
 }
 
 function renderHistory(){
-  let h=document.getElementById("history");
-  h.innerHTML="";
-  history.forEach(i=>{
-    let d=document.createElement("div");
-    d.className="history-item";
-    d.innerText=i;
-    h.appendChild(d);
-  });
+
+let h=document.getElementById("history");
+
+h.innerHTML="";
+
+history.forEach(item=>{
+
+let d=document.createElement("div");
+
+d.className="history-item";
+
+d.innerText=item;
+
+/* CLICK HISTORY TO SEARCH AGAIN */
+d.onclick=()=>{
+document.getElementById("query").value=item;
+};
+
+h.appendChild(d);
+
+});
+
 }
 
-/* SPLASH HIDE AFTER 2 SEC */
+/* SPLASH TIMER */
 setTimeout(()=>{
-  document.getElementById("splash").style.display="none";
+document.getElementById("splash").style.display="none";
 },2000);
 
 </script>
