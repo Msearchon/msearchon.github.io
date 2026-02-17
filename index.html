@@ -39,11 +39,61 @@ font-weight:bold;
 .header{
 text-align:center;
 margin-top:40px;
+position:relative;
 }
 
 .header h1{
 font-size:48px;
 margin-bottom:35px;
+}
+
+/* THREE DOT */
+.menu-btn{
+position:absolute;
+right:10px;
+top:0;
+font-size:28px;
+cursor:pointer;
+}
+
+/* MENU BOX */
+.menu-box{
+position:absolute;
+right:10px;
+top:40px;
+background:#1f1f1f;
+padding:15px;
+border-radius:12px;
+display:none;
+width:220px;
+}
+
+.menu-box.show{
+display:block;
+}
+
+.menu-close{
+float:right;
+cursor:pointer;
+font-size:18px;
+color:#aaa;
+}
+
+.menu-title{
+margin-top:10px;
+margin-bottom:10px;
+font-size:18px;
+}
+
+.clear-btn{
+background:green;
+color:white;
+border:none;
+padding:8px;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+width:100%;
 }
 
 /* SEARCH BAR */
@@ -112,6 +162,21 @@ cursor:pointer;
 <!-- PAGE 1 -->  
 <div id="page1" class="page show">        
   <div class="header">        
+
+    <div class="menu-btn" onclick="toggleMenu()">⋮</div>
+
+    <div class="menu-box" id="menuBox">
+
+      <div class="menu-close" onclick="toggleMenu()">✕</div>
+
+      <div class="menu-title">History</div>
+
+      <div id="menuHistory"></div>
+
+      <button class="clear-btn" onclick="clearHistory()">Clear Data</button>
+
+    </div>
+
     <h1>M Search</h1>        
   </div>    
 
@@ -159,6 +224,45 @@ const data={
 };    
 
 let selectedQuestion="";
+let historyData=[];
+
+function toggleMenu(){
+
+let box=document.getElementById("menuBox");
+
+box.classList.toggle("show");
+
+loadMenuHistory();
+
+}
+
+function loadMenuHistory(){
+
+let menu=document.getElementById("menuHistory");
+
+menu.innerHTML="";
+
+historyData.forEach(item=>{
+
+let d=document.createElement("div");
+
+d.className="history-item";
+
+d.innerText=item;
+
+menu.appendChild(d);
+
+});
+
+}
+
+function clearHistory(){
+
+historyData=[];
+
+loadMenuHistory();
+
+}
 
 function goPage(n){  
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));  
@@ -225,6 +329,12 @@ let q=document.getElementById("query").value.toLowerCase();
 if(data[q]){
 
 selectedQuestion=q;
+
+if(!historyData.includes(q)){
+
+historyData.push(q);
+
+}
 
 document.getElementById("answer").innerText=data[q];
 
