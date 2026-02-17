@@ -1,11 +1,19 @@
-<!DOCTYPE html>  <html lang="en">    <head>      <meta charset="UTF-8">        <meta name="viewport" content="width=device-width, initial-scale=1.0">        
-<title>M Search</title>  <style>        
+<!DOCTYPE html>  
+<html lang="en">    
+<head>      
+<meta charset="UTF-8">        
+<meta name="viewport" content="width=device-width, initial-scale=1.0">        
+<title>M Search</title>  
+
+<style>        
 body{        
   margin:0;        
   font-family:Arial, sans-serif;        
   background:#0f0f0f;        
   color:white;        
-}    /* SPLASH */    
+}    
+
+/* SPLASH */    
 #splash{    
 position:fixed;    
 inset:0;    
@@ -15,17 +23,24 @@ justify-content:center;
 align-items:center;    
 z-index:1000;    
 }    
+
 #splashLogo{    
 font-size:52px;    
 font-weight:bold;    
 }    
-#splashLogo span{ color:#4285F4; }  /* COMMON */  
+
+#splashLogo span{ color:#4285F4; }  
+
+/* COMMON */  
 .page{ display:none; padding:22px; }  
-.show{ display:block; }  /* HEADER */
+.show{ display:block; }  
+
+/* HEADER */
 .header{
 text-align:center;
 margin-top:40px;
 }
+
 .header h1{
 font-size:48px;
 margin-bottom:35px;
@@ -64,10 +79,12 @@ border-radius:20px;
 padding:26px;
 margin-top:22px;
 }
+
 .big-box h2{
 font-size:24px;
 margin:0 0 10px;
 }
+
 .big-box p{
 font-size:18px;
 color:#ccc;
@@ -75,34 +92,63 @@ color:#ccc;
 
 /* HISTORY */
 .history{ margin-top:20px; }
+
 .history-item{
 padding:10px;
 font-size:16px;
 color:#aaa;
+cursor:pointer;
 }
-</style>  </head>  <body>  <!-- SPLASH -->  <div id="splash">
+</style>  
+</head>  
 
+<body>  
+
+<!-- SPLASH -->  
+<div id="splash">
   <div id="splashLogo"> M <span> Search </span></div>        
-</div>  <!-- PAGE 1 -->  <div id="page1" class="page show">        
+</div>  
+
+<!-- PAGE 1 -->  
+<div id="page1" class="page show">        
   <div class="header">        
     <h1>M Search</h1>        
-  </div>    <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">    <div class="big-box">        
+  </div>    
+
+  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">    
+
+  <div class="big-box">        
     <h2>Information of Creative World</h2>        
     <p>Explore knowledge, ideas, and information from the world.</p>        
-  </div>    <div class="big-box">        
+  </div>    
+
+  <div class="big-box">        
     <h2>Mini Search Engine</h2>        
     <p>A simple and fast search experience built for learning.</p>        
-  </div>  <div class="big-box">        
-<h2>🌐 M SEARCH </h2>        
-<p> ALL File information.</p>    </div>        
-</div>  <!-- PAGE 2 -->  <div id="page2" class="page">        
-  <input id="query" class="search-pad" placeholder="Search">        
-  <button class="search-btn" onclick="search()">Search</button>    <div class="history" id="history"></div>        
-</div>  <!-- PAGE 3 -->  <div id="page3" class="page">        
+  </div>  
+
+  <div class="big-box">        
+    <h2>🌐 M SEARCH </h2>        
+    <p> ALL File information.</p>    
+  </div>        
+</div>  
+
+<!-- PAGE 2 -->  
+<div id="page2" class="page">        
+  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">        
+  <button class="search-btn" onclick="search()">Search</button>    
+  <div class="history" id="history"></div>        
+</div>  
+
+<!-- PAGE 3 -->  
+<div id="page3" class="page">        
   <h2>M Search Result</h2>        
   <p style="font-size:20px"><b>Answer:</b> <span id="answer"></span></p>        
-  <button class="search-btn" onclick="goPage(1)">Back</button>        
-</div>  <script>        
+  <button class="search-btn" onclick="goBack()">Back</button>        
+</div>  
+
+<script>        
+
 const data={        
   "what is python":"Python is a programming language.",        
   "what is google":"Google is a search engine.",        
@@ -110,31 +156,107 @@ const data={
   "what is m search":"🌐 M search is a mini search engine.",        
   "who is m.h":"M.H is a founder of M Search.",        
   "who create m search":"M.H created M search in 2023."        
-};    let history=[];  function goPage(n){  
+};    
+
+let selectedQuestion="";
+
+function goPage(n){  
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));  
 document.getElementById("page"+n).classList.add("show");  
-}  function search(){
-let q=document.getElementById("query").value.toLowerCase();
-history.unshift(q);
-renderHistory();
-document.getElementById("answer").innerText=data[q] || "Answer not found";
-goPage(3);
 }
 
-function renderHistory(){
+function showSuggestions(){
+
+let q=document.getElementById("query").value.toLowerCase();
 let h=document.getElementById("history");
+
 h.innerHTML="";
-history.forEach(i=>{
+
+if(q==="") return;
+
+for(let key in data){
+
+if(key.includes(q)){
+
 let d=document.createElement("div");
 d.className="history-item";
-d.innerText=i;
+d.innerText=key;
+
+d.onclick=function(){
+
+selectedQuestion=key;
+document.getElementById("query").value=key;
+
+showSelectedOnly();
+
+};
+
 h.appendChild(d);
-});
+
+}
+
+}
+
+}
+
+function showSelectedOnly(){
+
+let h=document.getElementById("history");
+h.innerHTML="";
+
+if(selectedQuestion==="") return;
+
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=selectedQuestion;
+
+d.onclick=function(){
+search();
+};
+
+h.appendChild(d);
+
+}
+
+function search(){
+
+let q=document.getElementById("query").value.toLowerCase();
+
+if(data[q]){
+
+selectedQuestion=q;
+
+document.getElementById("answer").innerText=data[q];
+
+showSelectedOnly();
+
+goPage(3);
+
+}else{
+
+document.getElementById("answer").innerText="Answer not found";
+
+goPage(3);
+
+}
+
+}
+
+function goBack(){
+
+goPage(2);
+
+document.getElementById("query").value=selectedQuestion;
+
+showSelectedOnly();
+
 }
 
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
-</script>  </body>
 
-</html>      
+</script>  
+
+</body>
+</html>
