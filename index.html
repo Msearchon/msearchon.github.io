@@ -39,11 +39,67 @@ font-weight:bold;
 .header{
 text-align:center;
 margin-top:40px;
+position:relative;
 }
 
 .header h1{
 font-size:48px;
 margin-bottom:35px;
+}
+
+/* THREE DOTS */
+.menu-btn{
+position:absolute;
+right:10px;
+top:0;
+font-size:28px;
+cursor:pointer;
+}
+
+/* MENU BOX */
+.menu-box{
+position:absolute;
+right:10px;
+top:40px;
+background:#1f1f1f;
+border-radius:10px;
+padding:10px;
+display:none;
+z-index:999;
+}
+
+.menu-item{
+padding:10px;
+cursor:pointer;
+}
+
+/* HISTORY PANEL */
+.history-panel{
+position:fixed;
+right:10px;
+top:10px;
+width:260px;
+background:#1f1f1f;
+border-radius:10px;
+padding:10px;
+display:none;
+z-index:1000;
+}
+
+.history-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.clear-btn{
+background:green;
+color:white;
+border:none;
+padding:8px;
+width:100%;
+margin-top:10px;
+cursor:pointer;
 }
 
 /* SEARCH BAR */
@@ -90,7 +146,7 @@ font-size:18px;
 color:#ccc;
 }
 
-/* HISTORY */
+/* HISTORY LIST */
 .history{ margin-top:20px; }
 
 .history-item{
@@ -99,25 +155,6 @@ font-size:16px;
 color:#aaa;
 cursor:pointer;
 }
-
-/* NEW PAGE BUTTONS */
-.page-buttons{
-display:flex;
-gap:10px;
-margin-bottom:10px;
-}
-
-.page-btn{
-flex:1;
-height:45px;
-border:none;
-border-radius:10px;
-background:#4285F4;
-color:white;
-font-size:16px;
-cursor:pointer;
-}
-
 </style>  
 </head>  
 
@@ -130,38 +167,52 @@ cursor:pointer;
 
 <!-- PAGE 1 -->  
 <div id="page1" class="page show">        
+
   <div class="header">        
+    <div class="menu-btn" onclick="toggleMenu()">⋮</div>
+    <div id="menuBox" class="menu-box">
+      <div class="menu-item" onclick="openHistory()">History</div>
+      <div class="menu-item">Mode</div>
+    </div>
+
     <h1>M Search</h1>        
   </div>    
 
   <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">    
 
   <div class="big-box">        
-    <h2>Information of Creat World</h2>        
-    <p>Information from the creat world.</p>        
+    <h2>Information of Creative World</h2>        
+    <p>Explore knowledge, ideas, and information from the world.</p>        
   </div>    
 
   <div class="big-box">        
     <h2>Mini Search Engine</h2>        
-    <p>A simple and fast search built for learning.</p>        
+    <p>A simple and fast search experience built for learning.</p>        
   </div>  
 
   <div class="big-box">        
     <h2>🌐 M SEARCH </h2>        
     <p> ALL File information.</p>    
   </div>        
+
 </div>  
+
+<!-- HISTORY PANEL -->
+<div id="historyPanel" class="history-panel">
+
+  <div class="history-header">
+    <b>History</b>
+    <span style="cursor:pointer;" onclick="closeHistory()">✕</span>
+  </div>
+
+  <div id="fullHistory"></div>
+
+  <button class="clear-btn" onclick="clearHistory()">Clear History</button>
+
+</div>
 
 <!-- PAGE 2 -->  
 <div id="page2" class="page">        
-
-  <!-- NEW BUTTONS -->
-  <div class="page-buttons">
-    <button class="page-btn" onclick="goPage(1)">Home</button>
-    <button class="page-btn">কখগ</button>
-    <button class="page-btn" onclick="goPage(3)">Result</button>
-  </div>
-
   <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">        
   <button class="search-btn" onclick="search()">Search</button>    
   <div class="history" id="history"></div>        
@@ -186,12 +237,53 @@ const data={
 };    
 
 let selectedQuestion="";
+let searchHistory=[];
 
+/* MENU */
+function toggleMenu(){
+let m=document.getElementById("menuBox");
+m.style.display=m.style.display=="block"?"none":"block";
+}
+
+/* OPEN HISTORY PANEL */
+function openHistory(){
+document.getElementById("historyPanel").style.display="block";
+updateFullHistory();
+}
+
+/* CLOSE HISTORY */
+function closeHistory(){
+document.getElementById("historyPanel").style.display="none";
+}
+
+/* CLEAR HISTORY */
+function clearHistory(){
+searchHistory=[];
+updateFullHistory();
+}
+
+/* UPDATE FULL HISTORY */
+function updateFullHistory(){
+
+let box=document.getElementById("fullHistory");
+box.innerHTML="";
+
+searchHistory.forEach(item=>{
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=item;
+box.appendChild(d);
+});
+
+}
+
+/* PAGE SWITCH */
 function goPage(n){  
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));  
 document.getElementById("page"+n).classList.add("show");  
 }
 
+/* SUGGESTIONS */
 function showSuggestions(){
 
 let q=document.getElementById("query").value.toLowerCase();
@@ -226,6 +318,7 @@ h.appendChild(d);
 
 }
 
+/* SHOW SELECTED */
 function showSelectedOnly(){
 
 let h=document.getElementById("history");
@@ -245,6 +338,7 @@ h.appendChild(d);
 
 }
 
+/* SEARCH */
 function search(){
 
 let q=document.getElementById("query").value.toLowerCase();
@@ -256,6 +350,8 @@ selectedQuestion=q;
 document.getElementById("answer").innerText=data[q];
 
 showSelectedOnly();
+
+searchHistory.push(q);
 
 goPage(3);
 
@@ -269,6 +365,7 @@ goPage(3);
 
 }
 
+/* BACK */
 function goBack(){
 
 goPage(2);
@@ -279,6 +376,7 @@ showSelectedOnly();
 
 }
 
+/* SPLASH */
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
@@ -286,4 +384,4 @@ document.getElementById("splash").style.display="none";
 </script>  
 
 </body>
-  </html>
+</html>
