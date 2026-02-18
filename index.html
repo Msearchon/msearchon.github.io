@@ -62,10 +62,10 @@ position:absolute;
 right:10px;
 top:40px;
 background:#1f1f1f;
+padding:15px;
 border-radius:10px;
-padding:10px;
 display:none;
-z-index:999;
+width:200px;
 }
 
 .menu-item{
@@ -73,32 +73,25 @@ padding:10px;
 cursor:pointer;
 }
 
-/* HISTORY PANEL */
-.history-panel{
-position:fixed;
-right:10px;
-top:10px;
-width:260px;
-background:#1f1f1f;
-border-radius:10px;
-padding:10px;
-display:none;
-z-index:1000;
+.close-btn{
+position:absolute;
+right:8px;
+top:5px;
+cursor:pointer;
 }
 
-.history-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
+/* NAV BUTTONS */
+.nav-btns{
+margin-bottom:10px;
 }
 
-.clear-btn{
-background:green;
+.nav-btn{
+background:#4285F4;
 color:white;
 border:none;
-padding:8px;
-width:100%;
-margin-top:10px;
+padding:10px 15px;
+margin-right:5px;
+border-radius:8px;
 cursor:pointer;
 }
 
@@ -146,7 +139,7 @@ font-size:18px;
 color:#ccc;
 }
 
-/* HISTORY LIST */
+/* HISTORY */
 .history{ margin-top:20px; }
 
 .history-item{
@@ -154,6 +147,26 @@ padding:10px;
 font-size:16px;
 color:#aaa;
 cursor:pointer;
+}
+
+/* HISTORY PANEL */
+#historyPanel{
+display:none;
+background:#1f1f1f;
+padding:15px;
+margin-top:10px;
+border-radius:10px;
+}
+
+.clear-btn{
+background:green;
+color:white;
+border:none;
+padding:10px;
+margin-top:10px;
+cursor:pointer;
+width:100%;
+border-radius:8px;
 }
 </style>  
 </head>  
@@ -167,14 +180,13 @@ cursor:pointer;
 
 <!-- PAGE 1 -->  
 <div id="page1" class="page show">        
-
   <div class="header">        
     <div class="menu-btn" onclick="toggleMenu()">⋮</div>
-    <div id="menuBox" class="menu-box">
+    <div class="menu-box" id="menuBox">
+      <div class="close-btn" onclick="toggleMenu()">✕</div>
       <div class="menu-item" onclick="openHistory()">History</div>
       <div class="menu-item">Mode</div>
     </div>
-
     <h1>M Search</h1>        
   </div>    
 
@@ -194,28 +206,26 @@ cursor:pointer;
     <h2>🌐 M SEARCH </h2>        
     <p> ALL File information.</p>    
   </div>        
-
 </div>  
-
-<!-- HISTORY PANEL -->
-<div id="historyPanel" class="history-panel">
-
-  <div class="history-header">
-    <b>History</b>
-    <span style="cursor:pointer;" onclick="closeHistory()">✕</span>
-  </div>
-
-  <div id="fullHistory"></div>
-
-  <button class="clear-btn" onclick="clearHistory()">Clear History</button>
-
-</div>
 
 <!-- PAGE 2 -->  
 <div id="page2" class="page">        
-  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">        
-  <button class="search-btn" onclick="search()">Search</button>    
-  <div class="history" id="history"></div>        
+
+<div class="nav-btns">
+<button class="nav-btn" onclick="goPage(1)">Page One</button>
+<button class="nav-btn">Page Two</button>
+<button class="nav-btn" onclick="goPage(3)">Page Three</button>
+</div>
+
+<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">        
+<button class="search-btn" onclick="search()">Search</button>    
+
+<div id="historyPanel">
+<div id="fullHistory"></div>
+<button class="clear-btn" onclick="clearHistory()">Clear History</button>
+</div>
+
+<div class="history" id="history"></div>        
 </div>  
 
 <!-- PAGE 3 -->  
@@ -239,51 +249,39 @@ const data={
 let selectedQuestion="";
 let searchHistory=[];
 
-/* MENU */
 function toggleMenu(){
-let m=document.getElementById("menuBox");
-m.style.display=m.style.display=="block"?"none":"block";
+let box=document.getElementById("menuBox");
+box.style.display=box.style.display==="block"?"none":"block";
 }
 
-/* OPEN HISTORY PANEL */
 function openHistory(){
+goPage(2);
 document.getElementById("historyPanel").style.display="block";
-updateFullHistory();
+showFullHistory();
+toggleMenu();
 }
 
-/* CLOSE HISTORY */
-function closeHistory(){
-document.getElementById("historyPanel").style.display="none";
-}
-
-/* CLEAR HISTORY */
-function clearHistory(){
-searchHistory=[];
-updateFullHistory();
-}
-
-/* UPDATE FULL HISTORY */
-function updateFullHistory(){
-
-let box=document.getElementById("fullHistory");
-box.innerHTML="";
-
+function showFullHistory(){
+let div=document.getElementById("fullHistory");
+div.innerHTML="";
 searchHistory.forEach(item=>{
 let d=document.createElement("div");
 d.className="history-item";
 d.innerText=item;
-box.appendChild(d);
+div.appendChild(d);
 });
-
 }
 
-/* PAGE SWITCH */
+function clearHistory(){
+searchHistory=[];
+showFullHistory();
+}
+
 function goPage(n){  
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));  
 document.getElementById("page"+n).classList.add("show");  
 }
 
-/* SUGGESTIONS */
 function showSuggestions(){
 
 let q=document.getElementById("query").value.toLowerCase();
@@ -318,7 +316,6 @@ h.appendChild(d);
 
 }
 
-/* SHOW SELECTED */
 function showSelectedOnly(){
 
 let h=document.getElementById("history");
@@ -338,7 +335,6 @@ h.appendChild(d);
 
 }
 
-/* SEARCH */
 function search(){
 
 let q=document.getElementById("query").value.toLowerCase();
@@ -347,11 +343,11 @@ if(data[q]){
 
 selectedQuestion=q;
 
+searchHistory.push(q);
+
 document.getElementById("answer").innerText=data[q];
 
 showSelectedOnly();
-
-searchHistory.push(q);
 
 goPage(3);
 
@@ -365,7 +361,6 @@ goPage(3);
 
 }
 
-/* BACK */
 function goBack(){
 
 goPage(2);
@@ -376,7 +371,6 @@ showSelectedOnly();
 
 }
 
-/* SPLASH */
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
@@ -384,4 +378,4 @@ document.getElementById("splash").style.display="none";
 </script>  
 
 </body>
-</html>
+  </html>
