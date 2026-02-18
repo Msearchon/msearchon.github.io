@@ -39,60 +39,11 @@ font-weight:bold;
 .header{
 text-align:center;
 margin-top:40px;
-position:relative;
 }
 
 .header h1{
 font-size:48px;
 margin-bottom:35px;
-}
-
-/* THREE DOTS */
-.menu-btn{
-position:absolute;
-right:10px;
-top:0;
-font-size:28px;
-cursor:pointer;
-}
-
-/* MENU BOX */
-.menu-box{
-position:absolute;
-right:10px;
-top:40px;
-background:#1f1f1f;
-padding:15px;
-border-radius:10px;
-display:none;
-width:200px;
-}
-
-.menu-item{
-padding:10px;
-cursor:pointer;
-}
-
-.close-btn{
-position:absolute;
-right:8px;
-top:5px;
-cursor:pointer;
-}
-
-/* NAV BUTTONS */
-.nav-btns{
-margin-bottom:10px;
-}
-
-.nav-btn{
-background:#4285F4;
-color:white;
-border:none;
-padding:10px 15px;
-margin-right:5px;
-border-radius:8px;
-cursor:pointer;
 }
 
 /* SEARCH BAR */
@@ -149,25 +100,24 @@ color:#aaa;
 cursor:pointer;
 }
 
-/* HISTORY PANEL */
-#historyPanel{
-display:none;
-background:#1f1f1f;
-padding:15px;
-margin-top:10px;
-border-radius:10px;
+/* NEW PAGE BUTTONS */
+.page-buttons{
+display:flex;
+gap:10px;
+margin-bottom:10px;
 }
 
-.clear-btn{
-background:green;
-color:white;
+.page-btn{
+flex:1;
+height:45px;
 border:none;
-padding:10px;
-margin-top:10px;
+border-radius:10px;
+background:#4285F4;
+color:white;
+font-size:16px;
 cursor:pointer;
-width:100%;
-border-radius:8px;
 }
+
 </style>  
 </head>  
 
@@ -181,12 +131,6 @@ border-radius:8px;
 <!-- PAGE 1 -->  
 <div id="page1" class="page show">        
   <div class="header">        
-    <div class="menu-btn" onclick="toggleMenu()">⋮</div>
-    <div class="menu-box" id="menuBox">
-      <div class="close-btn" onclick="toggleMenu()">✕</div>
-      <div class="menu-item" onclick="openHistory()">History</div>
-      <div class="menu-item">Mode</div>
-    </div>
     <h1>M Search</h1>        
   </div>    
 
@@ -211,21 +155,16 @@ border-radius:8px;
 <!-- PAGE 2 -->  
 <div id="page2" class="page">        
 
-<div class="nav-btns">
-<button class="nav-btn" onclick="goPage(1)">Page One</button>
-<button class="nav-btn">Page Two</button>
-<button class="nav-btn" onclick="goPage(3)">Page Three</button>
-</div>
+  <!-- NEW BUTTONS -->
+  <div class="page-buttons">
+    <button class="page-btn" onclick="goPage(1)">Home</button>
+    <button class="page-btn">This</button>
+    <button class="page-btn" onclick="goPage(3)">Result</button>
+  </div>
 
-<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">        
-<button class="search-btn" onclick="search()">Search</button>    
-
-<div id="historyPanel">
-<div id="fullHistory"></div>
-<button class="clear-btn" onclick="clearHistory()">Clear History</button>
-</div>
-
-<div class="history" id="history"></div>        
+  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">        
+  <button class="search-btn" onclick="search()">Search</button>    
+  <div class="history" id="history"></div>        
 </div>  
 
 <!-- PAGE 3 -->  
@@ -247,35 +186,6 @@ const data={
 };    
 
 let selectedQuestion="";
-let searchHistory=[];
-
-function toggleMenu(){
-let box=document.getElementById("menuBox");
-box.style.display=box.style.display==="block"?"none":"block";
-}
-
-function openHistory(){
-goPage(2);
-document.getElementById("historyPanel").style.display="block";
-showFullHistory();
-toggleMenu();
-}
-
-function showFullHistory(){
-let div=document.getElementById("fullHistory");
-div.innerHTML="";
-searchHistory.forEach(item=>{
-let d=document.createElement("div");
-d.className="history-item";
-d.innerText=item;
-div.appendChild(d);
-});
-}
-
-function clearHistory(){
-searchHistory=[];
-showFullHistory();
-}
 
 function goPage(n){  
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));  
@@ -343,8 +253,6 @@ if(data[q]){
 
 selectedQuestion=q;
 
-searchHistory.push(q);
-
 document.getElementById("answer").innerText=data[q];
 
 showSelectedOnly();
@@ -378,4 +286,4 @@ document.getElementById("splash").style.display="none";
 </script>  
 
 </body>
-  </html>
+    </html>
