@@ -31,14 +31,13 @@ font-weight:bold;
 
 #splashLogo span{ color:#4285F4; }  
 
-/* COMMON */  
 .page{ display:none; padding:22px; }  
 .show{ display:block; }  
 
-/* HEADER */
 .header{
 text-align:center;
 margin-top:40px;
+position:relative;
 }
 
 .header h1{
@@ -46,7 +45,36 @@ font-size:48px;
 margin-bottom:35px;
 }
 
-/* SEARCH BAR */
+/* THREE DOT BUTTON */
+.menu-btn{
+position:absolute;
+right:10px;
+top:-30px;
+font-size:28px;
+cursor:pointer;
+}
+
+/* MENU BOX */
+.menu-box{
+position:absolute;
+right:10px;
+top:10px;
+background:#1f1f1f;
+border-radius:10px;
+padding:10px;
+display:none;
+}
+
+.menu-item{
+padding:8px;
+cursor:pointer;
+}
+
+.menu-item:hover{
+background:#333;
+}
+
+/* SEARCH */
 .search-pad{
 width:100%;
 height:64px;
@@ -59,7 +87,6 @@ color:white;
 outline:none;
 }
 
-/* BUTTON */
 .search-btn{
 width:100%;
 height:56px;
@@ -72,7 +99,6 @@ color:white;
 cursor:pointer;
 }
 
-/* BIG BOXES */
 .big-box{
 background:#1f1f1f;
 border-radius:20px;
@@ -90,7 +116,6 @@ font-size:18px;
 color:#ccc;
 }
 
-/* HISTORY */
 .history{ margin-top:20px; }
 
 .history-item{
@@ -100,7 +125,6 @@ color:#aaa;
 cursor:pointer;
 }
 
-/* PAGE BUTTONS */
 .page-buttons{
 display:flex;
 gap:10px;
@@ -118,69 +142,6 @@ font-size:16px;
 cursor:pointer;
 }
 
-/* THREE DOT BUTTON */
-.menu-btn{
-position:fixed;
-top:10px;
-right:15px;
-font-size:26px;
-cursor:pointer;
-z-index:2000;
-}
-
-/* POPUP BOX */
-#menuBox{
-position:fixed;
-top:45px;
-right:15px;
-background:#1f1f1f;
-padding:10px;
-border-radius:10px;
-display:none;
-z-index:2000;
-width:140px;
-}
-
-.menu-item{
-padding:10px;
-cursor:pointer;
-}
-
-.menu-item:hover{
-background:#333;
-}
-
-.close-x{
-position:absolute;
-top:5px;
-right:8px;
-cursor:pointer;
-color:red;
-}
-
-/* HISTORY PAGE */
-#historyPage{
-position:fixed;
-inset:0;
-background:#0f0f0f;
-display:none;
-padding:20px;
-z-index:3000;
-overflow:auto;
-}
-
-.clear-btn{
-background:green;
-color:white;
-border:none;
-padding:12px;
-width:100%;
-border-radius:10px;
-margin-top:20px;
-font-size:16px;
-cursor:pointer;
-}
-
 </style>  
 </head>  
 
@@ -188,123 +149,141 @@ cursor:pointer;
 
 <!-- SPLASH -->  
 <div id="splash">
-  <div id="splashLogo"> M <span> Search </span></div>        
+<div id="splashLogo"> M <span> Search </span></div>        
 </div>  
-
-<!-- THREE DOT BUTTON -->
-<div class="menu-btn" onclick="toggleMenu()">⋮</div>
-
-<!-- MENU BOX -->
-<div id="menuBox">
-  <div class="close-x" onclick="toggleMenu()">✕</div>
-  <div class="menu-item" onclick="openHistory()">History</div>
-  <div class="menu-item">Mode</div>
-</div>
-
-<!-- HISTORY PAGE -->
-<div id="historyPage">
-  <h2>Search History</h2>
-  <div id="fullHistory"></div>
-  <button class="clear-btn" onclick="clearHistory()">Clear History</button>
-</div>
 
 <!-- PAGE 1 -->  
 <div id="page1" class="page show">        
-  <div class="header">        
-    <h1>M Search</h1>        
-  </div>    
 
-  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">    
+<div class="header">        
+<h1>M Search</h1>        
 
-  <div class="big-box">        
-    <h2>Information of Creative World</h2>        
-    <p>Explore knowledge, ideas, and information from the world.</p>        
-  </div>    
+<div class="menu-btn" onclick="toggleMenu()">⋮</div>
 
-  <div class="big-box">        
-    <h2>Mini Search Engine</h2>        
-    <p>A simple and fast search experience built for learning.</p>        
-  </div>  
+<div id="menuBox" class="menu-box">
+<div class="menu-item" onclick="openHistory()">History</div>
+<div class="menu-item">Mode</div>
+</div>
 
-  <div class="big-box">        
-    <h2>🌐 M SEARCH </h2>        
-    <p> ALL File information.</p>    
-  </div>        
+</div>    
+
+<input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">    
+
+<div class="big-box">        
+<h2>Information of Creative World</h2>        
+<p>Explore knowledge, ideas, and information from the world.</p>        
+</div>    
+
+<div class="big-box">        
+<h2>Mini Search Engine</h2>        
+<p>A simple and fast search experience built for learning.</p>        
+</div>  
+
+<div class="big-box">        
+<h2>🌐 M SEARCH </h2>        
+<p> ALL File information.</p>    
+</div>        
+
 </div>  
 
 <!-- PAGE 2 -->  
 <div id="page2" class="page">        
 
-  <div class="page-buttons">
-    <button class="page-btn" onclick="goPage(1)">Page One</button>
-    <button class="page-btn">Page Two</button>
-    <button class="page-btn" onclick="goPage(3)">Page Three</button>
-  </div>
+<div class="page-buttons">
+<button class="page-btn" onclick="goPage(1)">Page One</button>
+<button class="page-btn">Page Two</button>
+<button class="page-btn" onclick="goPage(3)">Page Three</button>
+</div>
 
-  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">        
-  <button class="search-btn" onclick="search()">Search</button>    
-  <div class="history" id="history"></div>        
+<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">        
+<button class="search-btn" onclick="search()">Search</button>    
+<div class="history" id="history"></div>        
+
 </div>  
 
 <!-- PAGE 3 -->  
 <div id="page3" class="page">        
-  <h2>M Search Result</h2>        
-  <p style="font-size:20px"><b>Answer:</b> <span id="answer"></span></p>        
-  <button class="search-btn" onclick="goBack()">Back</button>        
+<h2>M Search Result</h2>        
+<p style="font-size:20px"><b>Answer:</b> <span id="answer"></span></p>        
+<button class="search-btn" onclick="goBack()">Back</button>        
 </div>  
+
+<!-- HISTORY PAGE -->
+<div id="historyPage" class="page">
+
+<div style="display:flex;justify-content:space-between;align-items:center;">
+<h2>Search History</h2>
+
+<div onclick="closeHistory()" style="font-size:26px;cursor:pointer;color:red;">
+✕
+</div>
+
+</div>
+
+<div id="fullHistory" class="history"></div>
+
+<button class="search-btn" style="background:green;" onclick="clearHistory()">
+Clear History
+</button>
+
+</div>
 
 <script>        
 
 const data={        
-  "what is python":"Python is a programming language.",        
-  "what is google":"Google is a search engine.",        
-  "what is computer":"A computer is an electronic machine.",        
-  "what is m search":"🌐 M search is a mini search engine.",        
-  "who is m.h":"M.H is a founder of M Search.",        
-  "who create m search":"M.H created M search in 2023."        
+"what is python":"Python is a programming language.",        
+"what is google":"Google is a search engine.",        
+"what is computer":"A computer is an electronic machine.",        
+"what is m search":"🌐 M search is a mini search engine.",        
+"who is m.h":"M.H is a founder of M Search.",        
+"who create m search":"M.H created M search in 2023."        
 };    
 
 let selectedQuestion="";
-let searchHistory=[];
+let historyList=[];
 
-/* MENU */
-function toggleMenu(){
-let box=document.getElementById("menuBox");
-box.style.display=box.style.display==="block"?"none":"block";
-}
-
-/* OPEN HISTORY PAGE */
-function openHistory(){
-document.getElementById("historyPage").style.display="block";
-toggleMenu();
-showFullHistory();
-}
-
-/* SHOW FULL HISTORY */
-function showFullHistory(){
-let box=document.getElementById("fullHistory");
-box.innerHTML="";
-searchHistory.forEach(item=>{
-let div=document.createElement("div");
-div.className="history-item";
-div.innerText=item;
-box.appendChild(div);
-});
-}
-
-/* CLEAR HISTORY */
-function clearHistory(){
-searchHistory=[];
-showFullHistory();
-}
-
-/* PAGE SWITCH */
 function goPage(n){  
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));  
 document.getElementById("page"+n).classList.add("show");  
 }
 
-/* SUGGESTIONS */
+function toggleMenu(){
+let m=document.getElementById("menuBox");
+m.style.display=m.style.display=="block"?"none":"block";
+}
+
+function saveHistory(q){
+if(!historyList.includes(q)){
+historyList.push(q);
+}
+}
+
+function openHistory(){
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+document.getElementById("historyPage").classList.add("show");
+
+let box=document.getElementById("fullHistory");
+box.innerHTML="";
+
+historyList.forEach(item=>{
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=item;
+box.appendChild(d);
+});
+
+}
+
+function closeHistory(){
+goPage(1);
+}
+
+function clearHistory(){
+historyList=[];
+document.getElementById("fullHistory").innerHTML="";
+}
+
 function showSuggestions(){
 
 let q=document.getElementById("query").value.toLowerCase();
@@ -358,16 +337,15 @@ h.appendChild(d);
 
 }
 
-/* SEARCH */
 function search(){
 
 let q=document.getElementById("query").value.toLowerCase();
 
-searchHistory.push(q);
-
 if(data[q]){
 
 selectedQuestion=q;
+
+saveHistory(q);
 
 document.getElementById("answer").innerText=data[q];
 
@@ -395,7 +373,6 @@ showSelectedOnly();
 
 }
 
-/* SPLASH */
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
@@ -403,4 +380,4 @@ document.getElementById("splash").style.display="none";
 </script>  
 
 </body>
-</html>
+  </html>
