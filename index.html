@@ -100,7 +100,7 @@ color:#aaa;
 cursor:pointer;
 }
 
-/* NEW PAGE BUTTONS */
+/* PAGE BUTTONS */
 .page-buttons{
 display:flex;
 gap:10px;
@@ -118,6 +118,69 @@ font-size:16px;
 cursor:pointer;
 }
 
+/* THREE DOT BUTTON */
+.menu-btn{
+position:fixed;
+top:10px;
+right:15px;
+font-size:26px;
+cursor:pointer;
+z-index:2000;
+}
+
+/* POPUP BOX */
+#menuBox{
+position:fixed;
+top:45px;
+right:15px;
+background:#1f1f1f;
+padding:10px;
+border-radius:10px;
+display:none;
+z-index:2000;
+width:140px;
+}
+
+.menu-item{
+padding:10px;
+cursor:pointer;
+}
+
+.menu-item:hover{
+background:#333;
+}
+
+.close-x{
+position:absolute;
+top:5px;
+right:8px;
+cursor:pointer;
+color:red;
+}
+
+/* HISTORY PAGE */
+#historyPage{
+position:fixed;
+inset:0;
+background:#0f0f0f;
+display:none;
+padding:20px;
+z-index:3000;
+overflow:auto;
+}
+
+.clear-btn{
+background:green;
+color:white;
+border:none;
+padding:12px;
+width:100%;
+border-radius:10px;
+margin-top:20px;
+font-size:16px;
+cursor:pointer;
+}
+
 </style>  
 </head>  
 
@@ -127,6 +190,23 @@ cursor:pointer;
 <div id="splash">
   <div id="splashLogo"> M <span> Search </span></div>        
 </div>  
+
+<!-- THREE DOT BUTTON -->
+<div class="menu-btn" onclick="toggleMenu()">⋮</div>
+
+<!-- MENU BOX -->
+<div id="menuBox">
+  <div class="close-x" onclick="toggleMenu()">✕</div>
+  <div class="menu-item" onclick="openHistory()">History</div>
+  <div class="menu-item">Mode</div>
+</div>
+
+<!-- HISTORY PAGE -->
+<div id="historyPage">
+  <h2>Search History</h2>
+  <div id="fullHistory"></div>
+  <button class="clear-btn" onclick="clearHistory()">Clear History</button>
+</div>
 
 <!-- PAGE 1 -->  
 <div id="page1" class="page show">        
@@ -155,10 +235,10 @@ cursor:pointer;
 <!-- PAGE 2 -->  
 <div id="page2" class="page">        
 
-  <!-- NEW BUTTONS -->
   <div class="page-buttons">
-    <button class="page-btn" onclick="goPage(1)">Home</button>
-    <button class="page-btn" onclick="goPage(3)">Result</button>
+    <button class="page-btn" onclick="goPage(1)">Page One</button>
+    <button class="page-btn">Page Two</button>
+    <button class="page-btn" onclick="goPage(3)">Page Three</button>
   </div>
 
   <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">        
@@ -185,12 +265,46 @@ const data={
 };    
 
 let selectedQuestion="";
+let searchHistory=[];
 
+/* MENU */
+function toggleMenu(){
+let box=document.getElementById("menuBox");
+box.style.display=box.style.display==="block"?"none":"block";
+}
+
+/* OPEN HISTORY PAGE */
+function openHistory(){
+document.getElementById("historyPage").style.display="block";
+toggleMenu();
+showFullHistory();
+}
+
+/* SHOW FULL HISTORY */
+function showFullHistory(){
+let box=document.getElementById("fullHistory");
+box.innerHTML="";
+searchHistory.forEach(item=>{
+let div=document.createElement("div");
+div.className="history-item";
+div.innerText=item;
+box.appendChild(div);
+});
+}
+
+/* CLEAR HISTORY */
+function clearHistory(){
+searchHistory=[];
+showFullHistory();
+}
+
+/* PAGE SWITCH */
 function goPage(n){  
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));  
 document.getElementById("page"+n).classList.add("show");  
 }
 
+/* SUGGESTIONS */
 function showSuggestions(){
 
 let q=document.getElementById("query").value.toLowerCase();
@@ -244,9 +358,12 @@ h.appendChild(d);
 
 }
 
+/* SEARCH */
 function search(){
 
 let q=document.getElementById("query").value.toLowerCase();
+
+searchHistory.push(q);
 
 if(data[q]){
 
@@ -278,6 +395,7 @@ showSelectedOnly();
 
 }
 
+/* SPLASH */
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
@@ -285,4 +403,4 @@ document.getElementById("splash").style.display="none";
 </script>  
 
 </body>
-    </html>
+</html>
