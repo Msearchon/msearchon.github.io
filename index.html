@@ -1,39 +1,40 @@
-<!DOCTYPE html>  
-<html lang="en">    
-<head>      
-<meta charset="UTF-8">        
-<meta name="viewport" content="width=device-width, initial-scale=1.0">        
-<title>M Search</title>  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M Search</title>
 
-<style>        
-body{        
-  margin:0;        
-  font-family:Arial, sans-serif;        
-  background:#0f0f0f;        
-  color:white;        
-}    
+<style>
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#0f0f0f;
+color:white;
+overflow-x:hidden;
+}
 
-/* SPLASH */    
-#splash{    
-position:fixed;    
-inset:0;    
-background:#0f0f0f;    
-display:flex;    
-justify-content:center;    
-align-items:center;    
-z-index:1000;    
-}    
+/* SPLASH */
+#splash{
+position:fixed;
+inset:0;
+background:#0f0f0f;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
 
-#splashLogo{    
-font-size:52px;    
-font-weight:bold;    
-}    
+#splashLogo{
+font-size:52px;
+font-weight:bold;
+}
 
-#splashLogo span{ color:#4285F4; }  
+#splashLogo span{ color:#4285F4; }
 
-/* COMMON */  
-.page{ display:none; padding:22px; }  
-.show{ display:block; }  
+/* COMMON */
+.page{ display:none; padding:22px; }
+.show{ display:block; }
 
 /* HEADER */
 .header{
@@ -100,7 +101,7 @@ color:#aaa;
 cursor:pointer;
 }
 
-/* NEW PAGE BUTTONS */
+/* PAGE BUTTONS */
 .page-buttons{
 display:flex;
 gap:10px;
@@ -118,83 +119,199 @@ font-size:16px;
 cursor:pointer;
 }
 
-</style>  
-</head>  
-
-<body>  
-
-<!-- SPLASH -->  
-<div id="splash">
-  <div id="splashLogo"> M <span> Search </span></div>        
-</div>  
-
-<!-- PAGE 1 -->  
-<div id="page1" class="page show">        
-  <div class="header">        
-    <h1>M Search</h1>        
-  </div>    
-
-  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">    
-
-  <div class="big-box">        
-    <h2>Information of Creative World</h2>        
-    <p>Explore knowledge, ideas, and information from the world.</p>        
-  </div>    
-
-  <div class="big-box">        
-    <h2>Mini Search Engine</h2>        
-    <p>A simple and fast search experience built for learning.</p>        
-  </div>  
-
-  <div class="big-box">        
-    <h2>🌐 M SEARCH </h2>        
-    <p> ALL File information.</p>    
-  </div>        
-</div>  
-
-<!-- PAGE 2 -->  
-<div id="page2" class="page">        
-
-  <div class="page-buttons">
-    <button class="page-btn" onclick="goPage(1)">Page One</button>
-    <button class="page-btn">Page Two</button>
-    <button class="page-btn" onclick="goPage(3)">Page Three</button>
-  </div>
-
-  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">        
-  <button class="search-btn" onclick="search()">Search</button>    
-  <div class="history" id="history"></div>        
-</div>  
-
-<!-- PAGE 3 -->  
-<div id="page3" class="page">        
-  <h2>M Search Result</h2>        
-  <p style="font-size:20px"><b>Answer:</b> <span id="answer"></span></p>        
-  <button class="search-btn" onclick="goBack()">Back</button>        
-</div>  
-
-<script>        
-
-const data={        
-  "what is python":"Python is a programming language.",        
-  "what is google":"Google is a search engine.",        
-  "what is computer":"A computer is an electronic machine.",        
-  "what is m search":"🌐 M search is a mini search engine.",        
-  "who is m.h":"M.H is a founder of M Search.",        
-  "who create m search":"M.H created M search in 2023."        
-};    
-
-let selectedQuestion="";
-
-function goPage(n){  
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));  
-document.getElementById("page"+n).classList.add("show");  
+/* THREE DOT */
+#menuBtn{
+position:absolute;
+top:15px;
+right:15px;
+font-size:28px;
+cursor:pointer;
 }
 
-/* LETTER-BASED SUGGESTION SYSTEM (RESTORED) */
+/* MENU BOX */
+#menuBox{
+position:absolute;
+top:55px;
+right:15px;
+background:#1f1f1f;
+border-radius:10px;
+padding:10px;
+display:none;
+}
+
+.menu-item{
+padding:10px;
+cursor:pointer;
+}
+
+/* HISTORY PAGE */
+#historyPage{
+position:fixed;
+inset:0;
+background:#0f0f0f;
+padding:20px;
+display:none;
+z-index:999;
+}
+
+#clearBtn{
+background:green;
+color:white;
+border:none;
+padding:10px;
+margin-top:20px;
+width:100%;
+}
+
+#closeHistory{
+position:absolute;
+top:15px;
+right:20px;
+font-size:26px;
+cursor:pointer;
+}
+
+.light{
+background:white;
+color:black;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="splash">
+<div id="splashLogo"> M <span> Search </span></div>
+</div>
+
+<!-- THREE DOT -->
+<div id="menuBtn" onclick="toggleMenu()">⋮</div>
+
+<div id="menuBox">
+<div class="menu-item" onclick="openHistory()">History</div>
+<div class="menu-item" onclick="toggleMode()">Mode</div>
+</div>
+
+<!-- HISTORY PAGE -->
+<div id="historyPage">
+<div id="closeHistory" onclick="closeHistory()">✕</div>
+<h2>History</h2>
+<div id="fullHistory"></div>
+<button id="clearBtn" onclick="clearHistory()">Clear History</button>
+</div>
+
+<!-- PAGE 1 -->
+<div id="page1" class="page show">
+
+<div class="header">
+<h1>M Search</h1>
+</div>
+
+<input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">
+
+<div class="big-box">
+<h2>Information of Creative World</h2>
+<p>Explore knowledge, ideas, and information from the world.</p>
+</div>
+
+<div class="big-box">
+<h2>Mini Search Engine</h2>
+<p>A simple and fast search experience built for learning.</p>
+</div>
+
+<div class="big-box">
+<h2>🌐 M SEARCH </h2>
+<p> ALL File information.</p>
+</div>
+
+</div>
+
+<!-- PAGE 2 -->
+<div id="page2" class="page">
+
+<div class="page-buttons">
+<button class="page-btn" onclick="goPage(1)">Page One</button>
+<button class="page-btn">Page Two</button>
+<button class="page-btn" onclick="goPage(3)">Page Three</button>
+</div>
+
+<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">
+<button class="search-btn" onclick="search()">Search</button>
+
+<div class="history" id="history"></div>
+
+</div>
+
+<!-- PAGE 3 -->
+<div id="page3" class="page">
+
+<h2>M Search Result</h2>
+
+<p style="font-size:20px">
+<b>Answer:</b>
+<span id="answer"></span>
+</p>
+
+<button class="search-btn" onclick="goBack()">Back</button>
+
+</div>
+
+<script>
+
+const data={
+"what is python":"Python is a programming language.",
+"what is google":"Google is a search engine.",
+"what is computer":"A computer is an electronic machine.",
+"what is m search":"M search is a mini search engine.",
+"who is m.h":"M.H is founder.",
+"who create m search":"Created in 2023."
+};
+
+let selectedQuestion="";
+let historyList=[];
+
+/* PAGE */
+function goPage(n){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+document.getElementById("page"+n).classList.add("show");
+}
+
+/* SEARCH */
+function search(){
+
+let q=document.getElementById("query").value.toLowerCase();
+
+if(q==="") return;
+
+selectedQuestion=q;
+
+historyList.unshift(q);
+
+saveHistory();
+
+document.getElementById("answer").innerText=data[q] || "Answer not found";
+
+goPage(3);
+
+}
+
+/* BACK */
+function goBack(){
+
+goPage(2);
+
+document.getElementById("query").value=selectedQuestion;
+
+showSuggestions();
+
+}
+
+/* SUGGESTIONS */
 function showSuggestions(){
 
 let q=document.getElementById("query").value.toLowerCase();
+
 let h=document.getElementById("history");
 
 h.innerHTML="";
@@ -206,14 +323,14 @@ for(let key in data){
 if(key.includes(q)){
 
 let d=document.createElement("div");
+
 d.className="history-item";
+
 d.innerText=key;
 
 d.onclick=function(){
 
-selectedQuestion=key;
 document.getElementById("query").value=key;
-search();
 
 };
 
@@ -225,40 +342,94 @@ h.appendChild(d);
 
 }
 
-function search(){
+/* MENU */
+function toggleMenu(){
 
-let q=document.getElementById("query").value.toLowerCase();
+let m=document.getElementById("menuBox");
 
-if(data[q]){
-
-selectedQuestion=q;
-document.getElementById("answer").innerText=data[q];
-
-}else{
-
-document.getElementById("answer").innerText="Answer not found";
+m.style.display=m.style.display==="block"?"none":"block";
 
 }
 
-goPage(3);
+/* MODE */
+function toggleMode(){
+
+document.body.classList.toggle("light");
 
 }
 
-function goBack(){
+/* HISTORY OPEN */
+function openHistory(){
 
-goPage(2);
+document.getElementById("historyPage").style.display="block";
 
-document.getElementById("query").value=selectedQuestion;
-
-showSuggestions();
+renderFullHistory();
 
 }
+
+/* CLOSE */
+function closeHistory(){
+
+document.getElementById("historyPage").style.display="none";
+
+}
+
+/* SAVE */
+function saveHistory(){
+
+localStorage.setItem("m_history",JSON.stringify(historyList));
+
+}
+
+/* LOAD */
+function loadHistory(){
+
+let h=localStorage.getItem("m_history");
+
+if(h) historyList=JSON.parse(h);
+
+}
+
+/* SHOW */
+function renderFullHistory(){
+
+let box=document.getElementById("fullHistory");
+
+box.innerHTML="";
+
+historyList.forEach(item=>{
+
+let d=document.createElement("div");
+
+d.className="history-item";
+
+d.innerText=item;
+
+box.appendChild(d);
+
+});
+
+}
+
+/* CLEAR */
+function clearHistory(){
+
+historyList=[];
+
+saveHistory();
+
+renderFullHistory();
+
+}
+
+/* INIT */
+loadHistory();
 
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
 
-</script>  
+</script>
 
 </body>
 </html>
