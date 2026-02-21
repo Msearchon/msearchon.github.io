@@ -2,13 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>M Search</title>
 
 <style>
-/* =========================
-   DEFAULT DARK MODE (UNCHANGED)
-   ========================= */
 body{
   margin:0;
   font-family:Arial, sans-serif;
@@ -17,10 +14,31 @@ body{
   transition:0.3s;
 }
 
-/* LIGHT MODE (NEW MATCHING COLORS) */
-body.light{
+/* LIGHT MODE */
+.light-mode{
   background:#f4f7fb;
-  color:#111827;
+  color:#111;
+}
+
+.light-mode .search-pad{
+  background:#ffffff;
+  color:#111;
+  border:1px solid #ccc;
+}
+
+.light-mode .big-box{
+  background:#ffffff;
+  color:#111;
+}
+
+.light-mode .search-btn{
+  background:#2b7cff;
+  color:white;
+}
+
+.light-mode .page-btn{
+  background:#2b7cff;
+  color:white;
 }
 
 /* SPLASH */
@@ -32,10 +50,6 @@ display:flex;
 justify-content:center;
 align-items:center;
 z-index:1000;
-}
-
-body.light #splash{
-background:#f4f7fb;
 }
 
 #splashLogo{
@@ -53,11 +67,38 @@ font-weight:bold;
 .header{
 text-align:center;
 margin-top:40px;
+position:relative;
 }
 
-.header h1{
-font-size:48px;
-margin-bottom:35px;
+/* THREE DOTS */
+.menu-btn{
+position:absolute;
+right:0;
+top:0;
+font-size:28px;
+cursor:pointer;
+}
+
+/* MENU BOX */
+.menu-box{
+position:absolute;
+right:20px;
+top:70px;
+background:#1f1f1f;
+padding:10px;
+border-radius:10px;
+display:none;
+z-index:999;
+}
+
+.menu-box div{
+padding:10px;
+cursor:pointer;
+}
+
+.light-mode .menu-box{
+background:white;
+color:black;
 }
 
 /* SEARCH BAR */
@@ -71,13 +112,6 @@ font-size:22px;
 background:#1f1f1f;
 color:white;
 outline:none;
-transition:0.3s;
-}
-
-body.light .search-pad{
-background:#ffffff;
-color:#111827;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* BUTTON */
@@ -91,12 +125,6 @@ font-size:20px;
 background:#4285F4;
 color:white;
 cursor:pointer;
-transition:0.3s;
-}
-
-body.light .search-btn{
-background:#2563eb;
-color:white;
 }
 
 /* BIG BOXES */
@@ -105,22 +133,6 @@ background:#1f1f1f;
 border-radius:20px;
 padding:26px;
 margin-top:22px;
-transition:0.3s;
-}
-
-body.light .big-box{
-background:#ffffff;
-color:#111827;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
-}
-
-.big-box p{
-font-size:18px;
-color:#ccc;
-}
-
-body.light .big-box p{
-color:#374151;
 }
 
 /* HISTORY */
@@ -131,10 +143,6 @@ padding:10px;
 font-size:16px;
 color:#aaa;
 cursor:pointer;
-}
-
-body.light .history-item{
-color:#374151;
 }
 
 /* PAGE BUTTONS */
@@ -151,49 +159,41 @@ border:none;
 border-radius:10px;
 background:#4285F4;
 color:white;
-font-size:16px;
 cursor:pointer;
 }
 
-body.light .page-btn{
-background:#2563eb;
-color:white;
-}
-
-/* THREE DOT MENU */
-.menu-btn{
-position:absolute;
-top:15px;
-right:15px;
-font-size:26px;
-cursor:pointer;
-}
-
-.menu-box{
-position:absolute;
-top:50px;
-right:15px;
-background:#1f1f1f;
-padding:10px;
-border-radius:10px;
+/* HISTORY PAGE */
+#historyPage{
+position:fixed;
+inset:0;
+background:#0f0f0f;
+padding:20px;
 display:none;
+z-index:2000;
+overflow:auto;
 }
 
-body.light .menu-box{
-background:#ffffff;
+.light-mode #historyPage{
+background:#f4f7fb;
 color:#111;
-box-shadow:0 4px 12px rgba(0,0,0,0.15);
-}
-
-.menu-item{
-padding:8px;
-cursor:pointer;
 }
 
 .clear-btn{
-color:lime;
+background:green;
+color:white;
+padding:10px;
+border:none;
+border-radius:10px;
+margin-top:20px;
 cursor:pointer;
-margin-top:10px;
+}
+
+.close-btn{
+position:absolute;
+right:20px;
+top:20px;
+font-size:24px;
+cursor:pointer;
 }
 </style>
 </head>
@@ -205,18 +205,26 @@ margin-top:10px;
 <div id="splashLogo">M <span>Search</span></div>
 </div>
 
-<!-- THREE DOT -->
-<div class="menu-btn" onclick="toggleMenu()">⋮</div>
-
-<div class="menu-box" id="menuBox">
-<div class="menu-item" onclick="openHistory()">History</div>
-<div class="menu-item" onclick="toggleMode()">Mode</div>
-<div class="menu-item" onclick="closeMenu()">✕ Close</div>
+<!-- HISTORY PAGE -->
+<div id="historyPage">
+<div class="close-btn" onclick="closeHistory()">✖</div>
+<h2>Search History</h2>
+<div id="historyList"></div>
+<button class="clear-btn" onclick="clearHistory()">Clear History</button>
 </div>
 
 <!-- PAGE 1 -->
 <div id="page1" class="page show">
+
 <div class="header">
+
+<div class="menu-btn" onclick="toggleMenu()">⋮</div>
+
+<div class="menu-box" id="menuBox">
+<div onclick="openHistory()">History</div>
+<div onclick="toggleMode()">Mode</div>
+</div>
+
 <h1>M Search</h1>
 </div>
 
@@ -224,12 +232,17 @@ margin-top:10px;
 
 <div class="big-box">
 <h2>Information of Creative World</h2>
-<p>Explore knowledge, ideas, and information.</p>
+<p>Explore knowledge.</p>
 </div>
 
 <div class="big-box">
 <h2>Mini Search Engine</h2>
 <p>Fast search experience.</p>
+</div>
+
+<div class="big-box">
+<h2>🌐 M SEARCH</h2>
+<p>All File information.</p>
 </div>
 
 </div>
@@ -252,22 +265,28 @@ margin-top:10px;
 
 <!-- PAGE 3 -->
 <div id="page3" class="page">
+
 <h2>M Search Result</h2>
 <p><b>Answer:</b> <span id="answer"></span></p>
+
 <button class="search-btn" onclick="goBack()">Back</button>
+
 </div>
 
 <script>
+
 const data={
 "what is python":"Python is a programming language.",
 "what is google":"Google is a search engine.",
-"who is m.h":"M.H is founder."
+"what is computer":"Computer is electronic machine.",
+"who is m.h":"M.H is founder.",
+"who create m search":"M.H created M Search."
 };
 
 let selectedQuestion="";
-let searchHistory=[];
+let historyData=[];
 
-/* PAGE SYSTEM */
+/* PAGE NAV */
 function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
 document.getElementById("page"+n).classList.add("show");
@@ -275,95 +294,129 @@ document.getElementById("page"+n).classList.add("show");
 
 /* SEARCH SUGGESTIONS */
 function showSuggestions(){
+
 let q=query.value.toLowerCase();
 history.innerHTML="";
+
 if(q==="") return;
 
 for(let key in data){
-if(key.startsWith(q)){
-let d=document.createElement("div");
-d.className="history-item";
-d.innerText=key;
 
-d.onclick=function(){
+if(key.startsWith(q)){
+
+let div=document.createElement("div");
+div.className="history-item";
+div.innerText=key;
+
+div.onclick=()=>{
 query.value=key;
-search();
+selectedQuestion=key;
+showSelectedOnly();
 };
 
-history.appendChild(d);
+history.appendChild(div);
+
 }
+
 }
+
+}
+
+/* SHOW SELECTED */
+function showSelectedOnly(){
+
+history.innerHTML="";
+
+let div=document.createElement("div");
+div.className="history-item";
+div.innerText=selectedQuestion;
+
+div.onclick=search;
+
+history.appendChild(div);
+
 }
 
 /* SEARCH */
 function search(){
+
 let q=query.value.toLowerCase();
 
-if(data[q]){
-answer.innerText=data[q];
 selectedQuestion=q;
 
-if(!searchHistory.includes(q))
-searchHistory.unshift(q);
+if(!historyData.includes(q))
+historyData.unshift(q);
+
+answer.innerText=data[q] || "Answer not found";
+
+showSelectedOnly();
 
 goPage(3);
-}else{
-answer.innerText="Answer not found";
-goPage(3);
-}
+
 }
 
 /* BACK */
 function goBack(){
+
 goPage(2);
+
 query.value=selectedQuestion;
+
+showSelectedOnly();
+
 }
 
 /* MENU */
 function toggleMenu(){
+
 menuBox.style.display=
 menuBox.style.display==="block"?"none":"block";
+
 }
 
-function closeMenu(){
-menuBox.style.display="none";
-}
-
-/* HISTORY */
+/* HISTORY PAGE */
 function openHistory(){
-history.innerHTML="";
 
-searchHistory.forEach(item=>{
-let d=document.createElement("div");
-d.className="history-item";
-d.innerText=item;
-history.appendChild(d);
+menuBox.style.display="none";
+
+historyPage.style.display="block";
+
+historyList.innerHTML="";
+
+historyData.forEach(item=>{
+
+let div=document.createElement("div");
+div.innerText=item;
+historyList.appendChild(div);
+
 });
 
-let clear=document.createElement("div");
-clear.className="clear-btn";
-clear.innerText="Clear History";
-clear.onclick=function(){
-searchHistory=[];
-history.innerHTML="";
-};
+}
 
-history.appendChild(clear);
+function closeHistory(){
+historyPage.style.display="none";
+}
 
-goPage(2);
-closeMenu();
+function clearHistory(){
+
+historyData=[];
+historyList.innerHTML="";
+
 }
 
 /* MODE */
 function toggleMode(){
-document.body.classList.toggle("light");
+
+document.body.classList.toggle("light-mode");
+
 }
 
 /* SPLASH */
 setTimeout(()=>{
 splash.style.display="none";
 },2000);
+
 </script>
 
 </body>
-                                      </html>
+</html>
