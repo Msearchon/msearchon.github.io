@@ -6,12 +6,21 @@
 <title>M Search</title>
 
 <style>
+/* =========================
+   DEFAULT DARK MODE (UNCHANGED)
+   ========================= */
 body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#0f0f0f;
-color:white;
-overflow-x:hidden;
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#0f0f0f;
+  color:white;
+  transition:0.3s;
+}
+
+/* LIGHT MODE (NEW MATCHING COLORS) */
+body.light{
+  background:#f4f7fb;
+  color:#111827;
 }
 
 /* SPLASH */
@@ -23,6 +32,10 @@ display:flex;
 justify-content:center;
 align-items:center;
 z-index:1000;
+}
+
+body.light #splash{
+background:#f4f7fb;
 }
 
 #splashLogo{
@@ -58,6 +71,13 @@ font-size:22px;
 background:#1f1f1f;
 color:white;
 outline:none;
+transition:0.3s;
+}
+
+body.light .search-pad{
+background:#ffffff;
+color:#111827;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* BUTTON */
@@ -71,6 +91,12 @@ font-size:20px;
 background:#4285F4;
 color:white;
 cursor:pointer;
+transition:0.3s;
+}
+
+body.light .search-btn{
+background:#2563eb;
+color:white;
 }
 
 /* BIG BOXES */
@@ -79,16 +105,22 @@ background:#1f1f1f;
 border-radius:20px;
 padding:26px;
 margin-top:22px;
+transition:0.3s;
 }
 
-.big-box h2{
-font-size:24px;
-margin:0 0 10px;
+body.light .big-box{
+background:#ffffff;
+color:#111827;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 
 .big-box p{
 font-size:18px;
 color:#ccc;
+}
+
+body.light .big-box p{
+color:#374151;
 }
 
 /* HISTORY */
@@ -99,6 +131,10 @@ padding:10px;
 font-size:16px;
 color:#aaa;
 cursor:pointer;
+}
+
+body.light .history-item{
+color:#374151;
 }
 
 /* PAGE BUTTONS */
@@ -119,91 +155,67 @@ font-size:16px;
 cursor:pointer;
 }
 
-/* THREE DOT */
-#menuBtn{
-position:absolute;
-top:15px;
-right:15px;
-font-size:28px;
-cursor:pointer;
-}
-
-/* MENU BOX */
-#menuBox{
-position:absolute;
-top:55px;
-right:15px;
-background:#1f1f1f;
-border-radius:10px;
-padding:10px;
-display:none;
-}
-
-.menu-item{
-padding:10px;
-cursor:pointer;
-}
-
-/* HISTORY PAGE */
-#historyPage{
-position:fixed;
-inset:0;
-background:#0f0f0f;
-padding:20px;
-display:none;
-z-index:999;
-}
-
-#clearBtn{
-background:green;
+body.light .page-btn{
+background:#2563eb;
 color:white;
-border:none;
-padding:10px;
-margin-top:20px;
-width:100%;
 }
 
-#closeHistory{
+/* THREE DOT MENU */
+.menu-btn{
 position:absolute;
 top:15px;
-right:20px;
+right:15px;
 font-size:26px;
 cursor:pointer;
 }
 
-.light{
-background:green;
-color:white;
+.menu-box{
+position:absolute;
+top:50px;
+right:15px;
+background:#1f1f1f;
+padding:10px;
+border-radius:10px;
+display:none;
 }
 
+body.light .menu-box{
+background:#ffffff;
+color:#111;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+.menu-item{
+padding:8px;
+cursor:pointer;
+}
+
+.clear-btn{
+color:lime;
+cursor:pointer;
+margin-top:10px;
+}
 </style>
 </head>
 
 <body>
 
+<!-- SPLASH -->
 <div id="splash">
-<div id="splashLogo"> M <span> Search </span></div>
+<div id="splashLogo">M <span>Search</span></div>
 </div>
 
 <!-- THREE DOT -->
-<div id="menuBtn" onclick="toggleMenu()">⋮</div>
+<div class="menu-btn" onclick="toggleMenu()">⋮</div>
 
-<div id="menuBox">
+<div class="menu-box" id="menuBox">
 <div class="menu-item" onclick="openHistory()">History</div>
 <div class="menu-item" onclick="toggleMode()">Mode</div>
-</div>
-
-<!-- HISTORY PAGE -->
-<div id="historyPage">
-<div id="closeHistory" onclick="closeHistory()">✕</div>
-<h2>History</h2>
-<div id="fullHistory"></div>
-<button id="clearBtn" onclick="clearHistory()">Clear History</button>
+<div class="menu-item" onclick="closeMenu()">✕ Close</div>
 </div>
 
 <!-- PAGE 1 -->
 <div id="page1" class="page show">
-
 <div class="header">
 <h1>M Search</h1>
 </div>
@@ -212,17 +224,12 @@ color:white;
 
 <div class="big-box">
 <h2>Information of Creative World</h2>
-<p>Explore knowledge, ideas, and information from the world.</p>
+<p>Explore knowledge, ideas, and information.</p>
 </div>
 
 <div class="big-box">
 <h2>Mini Search Engine</h2>
-<p>A simple and fast search experience built for learning.</p>
-</div>
-
-<div class="big-box">
-<h2>🌐 M SEARCH </h2>
-<p> ALL File information.</p>
+<p>Fast search experience.</p>
 </div>
 
 </div>
@@ -231,8 +238,9 @@ color:white;
 <div id="page2" class="page">
 
 <div class="page-buttons">
-<button class="page-btn" onclick="goPage(1)">Home</button>
-<button class="page-btn" onclick="goPage(3)">Result</button>
+<button class="page-btn" onclick="goPage(1)">Page One</button>
+<button class="page-btn">Page Two</button>
+<button class="page-btn" onclick="goPage(3)">Page Three</button>
 </div>
 
 <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">
@@ -244,191 +252,118 @@ color:white;
 
 <!-- PAGE 3 -->
 <div id="page3" class="page">
-
 <h2>M Search Result</h2>
-
-<p style="font-size:20px">
-<b>Answer:</b>
-<span id="answer"></span>
-</p>
-
+<p><b>Answer:</b> <span id="answer"></span></p>
 <button class="search-btn" onclick="goBack()">Back</button>
-
 </div>
 
 <script>
-
 const data={
 "what is python":"Python is a programming language.",
 "what is google":"Google is a search engine.",
-"what is computer":"A computer is an electronic machine.",
-"what is m search":"M search is a mini search engine.",
-"who is m.h":"M.H is founder.",
-"who create m search":"Created in 2023."
+"who is m.h":"M.H is founder."
 };
 
 let selectedQuestion="";
-let historyList=[];
+let searchHistory=[];
 
-/* PAGE */
+/* PAGE SYSTEM */
 function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
 document.getElementById("page"+n).classList.add("show");
 }
 
-/* SEARCH */
-function search(){
-
-let q=document.getElementById("query").value.toLowerCase();
-
+/* SEARCH SUGGESTIONS */
+function showSuggestions(){
+let q=query.value.toLowerCase();
+history.innerHTML="";
 if(q==="") return;
 
+for(let key in data){
+if(key.startsWith(q)){
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=key;
+
+d.onclick=function(){
+query.value=key;
+search();
+};
+
+history.appendChild(d);
+}
+}
+}
+
+/* SEARCH */
+function search(){
+let q=query.value.toLowerCase();
+
+if(data[q]){
+answer.innerText=data[q];
 selectedQuestion=q;
 
-historyList.unshift(q);
-
-saveHistory();
-
-document.getElementById("answer").innerText=data[q] || "Answer not found";
+if(!searchHistory.includes(q))
+searchHistory.unshift(q);
 
 goPage(3);
-
+}else{
+answer.innerText="Answer not found";
+goPage(3);
+}
 }
 
 /* BACK */
 function goBack(){
-
 goPage(2);
-
-document.getElementById("query").value=selectedQuestion;
-
-showSuggestions();
-
-}
-
-/* SUGGESTIONS */
-function showSuggestions(){
-
-let q=document.getElementById("query").value.toLowerCase();
-
-let h=document.getElementById("history");
-
-h.innerHTML="";
-
-if(q==="") return;
-
-for(let key in data){
-
-if(key.includes(q)){
-
-let d=document.createElement("div");
-
-d.className="history-item";
-
-d.innerText=key;
-
-d.onclick=function(){
-
-document.getElementById("query").value=key;
-
-};
-
-h.appendChild(d);
-
-}
-
-}
-
+query.value=selectedQuestion;
 }
 
 /* MENU */
 function toggleMenu(){
+menuBox.style.display=
+menuBox.style.display==="block"?"none":"block";
+}
 
-let m=document.getElementById("menuBox");
+function closeMenu(){
+menuBox.style.display="none";
+}
 
-m.style.display=m.style.display==="block"?"none":"block";
+/* HISTORY */
+function openHistory(){
+history.innerHTML="";
 
+searchHistory.forEach(item=>{
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=item;
+history.appendChild(d);
+});
+
+let clear=document.createElement("div");
+clear.className="clear-btn";
+clear.innerText="Clear History";
+clear.onclick=function(){
+searchHistory=[];
+history.innerHTML="";
+};
+
+history.appendChild(clear);
+
+goPage(2);
+closeMenu();
 }
 
 /* MODE */
 function toggleMode(){
-
 document.body.classList.toggle("light");
-
 }
 
-/* HISTORY OPEN */
-function openHistory(){
-
-document.getElementById("historyPage").style.display="block";
-
-renderFullHistory();
-
-}
-
-/* CLOSE */
-function closeHistory(){
-
-document.getElementById("historyPage").style.display="none";
-
-}
-
-/* SAVE */
-function saveHistory(){
-
-localStorage.setItem("m_history",JSON.stringify(historyList));
-
-}
-
-/* LOAD */
-function loadHistory(){
-
-let h=localStorage.getItem("m_history");
-
-if(h) historyList=JSON.parse(h);
-
-}
-
-/* SHOW */
-function renderFullHistory(){
-
-let box=document.getElementById("fullHistory");
-
-box.innerHTML="";
-
-historyList.forEach(item=>{
-
-let d=document.createElement("div");
-
-d.className="history-item";
-
-d.innerText=item;
-
-box.appendChild(d);
-
-});
-
-}
-
-/* CLEAR */
-function clearHistory(){
-
-historyList=[];
-
-saveHistory();
-
-renderFullHistory();
-
-}
-
-/* INIT */
-loadHistory();
-
+/* SPLASH */
 setTimeout(()=>{
-document.getElementById("splash").style.display="none";
+splash.style.display="none";
 },2000);
-
 </script>
 
 </body>
-</html>
+                                      </html>
