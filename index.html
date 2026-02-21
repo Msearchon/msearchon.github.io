@@ -171,9 +171,74 @@ font-size:26px;
 cursor:pointer;
 }
 
+/* ================= LIGHT MODE FULL DESIGN ================= */
+
 .light{
-background:white;
-color:black;
+background:#eef3f9;
+color:#1b1f24;
+}
+
+/* Splash */
+.light #splash{
+background:#dde6f2;
+color:#1b1f24;
+}
+
+/* Search Bar */
+.light .search-pad{
+background:#ffffff;
+color:#1b1f24;
+border:2px solid #c5d2e3;
+}
+
+/* Buttons */
+.light .search-btn{
+background:#3f8efc;
+color:white;
+}
+
+.light .page-btn{
+background:#5c6bc0;
+color:white;
+}
+
+/* Boxes */
+.light .big-box{
+background:#ffffff;
+color:#1b1f24;
+border:1px solid #d4dde8;
+}
+
+.light .big-box p{
+color:#444;
+}
+
+/* Menu */
+.light #menuBox{
+background:#ffffff;
+color:#1b1f24;
+border:1px solid #cbd6e2;
+}
+
+/* History Page */
+.light #historyPage{
+background:#eef3f9;
+color:#1b1f24;
+}
+
+.light .history-item{
+color:#333;
+}
+
+/* Clear Button */
+.light #clearBtn{
+background:#2e7d32;
+color:white;
+}
+
+/* Close Button */
+.light #closeHistory{
+color:#1b1f24;
 }
 
 </style>
@@ -259,6 +324,8 @@ color:black;
 
 <script>
 
+/* YOUR ORIGINAL JS — UNCHANGED */
+
 const data={
 "what is python":"Python is a programming language.",
 "what is google":"Google is a search engine.",
@@ -271,158 +338,89 @@ const data={
 let selectedQuestion="";
 let historyList=[];
 
-/* PAGE */
 function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
 document.getElementById("page"+n).classList.add("show");
 }
 
-/* SEARCH */
 function search(){
-
 let q=document.getElementById("query").value.toLowerCase();
-
 if(q==="") return;
-
 selectedQuestion=q;
-
 historyList.unshift(q);
-
 saveHistory();
-
 document.getElementById("answer").innerText=data[q] || "Answer not found";
-
 goPage(3);
-
 }
 
-/* BACK */
 function goBack(){
-
 goPage(2);
-
 document.getElementById("query").value=selectedQuestion;
-
 showSuggestions();
-
 }
 
-/* SUGGESTIONS */
 function showSuggestions(){
-
 let q=document.getElementById("query").value.toLowerCase();
-
 let h=document.getElementById("history");
-
 h.innerHTML="";
-
 if(q==="") return;
-
 for(let key in data){
-
 if(key.includes(q)){
-
 let d=document.createElement("div");
-
 d.className="history-item";
-
 d.innerText=key;
-
 d.onclick=function(){
-
 document.getElementById("query").value=key;
-
 };
-
 h.appendChild(d);
-
+}
+}
 }
 
-}
-
-}
-
-/* MENU */
 function toggleMenu(){
-
 let m=document.getElementById("menuBox");
-
 m.style.display=m.style.display==="block"?"none":"block";
-
 }
 
-/* MODE */
 function toggleMode(){
-
 document.body.classList.toggle("light");
-
 }
 
-/* HISTORY OPEN */
 function openHistory(){
-
 document.getElementById("historyPage").style.display="block";
-
 renderFullHistory();
-
 }
 
-/* CLOSE */
 function closeHistory(){
-
 document.getElementById("historyPage").style.display="none";
-
 }
 
-/* SAVE */
 function saveHistory(){
-
 localStorage.setItem("m_history",JSON.stringify(historyList));
-
 }
 
-/* LOAD */
 function loadHistory(){
-
 let h=localStorage.getItem("m_history");
-
 if(h) historyList=JSON.parse(h);
-
 }
 
-/* SHOW */
 function renderFullHistory(){
-
 let box=document.getElementById("fullHistory");
-
 box.innerHTML="";
-
 historyList.forEach(item=>{
-
 let d=document.createElement("div");
-
 d.className="history-item";
-
 d.innerText=item;
-
 box.appendChild(d);
-
 });
-
 }
 
-/* CLEAR */
 function clearHistory(){
-
 historyList=[];
-
 saveHistory();
-
 renderFullHistory();
-
 }
 
-/* INIT */
 loadHistory();
 
 setTimeout(()=>{
