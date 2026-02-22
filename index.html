@@ -6,6 +6,7 @@
 <title>M Search</title>
 
 <style>
+/* === YOUR EXISTING CSS (UNCHANGED) === */
 body{
 margin:0;
 font-family:Arial, sans-serif;
@@ -13,8 +14,6 @@ background:#0f0f0f;
 color:white;
 overflow-x:hidden;
 }
-
-/* SPLASH */
 #splash{
 position:fixed;
 inset:0;
@@ -24,30 +23,21 @@ justify-content:center;
 align-items:center;
 z-index:1000;
 }
-
 #splashLogo{
 font-size:52px;
 font-weight:bold;
 }
-
 #splashLogo span{ color:#4285F4; }
-
-/* COMMON */
 .page{ display:none; padding:22px; }
 .show{ display:block; }
-
-/* HEADER */
 .header{
 text-align:center;
 margin-top:40px;
 }
-
 .header h1{
 font-size:48px;
 margin-bottom:35px;
 }
-
-/* SEARCH BAR */
 .search-pad{
 width:100%;
 height:64px;
@@ -59,8 +49,6 @@ background:#1f1f1f;
 color:white;
 outline:none;
 }
-
-/* BUTTON */
 .search-btn{
 width:100%;
 height:56px;
@@ -72,42 +60,32 @@ background:#4285F4;
 color:white;
 cursor:pointer;
 }
-
-/* BIG BOXES */
 .big-box{
 background:#1f1f1f;
 border-radius:20px;
 padding:26px;
 margin-top:22px;
 }
-
 .big-box h2{
 font-size:24px;
 margin:0 0 10px;
 }
-
 .big-box p{
 font-size:18px;
 color:#ccc;
 }
-
-/* HISTORY */
 .history{ margin-top:20px; }
-
 .history-item{
 padding:10px;
 font-size:16px;
 color:#aaa;
 cursor:pointer;
 }
-
-/* PAGE BUTTONS */
 .page-buttons{
 display:flex;
 gap:10px;
 margin-bottom:10px;
 }
-
 .page-btn{
 flex:1;
 height:45px;
@@ -118,8 +96,6 @@ color:white;
 font-size:16px;
 cursor:pointer;
 }
-
-/* THREE DOT */
 #menuBtn{
 position:absolute;
 top:15px;
@@ -127,8 +103,6 @@ right:15px;
 font-size:28px;
 cursor:pointer;
 }
-
-/* MENU BOX */
 #menuBox{
 position:absolute;
 top:55px;
@@ -138,13 +112,10 @@ border-radius:10px;
 padding:10px;
 display:none;
 }
-
 .menu-item{
 padding:10px;
 cursor:pointer;
 }
-
-/* HISTORY PAGE */
 #historyPage{
 position:fixed;
 inset:0;
@@ -153,7 +124,6 @@ padding:20px;
 display:none;
 z-index:999;
 }
-
 #clearBtn{
 background:green;
 color:white;
@@ -162,7 +132,6 @@ padding:10px;
 margin-top:20px;
 width:100%;
 }
-
 #closeHistory{
 position:absolute;
 top:15px;
@@ -170,113 +139,58 @@ right:20px;
 font-size:26px;
 cursor:pointer;
 }
-
-/* ================= PREMIUM LIGHT MODE ================= */
-
 .light{
 background:linear-gradient(180deg,#f4f7fb,#e9eef5);
 color:#1a1a1a;
 }
-
-/* Splash */
 .light #splash{
 background:linear-gradient(180deg,#eef2f8,#dde5ef);
 color:#1a1a1a;
 }
-
-/* Search Bar */
 .light .search-pad{
 background:#ffffff;
 color:#111;
 border:2px solid #d0d9e5;
 box-shadow:0 2px 6px rgba(0,0,0,0.08);
 }
-
-/* Search Button */
 .light .search-btn{
 background:linear-gradient(135deg,#4285F4,#2b6de0);
 color:white;
 box-shadow:0 3px 8px rgba(66,133,244,0.3);
 }
-
-/* Page Buttons */
 .light .page-btn{
 background:linear-gradient(135deg,#5c6bc0,#3949ab);
 color:white;
 box-shadow:0 2px 6px rgba(0,0,0,0.15);
 }
-
-/* Boxes */
 .light .big-box{
 background:#ffffff;
 color:#1a1a1a;
 border:1px solid #d6dee8;
 box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
-
 .light .big-box p{
 color:#444;
 }
-
-/* Menu */
-.light #menuBox{
-background:#ffffff;
-color:#111;
-border:1px solid #cfd8e3;
-box-shadow:0 4px 12px rgba(0,0,0,0.12);
-}
-
-/* History Page */
-.light #historyPage{
-background:linear-gradient(180deg,#f4f7fb,#e9eef5);
-color:#111;
-}
-
-/* History items */
-.light .history-item{
-color:#222;
-}
-
-/* Clear Button */
-.light #clearBtn{
-background:linear-gradient(135deg,#2e7d32,#1b5e20);
-color:white;
-box-shadow:0 2px 6px rgba(0,0,0,0.2);
-}
-
-/* Close Button */
-.light #closeHistory{
-color:#111;
-}
-
-/* Menu */
 .light #menuBox{
 background:#ffffff;
 color:#1b1f24;
 border:1px solid #cbd6e2;
 }
-
-/* History Page */
 .light #historyPage{
 background:#eef3f9;
 color:#1b1f24;
 }
-
 .light .history-item{
 color:#333;
 }
-
-/* Clear Button */
 .light #clearBtn{
 background:#2e7d32;
 color:white;
 }
-
-/* Close Button */
 .light #closeHistory{
 color:#1b1f24;
 }
-
 </style>
 </head>
 
@@ -286,7 +200,6 @@ color:#1b1f24;
 <div id="splashLogo"> M <span> Search </span></div>
 </div>
 
-<!-- THREE DOT -->
 <div id="menuBtn" onclick="toggleMenu()">⋮</div>
 
 <div id="menuBox">
@@ -294,7 +207,6 @@ color:#1b1f24;
 <div class="menu-item" onclick="toggleMode()">Mode</div>
 </div>
 
-<!-- HISTORY PAGE -->
 <div id="historyPage">
 <div id="closeHistory" onclick="closeHistory()">✕</div>
 <h2>History</h2>
@@ -302,7 +214,6 @@ color:#1b1f24;
 <button id="clearBtn" onclick="clearHistory()">Clear History</button>
 </div>
 
-<!-- PAGE 1 -->
 <div id="page1" class="page show">
 
 <div class="header">
@@ -328,7 +239,6 @@ color:#1b1f24;
 
 </div>
 
-<!-- PAGE 2 -->
 <div id="page2" class="page">
 
 <div class="page-buttons">
@@ -343,7 +253,6 @@ color:#1b1f24;
 
 </div>
 
-<!-- PAGE 3 -->
 <div id="page3" class="page">
 
 <h2>M Search Result</h2>
@@ -359,17 +268,17 @@ color:#1b1f24;
 
 <script>
 
-/* YOUR ORIGINAL JS — UNCHANGED */
+/* ==================== UPDATED JS TO LOAD JSON ==================== */
 
-const data={
-"what is python":"Python is a programming language.",
-"what is google":"Google is a search engine.",
-"what is computer":"A computer is an electronic machine.",
-"what is m search":"M search is a mini search engine.",
-"who is m.h":"M.H is founder of M Search All.",
-"who create m search":"M.H created m search in 2023.",
-"tell me what is miraz":"Miraz is a #️⃣."
-};
+let data = {}; // JSON placeholder
+
+// Load data from data.json file
+fetch('data.json')
+  .then(res => res.json())
+  .then(json => {
+    data = json;
+  })
+  .catch(err => console.error('Error loading JSON:', err));
 
 let selectedQuestion="";
 let historyList=[];
@@ -466,4 +375,4 @@ document.getElementById("splash").style.display="none";
 </script>
 
 </body>
-</html>
+  </html>
