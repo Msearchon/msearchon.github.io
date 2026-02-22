@@ -403,6 +403,16 @@ historyList=[];
 saveHistory();  
 renderFullHistory();  
 }  
+
+  // LOAD JSON DATA
+fetch("data.json")
+.then(response => response.json())
+.then(jsonData => {
+Object.assign(data, jsonData);
+})
+.catch(error => {
+console.log("JSON not loaded");
+});
   
 loadHistory();  
   
