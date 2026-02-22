@@ -1,7 +1,4 @@
-<html>
-        <head><title>Downloaded HTML</title></head>
-        <body>
-            <pre style="white-space: pre-wrap; word-wrap: break-word;">{
+{
   "what is m search": "M Search is a mini search engine founded in 2023. Creator is MH.",
   "m search kya hai": "M Search is a mini search engine founded in 2023. Creator is MH.",
   "define m search": "M Search is a mini search engine founded in 2023. Creator is MH.",
@@ -37,6 +34,4 @@
   "who founded m search": "MH founded M Search in 2023.",
   "m search founder name": "MH founded M Search in 2023.",
   "name of m search founder": "MH founded M Search in 2023."
-}</pre>
-        </body>
-    </html>
+}
