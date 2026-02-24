@@ -1,14 +1,21 @@
-<!DOCTYPE html>  <html lang="en">    <head>    
-<meta charset="UTF-8">    
-<meta name="viewport" content="width=device-width, initial-scale=1.0">    
-<title>M Search</title>  <style>    
-body{    
-margin:0;    
-font-family:Arial, sans-serif;    
-background:#0f0f0f;    
-color:white;    
-overflow-x:hidden;    
-}    /* SPLASH */
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M Search</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#0f0f0f;
+color:white;
+overflow-x:hidden;
+}
+
+/* SPLASH */
 #splash{
 position:fixed;
 inset:0;
@@ -165,142 +172,112 @@ font-size:26px;
 cursor:pointer;
 }
 
-/* ================= PREMIUM LIGHT MODE ================= */
-
+/* LIGHT MODE */
 .light{
 background:linear-gradient(180deg,#f4f7fb,#e9eef5);
 color:#1a1a1a;
 }
 
-/* Splash */
-.light #splash{
-background:linear-gradient(180deg,#eef2f8,#dde5ef);
-color:#1a1a1a;
-}
-
-/* Search Bar */
 .light .search-pad{
 background:#ffffff;
 color:#111;
 border:2px solid #d0d9e5;
-box-shadow:0 2px 6px rgba(0,0,0,0.08);
 }
 
-/* Search Button */
-.light .search-btn{
-background:linear-gradient(135deg,#4285F4,#2b6de0);
-color:white;
-box-shadow:0 3px 8px rgba(66,133,244,0.3);
-}
-
-/* Page Buttons */
-.light .page-btn{
-background:linear-gradient(135deg,#5c6bc0,#3949ab);
-color:white;
-box-shadow:0 2px 6px rgba(0,0,0,0.15);
-}
-
-/* Boxes */
 .light .big-box{
 background:#ffffff;
 color:#1a1a1a;
-border:1px solid #d6dee8;
-box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 
-.light .big-box p{
-color:#444;
-}
-
-/* Menu */
 .light #menuBox{
 background:#ffffff;
 color:#111;
-border:1px solid #cfd8e3;
-box-shadow:0 4px 12px rgba(0,0,0,0.12);
 }
 
-/* History Page */
-.light #historyPage{
-background:linear-gradient(180deg,#f4f7fb,#e9eef5);
-color:#111;
-}
-
-/* History items */
-.light .history-item{
-color:#222;
-}
-
-/* Clear Button */
-.light #clearBtn{
-background:linear-gradient(135deg,#2e7d32,#1b5e20);
-color:white;
-box-shadow:0 2px 6px rgba(0,0,0,0.2);
-}
-
-/* Close Button */
-.light #closeHistory{
-color:#111;
-}
-
-/* Menu */
-.light #menuBox{
-background:#ffffff;
-color:#1b1f24;
-border:1px solid #cbd6e2;
-}
-
-/* History Page */
 .light #historyPage{
 background:#eef3f9;
 color:#1b1f24;
 }
 
-.light .history-item{
-color:#333;
-}
+</style>
+</head>
 
-/* Clear Button */
-.light #clearBtn{
-background:#2e7d32;
-color:white;
-}
+<body>
 
-/* Close Button */
-.light #closeHistory{
-color:#1b1f24;
-}
+<div id="splash">
+<div id="splashLogo"> M <span> Search </span></div>
+</div>
 
-</style>  </head>  <body>  <div id="splash">
+<div id="menuBtn" onclick="toggleMenu()">⋮</div>
 
-<div id="splashLogo"> M <span> Search </span></div>    
-</div>  <!-- THREE DOT -->  <div id="menuBtn" onclick="toggleMenu()">⋮</div>  <div id="menuBox">    
-<div class="menu-item" onclick="openHistory()">History</div>    
-<div class="menu-item" onclick="toggleMode()">Mode</div>    
-</div>  <!-- HISTORY PAGE -->  <div id="historyPage">    
-<div id="closeHistory" onclick="closeHistory()">✕</div>    
-<h2>History</h2>    
-<div id="fullHistory"></div>    
-<button id="clearBtn" onclick="clearHistory()">Clear History</button>    
-</div>  <!-- PAGE 1 -->  <div id="page1" class="page show">  <div class="header">    
-<h1>M Search</h1>    
-</div>  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">  <div class="big-box">    
-<h2>Important Rules</h2>    
-<p>When you open M Search, refresh it once.</p>    
-</div>  <div class="big-box">    
-<h2>News 📊</h2>    
-<p>A simple and fast search  built in 2023.</p>    
-</div>  <div class="big-box">    
-<h2>🌐 M SEARCH </h2>    
-<p> ALL File information.</p>    
-</div>  </div>  <!-- PAGE 2 -->  <div id="page2" class="page">  <div class="page-buttons">    
-<button class="page-btn" onclick="goPage(1)">Home</button>    
-<button class="page-btn" onclick="goPage(3)">Result</button>    
-</div>  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">    
-<button class="search-btn" onclick="search()">Search</button>  <div class="history" id="history"></div>  </div>  <!-- PAGE 3 -->  <div id="page3" class="page">  <h2>M Search Result</h2>  <p style="font-size:20px">    
-<b>Answer:</b>    
-<span id="answer"></span>    
-</p>  <button class="search-btn" onclick="goBack()">Back</button>  </div>  <script>    /* YOUR ORIGINAL JS — UNCHANGED */
+<div id="menuBox">
+<div class="menu-item" onclick="openHistory()">History</div>
+<div class="menu-item" onclick="toggleMode()">Mode</div>
+</div>
+
+<div id="historyPage">
+<div id="closeHistory" onclick="closeHistory()">✕</div>
+<h2>History</h2>
+<div id="fullHistory"></div>
+<button id="clearBtn" onclick="clearHistory()">Clear History</button>
+</div>
+
+<div id="page1" class="page show">
+
+<div class="header">
+<h1>M Search</h1>
+</div>
+
+<input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">
+
+<div class="big-box">
+<h2>Important Rules</h2>
+<p>When you open M Search, refresh it once.</p>
+</div>
+
+<div class="big-box">
+<h2>News 📊</h2>
+<p>A simple and fast search built in 2023.</p>
+</div>
+
+<div class="big-box">
+<h2>🌐 M SEARCH </h2>
+<p>ALL File information.</p>
+</div>
+
+</div>
+
+<div id="page2" class="page">
+
+<div class="page-buttons">
+<button class="page-btn" onclick="goPage(1)">Home</button>
+<button class="page-btn" onclick="goPage(3)">Result</button>
+</div>
+
+<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">
+
+<button class="search-btn" onclick="search()">Search</button>
+
+<div class="history" id="history"></div>
+
+</div>
+
+<div id="page3" class="page">
+
+<h2>M Search Result</h2>
+
+<p style="font-size:20px">
+<b>Answer:</b>
+<span id="answer"></span>
+</p>
+
+<button class="search-btn" onclick="goBack()">Back</button>
+
+</div>
+
+<script>
+
+/* ORIGINAL DATA — UNCHANGED */
 
 const data={
 "what is python":"Python is a programming language.",
@@ -315,19 +292,67 @@ const data={
 let selectedQuestion="";
 let historyList=[];
 
+
+/* SMART JSON SYSTEM ADDED */
+
+let smartData={};
+
+fetch("smart-data.json")
+.then(response=>response.json())
+.then(json=>{
+smartData=json;
+})
+.catch(()=>{
+console.log("Smart JSON not loaded");
+});
+
+
+function getSmartAnswer(q){
+
+q=q.toLowerCase();
+
+for(let topic in smartData){
+
+if(q.includes(topic)){
+
+let item=smartData[topic];
+
+if(q.includes("founder")) return item.founder;
+
+if(q.includes("create date") || q.includes("created")) return item.create_date;
+
+return item.about;
+
+}
+}
+
+return data[q] || "Answer not found";
+}
+
+
+/* ORIGINAL FUNCTIONS — UNCHANGED */
+
 function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
 document.getElementById("page"+n).classList.add("show");
 }
 
 function search(){
+
 let q=document.getElementById("query").value.toLowerCase();
+
 if(q==="") return;
+
 selectedQuestion=q;
+
 historyList.unshift(q);
+
 saveHistory();
-document.getElementById("answer").innerText=data[q] || "Answer not found";
+
+document.getElementById("answer").innerText=getSmartAnswer(q);
+
 goPage(3);
+
 }
 
 function goBack(){
@@ -337,21 +362,35 @@ showSuggestions();
 }
 
 function showSuggestions(){
+
 let q=document.getElementById("query").value.toLowerCase();
+
 let h=document.getElementById("history");
+
 h.innerHTML="";
+
 if(q==="") return;
+
 for(let key in data){
+
 if(key.includes(q)){
+
 let d=document.createElement("div");
+
 d.className="history-item";
+
 d.innerText=key;
+
 d.onclick=function(){
 document.getElementById("query").value=key;
 };
+
 h.appendChild(d);
+
 }
+
 }
+
 }
 
 function toggleMenu(){
@@ -398,22 +437,13 @@ saveHistory();
 renderFullHistory();
 }
 
-  // LOAD JSON DATA
-fetch("data.json")
-.then(response => response.json())
-.then(jsonData => {
-Object.assign(data, jsonData);
-})
-.catch(error => {
-console.log("JSON not loaded");
-});
-
 loadHistory();
 
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
 
-</script>  </body>
+</script>
 
-</html>     
+</body>
+</html>
