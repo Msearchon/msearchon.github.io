@@ -1,7 +1,4 @@
-<html>
-        <head><title>Downloaded HTML</title></head>
-        <body>
-            <pre style="white-space: pre-wrap; word-wrap: break-word;">{
+{
   "brain": {
     "version": "3.0",
     "name": "M Search GOD-Level Brain",
@@ -201,7 +198,3 @@
     "learning": "enabled",
     "auto_improve": true
   }
-
-      }</pre>
-        </body>
-    </html>
