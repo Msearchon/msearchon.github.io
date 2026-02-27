@@ -1,7 +1,16 @@
 {
   "m search": {
-    "about": "M Search is a mini search engine created in 2023 by M.H.",
+    "about": "M Search is a smart search engine.",
+    "founder": "M.H is founder of M Search.",
     "create_date": "M Search was created in 2023.",
-    "founder": "M Search founder is M.H."
+    "owner": "M Search is owned by MGPLC company."
+  },
+
+  "mgplc": {
+    "about": "MGPLC is a parent company that owns M Search and 19 companies.",
+    "founder": "M.H is the founder of MGPLC.",
+    "create_date": "MGPLC was created in 2017.",
+    "companies": "MGPLC owns 19 companies.",
+    "network": "MGPLC network is valued at 1.2 trillion dollars."
   }
 }
