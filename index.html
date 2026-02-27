@@ -293,41 +293,99 @@ let selectedQuestion="";
 let historyList=[];
 
 
-/* SMART JSON SYSTEM ADDED */
+/* ===========================
+   ULTRA-BRAIN LEVEL-4 AI
+   =========================== */
 
-let smartData={};
+let BRAIN = {};
+let ENTITIES = {};
+let INTENTS = {};
 
-fetch("smart-data.json")
-.then(response=>response.json())
-.then(json=>{
-smartData=json;
+fetch("data.json")
+.then(res => res.json())
+.then(json => {
+
+    BRAIN = json;
+    ENTITIES = json.entities;
+    INTENTS = json.intents;
+
 })
-.catch(()=>{
-console.log("Smart JSON not loaded");
+.catch(() => {
+
+    console.log("Brain not loaded");
+
 });
 
-
-function getSmartAnswer(q){
-
-q=q.toLowerCase();
-
-for(let topic in smartData){
-
-if(q.includes(topic)){
-
-let item=smartData[topic];
-
-if(q.includes("founder")) return item.founder;
-
-if(q.includes("create date") || q.includes("created")) return item.create_date;
-
-return item.about;
-
-}
+function clean(text){
+    return text.toLowerCase().replace(/[^\w\s]/g,"").trim();
 }
 
-return data[q] || "Answer not found";
+function findEntity(question){
+
+    question = clean(question);
+
+    for(let key in ENTITIES){
+
+        let entity = ENTITIES[key];
+
+        if(question.includes(key))
+        return entity;
+
+        if(entity.aliases){
+
+            for(let alias of entity.aliases){
+
+                if(question.includes(alias))
+                return entity;
+
+            }
+
+        }
+
+    }
+
+    return null;
+
 }
+
+function findIntent(question){
+
+    question = clean(question);
+
+    for(let intent in INTENTS){
+
+        let words = INTENTS[intent];
+
+        for(let word of words){
+
+            if(question.includes(word))
+            return intent;
+
+        }
+
+    }
+
+    return "about";
+
+}
+
+function ultraBrainAnswer(question){
+
+    let entity = findEntity(question);
+
+    if(!entity)
+    return "I do not know that yet.";
+
+    let intent = findIntent(question);
+
+    let props = entity.properties;
+
+    if(props[intent])
+    return props[intent];
+
+    return props.about || "Information not available.";
+
+  }
 
 
 /* ORIGINAL FUNCTIONS — UNCHANGED */
@@ -349,7 +407,7 @@ historyList.unshift(q);
 
 saveHistory();
 
-document.getElementById("answer").innerText=getSmartAnswer(q);
+document.getElementById("answer").innerText=ultraBrainAnswer(q);
 
 goPage(3);
 
