@@ -1,13 +1,18 @@
-<!DOCTYPE html>  <html lang="en">  <head>    <meta charset="UTF-8">    
-<meta name="viewport" content="width=device-width, initial-scale=1.0">    
-<title>M Search</title>  <style>    
-body{    
-margin:0;    
-font-family:Arial, sans-serif;    
-background:#0f0f0f;    
-color:white;    
-overflow-x:hidden;    
-}    /* SPLASH */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M Search</title>
+<style>
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#0f0f0f;
+color:white;
+overflow-x:hidden;
+}
+/* SPLASH */
 #splash{
 position:fixed;
 inset:0;
@@ -17,29 +22,23 @@ justify-content:center;
 align-items:center;
 z-index:1000;
 }
-
 #splashLogo{
 font-size:52px;
 font-weight:bold;
 }
-
 #splashLogo span{ color:#4285F4; }
-
 /* COMMON */
 .page{ display:none; padding:22px; }
 .show{ display:block; }
-
 /* HEADER */
 .header{
 text-align:center;
 margin-top:40px;
 }
-
 .header h1{
 font-size:48px;
 margin-bottom:35px;
 }
-
 /* SEARCH BAR */
 .search-pad{
 width:100%;
@@ -52,7 +51,6 @@ background:#1f1f1f;
 color:white;
 outline:none;
 }
-
 /* BUTTON */
 .search-btn{
 width:100%;
@@ -65,7 +63,6 @@ background:#4285F4;
 color:white;
 cursor:pointer;
 }
-
 /* BIG BOXES */
 .big-box{
 background:#1f1f1f;
@@ -73,34 +70,28 @@ border-radius:20px;
 padding:26px;
 margin-top:22px;
 }
-
 .big-box h2{
 font-size:24px;
 margin:0 0 10px;
 }
-
 .big-box p{
 font-size:18px;
 color:#ccc;
 }
-
 /* HISTORY */
 .history{ margin-top:20px; }
-
 .history-item{
 padding:10px;
 font-size:16px;
 color:#aaa;
 cursor:pointer;
 }
-
 /* PAGE BUTTONS */
 .page-buttons{
 display:flex;
 gap:10px;
 margin-bottom:10px;
 }
-
 .page-btn{
 flex:1;
 height:45px;
@@ -111,7 +102,6 @@ color:white;
 font-size:16px;
 cursor:pointer;
 }
-
 /* THREE DOT */
 #menuBtn{
 position:absolute;
@@ -120,7 +110,6 @@ right:15px;
 font-size:28px;
 cursor:pointer;
 }
-
 /* MENU BOX */
 #menuBox{
 position:absolute;
@@ -131,12 +120,10 @@ border-radius:10px;
 padding:10px;
 display:none;
 }
-
 .menu-item{
 padding:10px;
 cursor:pointer;
 }
-
 /* HISTORY PAGE */
 #historyPage{
 position:fixed;
@@ -146,7 +133,6 @@ padding:20px;
 display:none;
 z-index:999;
 }
-
 #clearBtn{
 background:green;
 color:white;
@@ -155,7 +141,6 @@ padding:10px;
 margin-top:20px;
 width:100%;
 }
-
 #closeHistory{
 position:absolute;
 top:15px;
@@ -163,64 +148,88 @@ right:20px;
 font-size:26px;
 cursor:pointer;
 }
-
 /* LIGHT MODE */
 .light{
 background:linear-gradient(180deg,#f4f7fb,#e9eef5);
 color:#1a1a1a;
 }
-
 .light .search-pad{
 background:#ffffff;
 color:#111;
 border:2px solid #d0d9e5;
 }
-
 .light .big-box{
 background:#ffffff;
 color:#1a1a1a;
 }
-
 .light #menuBox{
 background:#ffffff;
 color:#111;
 }
-
 .light #historyPage{
 background:#eef3f9;
 color:#1b1f24;
 }
+</style>
+</head>
+<body>
+<div id="splash">
+<div id="splashLogo"> M <span> Search </span></div>
+</div>
 
-</style>  </head>  <body>  <div id="splash">
+<div id="menuBtn" onclick="toggleMenu()">⋮</div>
+<div id="menuBox">
+<div class="menu-item" onclick="openHistory()">History</div>
+<div class="menu-item" onclick="toggleMode()">Mode</div>
+</div>
 
-<div id="splashLogo"> M <span> Search </span></div>    
-</div>  <div id="menuBtn" onclick="toggleMenu()">⋮</div>  <div id="menuBox">    
-<div class="menu-item" onclick="openHistory()">History</div>    
-<div class="menu-item" onclick="toggleMode()">Mode</div>    
-</div>  <div id="historyPage">    
-<div id="closeHistory" onclick="closeHistory()">✕</div>    
-<h2>History</h2>    
-<div id="fullHistory"></div>    
-<button id="clearBtn" onclick="clearHistory()">Clear History</button>    
-</div>  <div id="page1" class="page show">  <div class="header">    
-<h1>M Search</h1>    
-</div>  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">  <div class="big-box">    
-<h2>Important Rules</h2>    
-<p>When you open M Search, refresh it once.</p>    
-</div>  <div class="big-box">    
-<h2>News 📊</h2>    
-<p>A simple and fast search built in 2023.</p>    
-</div>  <div class="big-box">    
-<h2>🌐 M SEARCH </h2>    
-<p>ALL File information.</p>    
-</div>  </div>  <div id="page2" class="page">  <div class="page-buttons">    
-<button class="page-btn" onclick="goPage(1)">Home</button>    
-<button class="page-btn" onclick="goPage(3)">Result</button>    
-</div>  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">  <button class="search-btn" onclick="search()">Search</button>  <div class="history" id="history"></div>  </div>  <div id="page3" class="page">  <h2>M Search Result</h2>  <p style="font-size:20px">    
-<b>Answer:</b>    
-<span id="answer"></span>    
-</p>  <button class="search-btn" onclick="goBack()">Back</button>  </div>  <script>    /* ORIGINAL DATA — UNCHANGED */
+<div id="historyPage">
+<div id="closeHistory" onclick="closeHistory()">✕</div>
+<h2>History</h2>
+<div id="fullHistory"></div>
+<button id="clearBtn" onclick="clearHistory()">Clear History</button>
+</div>
 
+<div id="page1" class="page show">
+<div class="header">
+<h1>M Search</h1>
+</div>
+<input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">
+<div class="big-box">
+<h2>Important Rules</h2>
+<p>When you open M Search, refresh it once.</p>
+</div>
+<div class="big-box">
+<h2>News 📊</h2>
+<p>A simple and fast search built in 2023.</p>
+</div>
+<div class="big-box">
+<h2>🌐 M SEARCH </h2>
+<p>ALL File information.</p>
+</div>
+</div>
+
+<div id="page2" class="page">
+<div class="page-buttons">
+<button class="page-btn" onclick="goPage(1)">Home</button>
+<button class="page-btn" onclick="goPage(3)">Result</button>
+</div>
+<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">
+<button class="search-btn" onclick="search()">Search</button>
+<div class="history" id="history"></div>
+</div>
+
+<div id="page3" class="page">
+<h2>M Search Result</h2>
+<p style="font-size:20px">
+<b>Answer:</b>
+<span id="answer"></span>
+</p>
+<button class="search-btn" onclick="goBack()">Back</button>
+</div>
+
+<script>
+/* ORIGINAL DATA — UNCHANGED */
 const data={
 "what is python":"Python is a programming language.",
 "what is google":"Google is a search engine.",
@@ -234,8 +243,7 @@ const data={
 let selectedQuestion="";
 let historyList=[];
 
-/* SMART JSON SYSTEM ADDED */
-
+/* SMART JSON SYSTEM UPDATED FOR ANY SEARCH */
 let smartData={};
 
 fetch("smart-data.json")
@@ -243,55 +251,36 @@ fetch("smart-data.json")
 .then(json=>{
 smartData=json;
 })
-.catch(()=>{
-console.log("Smart JSON not loaded");
-});
+.catch(()=>{console.log("Smart JSON not loaded");});
 
 function getSmartAnswer(q){
-
-q=q.toLowerCase();
+q=q.toLowerCase().trim();
 
 for(let topic in smartData){
-
-if(q.includes(topic)){
-
 let item=smartData[topic];
-
-if(q.includes("founder")) return item.founder;
-
-if(q.includes("create date") || q.includes("created")) return item.create_date;
-
-return item.about;
-
+if(q.includes(topic)){
+return item.about; // Always return the exact data about that topic
 }
 }
 
+// fallback to original data
 return data[q] || "Answer not found";
 }
 
 /* ORIGINAL FUNCTIONS — UNCHANGED */
-
 function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
 document.getElementById("page"+n).classList.add("show");
 }
 
 function search(){
-
-let q=document.getElementById("query").value.toLowerCase();
-
+let q=document.getElementById("query").value;
 if(q==="") return;
-
 selectedQuestion=q;
-
 historyList.unshift(q);
-
 saveHistory();
-
 document.getElementById("answer").innerText=getSmartAnswer(q);
-
 goPage(3);
-
 }
 
 function goBack(){
@@ -301,35 +290,21 @@ showSuggestions();
 }
 
 function showSuggestions(){
-
 let q=document.getElementById("query").value.toLowerCase();
-
 let h=document.getElementById("history");
-
 h.innerHTML="";
-
 if(q==="") return;
-
 for(let key in data){
-
 if(key.includes(q)){
-
 let d=document.createElement("div");
-
 d.className="history-item";
-
 d.innerText=key;
-
 d.onclick=function(){
 document.getElementById("query").value=key;
 };
-
 h.appendChild(d);
-
 }
-
 }
-
 }
 
 function toggleMenu(){
@@ -381,7 +356,6 @@ loadHistory();
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
-
-</script>  </body>
-
-</html>  
+</script>
+</body>
+</html>
