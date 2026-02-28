@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>M Search</title>
-
-<style>
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#0f0f0f;
-color:white;
-overflow-x:hidden;
-}
-
-/* SPLASH */
+<!DOCTYPE html>  <html lang="en">  <head>    <meta charset="UTF-8">    
+<meta name="viewport" content="width=device-width, initial-scale=1.0">    
+<title>M Search</title>  <style>    
+body{    
+margin:0;    
+font-family:Arial, sans-serif;    
+background:#0f0f0f;    
+color:white;    
+overflow-x:hidden;    
+}    /* SPLASH */
 #splash{
 position:fixed;
 inset:0;
@@ -199,85 +191,35 @@ background:#eef3f9;
 color:#1b1f24;
 }
 
-</style>
-</head>
+</style>  </head>  <body>  <div id="splash">
 
-<body>
-
-<div id="splash">
-<div id="splashLogo"> M <span> Search </span></div>
-</div>
-
-<div id="menuBtn" onclick="toggleMenu()">⋮</div>
-
-<div id="menuBox">
-<div class="menu-item" onclick="openHistory()">History</div>
-<div class="menu-item" onclick="toggleMode()">Mode</div>
-</div>
-
-<div id="historyPage">
-<div id="closeHistory" onclick="closeHistory()">✕</div>
-<h2>History</h2>
-<div id="fullHistory"></div>
-<button id="clearBtn" onclick="clearHistory()">Clear History</button>
-</div>
-
-<div id="page1" class="page show">
-
-<div class="header">
-<h1>M Search</h1>
-</div>
-
-<input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">
-
-<div class="big-box">
-<h2>Important Rules</h2>
-<p>When you open M Search, refresh it once.</p>
-</div>
-
-<div class="big-box">
-<h2>News 📊</h2>
-<p>A simple and fast search built in 2023.</p>
-</div>
-
-<div class="big-box">
-<h2>🌐 M SEARCH </h2>
-<p>ALL File information.</p>
-</div>
-
-</div>
-
-<div id="page2" class="page">
-
-<div class="page-buttons">
-<button class="page-btn" onclick="goPage(1)">Home</button>
-<button class="page-btn" onclick="goPage(3)">Result</button>
-</div>
-
-<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">
-
-<button class="search-btn" onclick="search()">Search</button>
-
-<div class="history" id="history"></div>
-
-</div>
-
-<div id="page3" class="page">
-
-<h2>M Search Result</h2>
-
-<p style="font-size:20px">
-<b>Answer:</b>
-<span id="answer"></span>
-</p>
-
-<button class="search-btn" onclick="goBack()">Back</button>
-
-</div>
-
-<script>
-
-/* ORIGINAL DATA — UNCHANGED */
+<div id="splashLogo"> M <span> Search </span></div>    
+</div>  <div id="menuBtn" onclick="toggleMenu()">⋮</div>  <div id="menuBox">    
+<div class="menu-item" onclick="openHistory()">History</div>    
+<div class="menu-item" onclick="toggleMode()">Mode</div>    
+</div>  <div id="historyPage">    
+<div id="closeHistory" onclick="closeHistory()">✕</div>    
+<h2>History</h2>    
+<div id="fullHistory"></div>    
+<button id="clearBtn" onclick="clearHistory()">Clear History</button>    
+</div>  <div id="page1" class="page show">  <div class="header">    
+<h1>M Search</h1>    
+</div>  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">  <div class="big-box">    
+<h2>Important Rules</h2>    
+<p>When you open M Search, refresh it once.</p>    
+</div>  <div class="big-box">    
+<h2>News 📊</h2>    
+<p>A simple and fast search built in 2023.</p>    
+</div>  <div class="big-box">    
+<h2>🌐 M SEARCH </h2>    
+<p>ALL File information.</p>    
+</div>  </div>  <div id="page2" class="page">  <div class="page-buttons">    
+<button class="page-btn" onclick="goPage(1)">Home</button>    
+<button class="page-btn" onclick="goPage(3)">Result</button>    
+</div>  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">  <button class="search-btn" onclick="search()">Search</button>  <div class="history" id="history"></div>  </div>  <div id="page3" class="page">  <h2>M Search Result</h2>  <p style="font-size:20px">    
+<b>Answer:</b>    
+<span id="answer"></span>    
+</p>  <button class="search-btn" onclick="goBack()">Back</button>  </div>  <script>    /* ORIGINAL DATA — UNCHANGED */
 
 const data={
 "what is python":"Python is a programming language.",
@@ -292,101 +234,40 @@ const data={
 let selectedQuestion="";
 let historyList=[];
 
+/* SMART JSON SYSTEM ADDED */
 
-/* ===========================
-   ULTRA-BRAIN LEVEL-4 AI
-   =========================== */
+let smartData={};
 
-let BRAIN = {};
-let ENTITIES = {};
-let INTENTS = {};
-
-fetch("data.json")
-.then(res => res.json())
-.then(json => {
-
-    BRAIN = json;
-    ENTITIES = json.entities;
-    INTENTS = json.intents;
-
+fetch("smart-data.json")
+.then(response=>response.json())
+.then(json=>{
+smartData=json;
 })
-.catch(() => {
-
-    console.log("Brain not loaded");
-
+.catch(()=>{
+console.log("Smart JSON not loaded");
 });
 
-function clean(text){
-    return text.toLowerCase().replace(/[^\w\s]/g,"").trim();
-}
+function getSmartAnswer(q){
 
-function findEntity(question){
+q=q.toLowerCase();
 
-    question = clean(question);
+for(let topic in smartData){
 
-    for(let key in ENTITIES){
+if(q.includes(topic)){
 
-        let entity = ENTITIES[key];
+let item=smartData[topic];
 
-        if(question.includes(key))
-        return entity;
+if(q.includes("founder")) return item.founder;
 
-        if(entity.aliases){
+if(q.includes("create date") || q.includes("created")) return item.create_date;
 
-            for(let alias of entity.aliases){
-
-                if(question.includes(alias))
-                return entity;
-
-            }
-
-        }
-
-    }
-
-    return null;
+return item.about;
 
 }
-
-function findIntent(question){
-
-    question = clean(question);
-
-    for(let intent in INTENTS){
-
-        let words = INTENTS[intent];
-
-        for(let word of words){
-
-            if(question.includes(word))
-            return intent;
-
-        }
-
-    }
-
-    return "about";
-
 }
 
-function ultraBrainAnswer(question){
-
-    let entity = findEntity(question);
-
-    if(!entity)
-    return "I do not know that yet.";
-
-    let intent = findIntent(question);
-
-    let props = entity.properties;
-
-    if(props[intent])
-    return props[intent];
-
-    return props.about || "Information not available.";
-
-  }
-
+return data[q] || "Answer not found";
+}
 
 /* ORIGINAL FUNCTIONS — UNCHANGED */
 
@@ -407,7 +288,7 @@ historyList.unshift(q);
 
 saveHistory();
 
-document.getElementById("answer").innerText=ultraBrainAnswer(q);
+document.getElementById("answer").innerText=getSmartAnswer(q);
 
 goPage(3);
 
@@ -501,7 +382,6 @@ setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
 
-</script>
+</script>  </body>
 
-</body>
-</html>
+</html>  
