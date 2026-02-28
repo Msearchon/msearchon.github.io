@@ -176,20 +176,17 @@ color:#1b1f24;
 <div id="splash">
 <div id="splashLogo"> M <span> Search </span></div>
 </div>
-
 <div id="menuBtn" onclick="toggleMenu()">⋮</div>
 <div id="menuBox">
 <div class="menu-item" onclick="openHistory()">History</div>
 <div class="menu-item" onclick="toggleMode()">Mode</div>
 </div>
-
 <div id="historyPage">
 <div id="closeHistory" onclick="closeHistory()">✕</div>
 <h2>History</h2>
 <div id="fullHistory"></div>
 <button id="clearBtn" onclick="clearHistory()">Clear History</button>
 </div>
-
 <div id="page1" class="page show">
 <div class="header">
 <h1>M Search</h1>
@@ -201,14 +198,13 @@ color:#1b1f24;
 </div>
 <div class="big-box">
 <h2>News 📊</h2>
-<p>A simple and fast search built in 2023.</p>
+<p>A simple And fast search built in 2023.</p>
 </div>
 <div class="big-box">
 <h2>🌐 M SEARCH </h2>
 <p>ALL File information.</p>
 </div>
 </div>
-
 <div id="page2" class="page">
 <div class="page-buttons">
 <button class="page-btn" onclick="goPage(1)">Home</button>
@@ -218,7 +214,6 @@ color:#1b1f24;
 <button class="search-btn" onclick="search()">Search</button>
 <div class="history" id="history"></div>
 </div>
-
 <div id="page3" class="page">
 <h2>M Search Result</h2>
 <p style="font-size:20px">
@@ -227,7 +222,6 @@ color:#1b1f24;
 </p>
 <button class="search-btn" onclick="goBack()">Back</button>
 </div>
-
 <script>
 /* ORIGINAL DATA — UNCHANGED */
 const data={
@@ -243,28 +237,38 @@ const data={
 let selectedQuestion="";
 let historyList=[];
 
-/* SMART JSON SYSTEM UPDATED FOR ANY SEARCH */
+/* SMART JSON SYSTEM ADDED */
 let smartData={};
 
 fetch("smart-data.json")
 .then(response=>response.json())
 .then(json=>{
-smartData=json;
+    smartData=json;
 })
-.catch(()=>{console.log("Smart JSON not loaded");});
+.catch(()=>{
+    console.log("Smart JSON not loaded");
+});
 
+/* FIXED: getSmartAnswer now checks ALL keys for the entity */
 function getSmartAnswer(q){
-q=q.toLowerCase().trim();
+    q = q.toLowerCase().trim();
 
-for(let topic in smartData){
-let item=smartData[topic];
-if(q.includes(topic)){
-return item.about; // Always return the exact data about that topic
-}
-}
+    for (let topic in smartData) {
+        if (q.includes(topic.toLowerCase())) {
+            let item = smartData[topic];
 
-// fallback to original data
-return data[q] || "Answer not found";
+            for (let key in item) {
+                if (q.includes(key.toLowerCase())) {
+                    return item[key];
+                }
+            }
+
+            if (item.about) return item.about;
+            return Object.values(item)[0];
+        }
+    }
+
+    return data[q] || "Answer not found";
 }
 
 /* ORIGINAL FUNCTIONS — UNCHANGED */
@@ -274,7 +278,7 @@ document.getElementById("page"+n).classList.add("show");
 }
 
 function search(){
-let q=document.getElementById("query").value;
+let q=document.getElementById("query").value.toLowerCase();
 if(q==="") return;
 selectedQuestion=q;
 historyList.unshift(q);
@@ -358,4 +362,4 @@ document.getElementById("splash").style.display="none";
 },2000);
 </script>
 </body>
-</html>
+  </html>
