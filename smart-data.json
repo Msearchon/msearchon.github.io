@@ -1,0 +1,207 @@
+<html>
+        <head><title>Downloaded HTML</title></head>
+        <body>
+            <pre style="white-space: pre-wrap; word-wrap: break-word;">{
+  "brain": {
+    "version": "3.0",
+    "name": "M Search GOD-Level Brain",
+    "intelligence": "Ultra Advanced",
+    "description": "Understands natural human questions and gives smart answers."
+  },
+
+  "entities": {
+
+    "m search": {
+      "type": "search_engine",
+      "name": "M Search",
+
+      "aliases": [
+        "msearch",
+        "m search engine",
+        "m-search",
+        "ms"
+      ],
+
+      "properties": {
+
+        "about": "M Search is an ultra-smart AI search engine designed to answer questions intelligently.",
+
+        "founder": "M.H is the founder of M Search.",
+
+        "created": "M Search was created in 2023.",
+
+        "owner": "MGPLC owns M Search.",
+
+        "company": "M Search operates under MGPLC.",
+
+        "purpose": "Its purpose is to provide fast, accurate, and intelligent answers.",
+
+        "technology": "It uses JSON brain intelligence and AI logic system.",
+
+        "type": "Artificial Intelligence Search Engine",
+
+        "status": "Active",
+
+        "future": "Future versions will include voice assistant and full AI automation."
+      }
+    },
+
+    "mgplc": {
+
+      "type": "company",
+
+      "name": "MGPLC",
+
+      "aliases": [
+        "mg plc",
+        "m g plc",
+        "mgplc company"
+      ],
+
+      "properties": {
+
+        "about": "MGPLC is a global artificial intelligence and technology company.",
+
+        "founded": "MGPLC was founded in 2017.",
+
+        "founder": "M.H is the founder of MGPLC.",
+
+        "ceo": "M.H is the CEO of MGPLC.",
+
+        "owner": "M.H owns MGPLC.",
+
+        "companies": "MGPLC owns 19 companies.",
+
+        "subsidiaries": "MGPLC has 19 subsidiaries.",
+
+        "network_value": "MGPLC network value is 1.2 trillion dollars.",
+
+        "industry": "Artificial Intelligence and Technology.",
+
+        "owns": "MGPLC owns M Search.",
+
+        "mission": "To build advanced AI systems.",
+
+        "vision": "To create world-leading intelligent technology.",
+
+        "status": "Active"
+      }
+    },
+
+    "m.h": {
+
+      "type": "person",
+
+      "name": "M.H",
+
+      "aliases": [
+        "mh",
+        "m h",
+        "founder mh"
+      ],
+
+      "properties": {
+
+        "about": "M.H is a technology entrepreneur and AI developer.",
+
+        "profession": "AI Developer and Technology Founder.",
+
+        "role": "Founder and CEO of MGPLC.",
+
+        "founded": "M.H founded MGPLC in 2017.",
+
+        "created": "M.H created M Search in 2023.",
+
+        "known_for": "Creating M Search and MGPLC.",
+
+        "company": "MGPLC",
+
+        "position": "CEO",
+
+        "status": "Active"
+      }
+    }
+
+  },
+
+  "intents": {
+
+    "about": [
+      "about",
+      "what is",
+      "tell me about",
+      "describe",
+      "information",
+      "info",
+      "explain"
+    ],
+
+    "founder": [
+      "founder",
+      "who created",
+      "who made",
+      "who built",
+      "creator",
+      "inventor"
+    ],
+
+    "created": [
+      "when created",
+      "creation date",
+      "when made",
+      "when started",
+      "created"
+    ],
+
+    "owner": [
+      "owner",
+      "who owns",
+      "owned by"
+    ],
+
+    "ceo": [
+      "ceo",
+      "chief executive officer",
+      "head"
+    ],
+
+    "companies": [
+      "companies",
+      "subsidiaries",
+      "how many companies"
+    ],
+
+    "network_value": [
+      "value",
+      "net worth",
+      "network value",
+      "company value"
+    ],
+
+    "mission": [
+      "mission",
+      "goal",
+      "objective"
+    ],
+
+    "vision": [
+      "vision",
+      "future goal"
+    ],
+
+    "purpose": [
+      "purpose",
+      "why created",
+      "reason"
+    ]
+
+  },
+
+  "memory": {
+    "learning": "enabled",
+    "auto_improve": true
+  }
+
+      }</pre>
+        </body>
+    </html>
