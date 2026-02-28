@@ -1,28 +1,29 @@
-<!DOCTYPE html>  
-<html lang="en">  
-<head>    
-<meta charset="UTF-8">      
-<meta name="viewport" content="width=device-width, initial-scale=1.0">      
-<title>M Search</title>  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M Search</title>
 
-<style>      
-body{      
-margin:0;      
-font-family:Arial, sans-serif;      
-background:#0f0f0f;      
-color:white;      
-overflow-x:hidden;      
-}    
+<style>
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#0f0f0f;
+color:white;
+overflow-x:hidden;
+}
 
-#splash{  
-position:fixed;  
-inset:0;  
-background:#0f0f0f;  
-display:flex;  
-justify-content:center;  
-align-items:center;  
-z-index:1000;  
-}  
+/* SPLASH */
+#splash{
+position:fixed;
+inset:0;
+background:#0f0f0f;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
 
 #splashLogo{
 font-size:52px;
@@ -31,9 +32,11 @@ font-weight:bold;
 
 #splashLogo span{ color:#4285F4; }
 
+/* COMMON */
 .page{ display:none; padding:22px; }
 .show{ display:block; }
 
+/* HEADER */
 .header{
 text-align:center;
 margin-top:40px;
@@ -44,6 +47,7 @@ font-size:48px;
 margin-bottom:35px;
 }
 
+/* SEARCH BAR */
 .search-pad{
 width:100%;
 height:64px;
@@ -56,6 +60,7 @@ color:white;
 outline:none;
 }
 
+/* BUTTON */
 .search-btn{
 width:100%;
 height:56px;
@@ -68,6 +73,7 @@ color:white;
 cursor:pointer;
 }
 
+/* BIG BOXES */
 .big-box{
 background:#1f1f1f;
 border-radius:20px;
@@ -85,6 +91,7 @@ font-size:18px;
 color:#ccc;
 }
 
+/* HISTORY */
 .history{ margin-top:20px; }
 
 .history-item{
@@ -94,6 +101,7 @@ color:#aaa;
 cursor:pointer;
 }
 
+/* PAGE BUTTONS */
 .page-buttons{
 display:flex;
 gap:10px;
@@ -111,6 +119,7 @@ font-size:16px;
 cursor:pointer;
 }
 
+/* THREE DOT */
 #menuBtn{
 position:absolute;
 top:15px;
@@ -119,6 +128,7 @@ font-size:28px;
 cursor:pointer;
 }
 
+/* MENU BOX */
 #menuBox{
 position:absolute;
 top:55px;
@@ -134,6 +144,7 @@ padding:10px;
 cursor:pointer;
 }
 
+/* HISTORY PAGE */
 #historyPage{
 position:fixed;
 inset:0;
@@ -160,6 +171,7 @@ font-size:26px;
 cursor:pointer;
 }
 
+/* LIGHT MODE */
 .light{
 background:linear-gradient(180deg,#f4f7fb,#e9eef5);
 color:#1a1a1a;
@@ -185,150 +197,151 @@ color:#111;
 background:#eef3f9;
 color:#1b1f24;
 }
-</style>  
-</head>  
+</style>
+</head>
 
-<body>  
+<body>
 
 <div id="splash">
-<div id="splashLogo"> M <span> Search </span></div>      
-</div>  
+<div id="splashLogo"> M <span> Search </span></div>
+</div>
 
-<div id="menuBtn" onclick="toggleMenu()">⋮</div>  
+<div id="menuBtn" onclick="toggleMenu()">⋮</div>
 
-<div id="menuBox">      
-<div class="menu-item" onclick="openHistory()">History</div>      
-<div class="menu-item" onclick="toggleMode()">Mode</div>      
-</div>  
+<div id="menuBox">
+<div class="menu-item" onclick="openHistory()">History</div>
+<div class="menu-item" onclick="toggleMode()">Mode</div>
+</div>
 
-<div id="historyPage">      
-<div id="closeHistory" onclick="closeHistory()">✕</div>      
-<h2>History</h2>      
-<div id="fullHistory"></div>      
-<button id="clearBtn" onclick="clearHistory()">Clear History</button>      
-</div>  
+<div id="historyPage">
+<div id="closeHistory" onclick="closeHistory()">✕</div>
+<h2>History</h2>
+<div id="fullHistory"></div>
+<button id="clearBtn" onclick="clearHistory()">Clear History</button>
+</div>
 
-<div id="page1" class="page show">  
-<div class="header">      
-<h1>M Search</h1>      
-</div>  
+<div id="page1" class="page show">
+<div class="header">
+<h1>M Search</h1>
+</div>
 
-<input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">  
+<input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">
 
-<div class="big-box">      
-<h2>Important Rules</h2>      
-<p>When you open M Search, refresh it once.</p>      
-</div>  
+<div class="big-box">
+<h2>Important Rules</h2>
+<p>When you open M Search, refresh it once.</p>
+</div>
 
-<div class="big-box">      
-<h2>News 📊</h2>      
-<p>A simple and fast search built in 2023.</p>      
-</div>  
+<div class="big-box">
+<h2>News 📊</h2>
+<p>A simple and fast search built in 2023.</p>
+</div>
 
-<div class="big-box">      
-<h2>🌐 M SEARCH </h2>      
-<p>ALL File information.</p>      
-</div>  
-</div>  
+<div class="big-box">
+<h2>🌐 M SEARCH </h2>
+<p>ALL File information.</p>
+</div>
 
-<div id="page2" class="page">  
+</div>
 
-<div class="page-buttons">      
-<button class="page-btn" onclick="goPage(1)">Home</button>      
-<button class="page-btn" onclick="goPage(3)">Result</button>      
-</div>  
+<div id="page2" class="page">
 
-<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">  
+<div class="page-buttons">
+<button class="page-btn" onclick="goPage(1)">Home</button>
+<button class="page-btn" onclick="goPage(3)">Result</button>
+</div>
 
-<button class="search-btn" onclick="search()">Search</button>  
+<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">
 
-<div class="history" id="history"></div>  
+<button class="search-btn" onclick="search()">Search</button>
 
-</div>  
+<div class="history" id="history"></div>
 
-<div id="page3" class="page">  
+</div>
 
-<h2>M Search Result</h2>  
+<div id="page3" class="page">
 
-<p style="font-size:20px">      
-<b>Answer:</b>      
-<span id="answer"></span>      
-</p>  
+<h2>M Search Result</h2>
 
-<button class="search-btn" onclick="goBack()">Back</button>  
+<p style="font-size:20px">
+<b>Answer:</b>
+<span id="answer"></span>
+</p>
 
-</div>  
+<button class="search-btn" onclick="goBack()">Back</button>
 
-<script>    
+</div>
 
+<script>
+
+/* ORIGINAL DATA */
 const data={
 "what is python":"Python is a programming language.",
 "what is google":"Google is a search engine.",
-"what is computer":"A computer is an electronic machine.",
-"what is m search":"M search is a mini search engine.",
-"who is m.h":"M.H is founder of M Search All.",
-"who create m search":"M.H created m search in 2023.",
-"tell me what is miraz":"Miraz is a #️⃣."
+"what is computer":"A computer is an electronic machine."
 };
 
 let selectedQuestion="";
 let historyList=[];
 
+/* SMART JSON LOAD */
 let smartData={};
 
 fetch("smart-data.json")
-.then(res=>res.json())
+.then(r=>r.json())
 .then(json=>{
 smartData=json;
+console.log("Smart JSON loaded");
 })
-.catch(()=>{
-console.log("Smart JSON not loaded");
+.catch(e=>{
+console.log("Smart JSON failed",e);
 });
 
+/* FULLY FIXED SEARCH FUNCTION */
 
-/* ✅ FIXED SEARCH SYSTEM */
 function getSmartAnswer(q){
 
-q=q.toLowerCase();
+q=q.toLowerCase().trim();
 
-if(!smartData.entities) return data[q] || "Answer not found";
+if(!smartData.entities) return "Answer not found";
 
-for(let entity in smartData.entities){
+for(const entityName in smartData.entities){
 
-let obj=smartData.entities[entity];
+const entity=smartData.entities[entityName];
 
-let names=[entity];
+let names=[entityName];
 
-if(obj.aliases) names=names.concat(obj.aliases);
+if(entity.aliases){
+names=names.concat(entity.aliases);
+}
 
-for(let name of names){
+for(const name of names){
 
 if(q.includes(name.toLowerCase())){
 
-let props=obj.properties;
+const props=entity.properties;
 
-for(let key in props){
+for(const key in props){
 
-if(q.includes(key.toLowerCase()) || q.includes("about") || q.includes("what") || q===name){
-
+if(q.includes(key.toLowerCase())){
 return props[key];
+}
+
+}
+
+if(props.about){
+return props.about;
+}
+
+}
 
 }
 
 }
 
-if(props.about) return props.about;
+return "Answer not found";
 
 }
-
-}
-
-}
-
-return data[q] || "Answer not found";
-
-}
-
 
 /* ORIGINAL FUNCTIONS */
 
@@ -339,7 +352,7 @@ document.getElementById("page"+n).classList.add("show");
 
 function search(){
 
-let q=document.getElementById("query").value.toLowerCase();
+let q=document.getElementById("query").value;
 
 if(q==="") return;
 
@@ -358,40 +371,9 @@ goPage(3);
 function goBack(){
 goPage(2);
 document.getElementById("query").value=selectedQuestion;
-showSuggestions();
 }
 
-function showSuggestions(){
-
-let q=document.getElementById("query").value.toLowerCase();
-
-let h=document.getElementById("history");
-
-h.innerHTML="";
-
-if(q==="") return;
-
-for(let key in data){
-
-if(key.includes(q)){
-
-let d=document.createElement("div");
-
-d.className="history-item";
-
-d.innerText=key;
-
-d.onclick=function(){
-document.getElementById("query").value=key;
-};
-
-h.appendChild(d);
-
-}
-
-}
-
-}
+function showSuggestions(){}
 
 function toggleMenu(){
 let m=document.getElementById("menuBox");
@@ -443,7 +425,7 @@ setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
 
-</script>  
+</script>
 
 </body>
 </html>
