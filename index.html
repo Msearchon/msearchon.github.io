@@ -234,7 +234,7 @@ color:#1b1f24;
 
 <div class="big-box">
 <h2>News 📊</h2>
-<p>A simple And fast search built in 2023.</p>
+<p>A simple and fast search built in 2023.</p>
 </div>
 
 <div class="big-box">
@@ -289,46 +289,46 @@ const data={
 let selectedQuestion="";
 let historyList=[];
 
-/* LOAD SMART JSON */
+/* FINAL SMART JSON SYSTEM */
 
 let smartData={};
+let smartLoaded=false;
 
 fetch("smart-data.json")
 .then(response=>response.json())
 .then(json=>{
 smartData=json;
+smartLoaded=true;
+console.log("Smart data loaded successfully");
 })
 .catch(()=>{
 console.log("Smart JSON not loaded");
 });
 
-/* FIXED SMART SEARCH SYSTEM */
-
 function getSmartAnswer(q){
 
-q = q.toLowerCase();
+q=q.toLowerCase();
 
 if(!smartData.entities) return data[q] || "Answer not found";
 
 for(let name in smartData.entities){
 
-let entity = smartData.entities[name];
-let props = entity.properties;
+let entity=smartData.entities[name];
+let props=entity.properties;
 
-/* check entity name */
+/* check main name */
 if(q.includes(name)){
 
 for(let key in props){
 
-let keyText = key.replace(/_/g," ");
+let keyText=key.replace(/_/g," ");
 
-if(q.includes(keyText)){
-return props[key];
-}
+if(q.includes(keyText)) return props[key];
 
 }
 
 return props.about || "Answer not found";
+
 }
 
 /* check aliases */
@@ -340,11 +340,9 @@ if(q.includes(alias)){
 
 for(let key in props){
 
-let keyText = key.replace(/_/g," ");
+let keyText=key.replace(/_/g," ");
 
-if(q.includes(keyText)){
-return props[key];
-}
+if(q.includes(keyText)) return props[key];
 
 }
 
@@ -362,8 +360,6 @@ return data[q] || "Answer not found";
 
 }
 
-/* ORIGINAL FUNCTIONS — UNCHANGED */
-
 function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
 document.getElementById("page"+n).classList.add("show");
@@ -380,6 +376,18 @@ selectedQuestion=q;
 historyList.unshift(q);
 
 saveHistory();
+
+if(!smartLoaded){
+
+document.getElementById("answer").innerText="Loading data, please wait...";
+goPage(3);
+
+setTimeout(()=>{
+document.getElementById("answer").innerText=getSmartAnswer(q);
+},500);
+
+return;
+}
 
 document.getElementById("answer").innerText=getSmartAnswer(q);
 
