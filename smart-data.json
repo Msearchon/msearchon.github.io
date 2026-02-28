@@ -1,7 +1,4 @@
-<html>
-        <head><title>Downloaded HTML</title></head>
-        <body>
-            <pre style="white-space: pre-wrap; word-wrap: break-word;">{
+{
   "entities": {
     "m search": {
       "aliases": ["msearch"],
@@ -85,6 +82,3 @@
     "universities": ["university", "college", "school"],
     "students": ["student", "college student", "pupil"]
   }
-    }</pre>
-        </body>
-    </html>
