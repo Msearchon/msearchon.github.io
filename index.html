@@ -3,8 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>M Search</title>
+
 <style>
+
 body{
 margin:0;
 font-family:Arial, sans-serif;
@@ -12,6 +15,7 @@ background:#0f0f0f;
 color:white;
 overflow-x:hidden;
 }
+
 /* SPLASH */
 #splash{
 position:fixed;
@@ -22,23 +26,29 @@ justify-content:center;
 align-items:center;
 z-index:1000;
 }
+
 #splashLogo{
 font-size:52px;
 font-weight:bold;
 }
+
 #splashLogo span{ color:#4285F4; }
+
 /* COMMON */
 .page{ display:none; padding:22px; }
 .show{ display:block; }
+
 /* HEADER */
 .header{
 text-align:center;
 margin-top:40px;
 }
+
 .header h1{
 font-size:48px;
 margin-bottom:35px;
 }
+
 /* SEARCH BAR */
 .search-pad{
 width:100%;
@@ -51,6 +61,7 @@ background:#1f1f1f;
 color:white;
 outline:none;
 }
+
 /* BUTTON */
 .search-btn{
 width:100%;
@@ -63,6 +74,7 @@ background:#4285F4;
 color:white;
 cursor:pointer;
 }
+
 /* BIG BOXES */
 .big-box{
 background:#1f1f1f;
@@ -70,28 +82,34 @@ border-radius:20px;
 padding:26px;
 margin-top:22px;
 }
+
 .big-box h2{
 font-size:24px;
 margin:0 0 10px;
 }
+
 .big-box p{
 font-size:18px;
 color:#ccc;
 }
+
 /* HISTORY */
 .history{ margin-top:20px; }
+
 .history-item{
 padding:10px;
 font-size:16px;
 color:#aaa;
 cursor:pointer;
 }
+
 /* PAGE BUTTONS */
 .page-buttons{
 display:flex;
 gap:10px;
 margin-bottom:10px;
 }
+
 .page-btn{
 flex:1;
 height:45px;
@@ -102,7 +120,8 @@ color:white;
 font-size:16px;
 cursor:pointer;
 }
-/* THREE DOT */
+
+/* MENU */
 #menuBtn{
 position:absolute;
 top:15px;
@@ -110,7 +129,7 @@ right:15px;
 font-size:28px;
 cursor:pointer;
 }
-/* MENU BOX */
+
 #menuBox{
 position:absolute;
 top:55px;
@@ -120,10 +139,12 @@ border-radius:10px;
 padding:10px;
 display:none;
 }
+
 .menu-item{
 padding:10px;
 cursor:pointer;
 }
+
 /* HISTORY PAGE */
 #historyPage{
 position:fixed;
@@ -133,6 +154,7 @@ padding:20px;
 display:none;
 z-index:999;
 }
+
 #clearBtn{
 background:green;
 color:white;
@@ -141,6 +163,7 @@ padding:10px;
 margin-top:20px;
 width:100%;
 }
+
 #closeHistory{
 position:absolute;
 top:15px;
@@ -148,36 +171,45 @@ right:20px;
 font-size:26px;
 cursor:pointer;
 }
+
 /* LIGHT MODE */
 .light{
 background:linear-gradient(180deg,#f4f7fb,#e9eef5);
 color:#1a1a1a;
 }
+
 .light .search-pad{
 background:#ffffff;
 color:#111;
 border:2px solid #d0d9e5;
 }
+
 .light .big-box{
 background:#ffffff;
 color:#1a1a1a;
 }
+
 .light #menuBox{
 background:#ffffff;
 color:#111;
 }
+
 .light #historyPage{
 background:#eef3f9;
 color:#1b1f24;
 }
+
 </style>
 </head>
+
 <body>
+
 <div id="splash">
 <div id="splashLogo"> M <span> Search </span></div>
 </div>
 
 <div id="menuBtn" onclick="toggleMenu()">⋮</div>
+
 <div id="menuBox">
 <div class="menu-item" onclick="openHistory()">History</div>
 <div class="menu-item" onclick="toggleMode()">Mode</div>
@@ -191,130 +223,161 @@ color:#1b1f24;
 </div>
 
 <div id="page1" class="page show">
+
 <div class="header">
 <h1>M Search</h1>
 </div>
+
 <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">
+
 <div class="big-box">
 <h2>Important Rules</h2>
 <p>When you open M Search, refresh it once.</p>
 </div>
+
 <div class="big-box">
 <h2>News 📊</h2>
 <p>A simple and fast search built in 2023.</p>
 </div>
+
 <div class="big-box">
 <h2>🌐 M SEARCH </h2>
 <p>ALL File information.</p>
 </div>
+
 </div>
 
 <div id="page2" class="page">
+
 <div class="page-buttons">
 <button class="page-btn" onclick="goPage(1)">Home</button>
 <button class="page-btn" onclick="goPage(3)">Result</button>
 </div>
-<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">
+
+<input id="query" class="search-pad" placeholder="Search">
+
 <button class="search-btn" onclick="search()">Search</button>
+
 <div class="history" id="history"></div>
+
 </div>
 
 <div id="page3" class="page">
+
 <h2>M Search Result</h2>
+
 <p style="font-size:20px">
 <b>Answer:</b>
 <span id="answer"></span>
 </p>
+
 <button class="search-btn" onclick="goBack()">Back</button>
+
 </div>
 
 <script>
+
+/* ORIGINAL DATA */
+const data={
+"what is python":"Python is a programming language.",
+"what is google":"Google is a search engine.",
+"what is computer":"A computer is an electronic machine.",
+"what is m search":"M search is a mini search engine.",
+"who is m.h":"M.H is founder of M Search All.",
+"who create m search":"M.H created m search in 2023.",
+"tell me what is miraz":"Miraz is a #️⃣."
+};
+
 let selectedQuestion="";
 let historyList=[];
+
+/* LOAD SMART JSON */
+
 let smartData={};
 
 fetch("smart-data.json")
-.then(response=>response.json())
+.then(res=>res.json())
 .then(json=>{
 smartData=json;
-})
-.catch(()=>{
-console.log("Smart JSON not loaded");
 });
 
-// FULL GOOGLE-LIKE SEARCH FUNCTION
-function getSmartAnswer(q){
-q=q.toLowerCase().trim();
+/* FIXED SEARCH SYSTEM */
 
-// Loop through all entities
-for(let entityKey in smartData.entities){
-let entity=smartData.entities[entityKey];
-let allNames=[entityKey];
-if(entity.aliases) allNames=allNames.concat(entity.aliases);
+function getSmartAnswer(query){
 
-for(let name of allNames){
-if(q.includes(name.toLowerCase())){
-// Search intent dynamically
-let propertyFound=false;
-for(let prop in entity.properties){
-let keywords=smartData.intents[prop] || [];
-for(let kw of keywords){
-if(q.includes(kw)){
-propertyFound=true;
-return entity.properties[prop];
+query=query.toLowerCase();
+
+if(!smartData.entities) return data[query] || "Answer not found";
+
+let entities=smartData.entities;
+let intents=smartData.intents;
+
+for(let entityName in entities){
+
+let entity=entities[entityName];
+
+let names=[entityName,...(entity.aliases||[])];
+
+for(let name of names){
+
+if(query.includes(name.toLowerCase())){
+
+for(let intentName in intents){
+
+let keywords=intents[intentName];
+
+for(let keyword of keywords){
+
+if(query.includes(keyword)){
+
+if(entity.properties && entity.properties[intentName])
+return entity.properties[intentName];
+
 }
 }
+
 }
-// If no specific intent found, return 'about'
-if(!propertyFound && entity.properties.about) return entity.properties.about;
+
+if(entity.properties && entity.properties.about)
+return entity.properties.about;
+
 }
 }
 }
 
-return "Answer not found";
+return data[query] || "Answer not found";
+
 }
 
-/* ORIGINAL FUNCTIONS — UNCHANGED */
+/* SEARCH FUNCTION */
+
+function search(){
+
+let q=document.getElementById("query").value.toLowerCase();
+
+if(q==="") return;
+
+selectedQuestion=q;
+
+historyList.unshift(q);
+
+saveHistory();
+
+document.getElementById("answer").innerText=getSmartAnswer(q);
+
+goPage(3);
+
+}
+
+/* OTHER FUNCTIONS */
+
 function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
 document.getElementById("page"+n).classList.add("show");
 }
 
-function search(){
-let q=document.getElementById("query").value;
-if(q==="") return;
-selectedQuestion=q;
-historyList.unshift(q);
-saveHistory();
-document.getElementById("answer").innerText=getSmartAnswer(q);
-goPage(3);
-}
-
 function goBack(){
 goPage(2);
-document.getElementById("query").value=selectedQuestion;
-showSuggestions();
-}
-
-function showSuggestions(){
-let q=document.getElementById("query").value.toLowerCase();
-let h=document.getElementById("history");
-h.innerHTML="";
-if(q==="") return;
-for(let key in smartData.entities){
-let entity=smartData.entities[key];
-let allNames=[key];
-if(entity.aliases) allNames=allNames.concat(entity.aliases);
-for(let name of allNames){
-if(name.toLowerCase().includes(q)){
-let d=document.createElement("div");
-d.className="history-item";
-d.innerText=name;
-d.onclick=function(){ document.getElementById("query").value=name; };
-h.appendChild(d);
-}
-}
-}
 }
 
 function toggleMenu(){
@@ -366,6 +429,8 @@ loadHistory();
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
+
 </script>
+
 </body>
 </html>
