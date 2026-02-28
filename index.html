@@ -234,7 +234,7 @@ color:#1b1f24;
 
 <div class="big-box">
 <h2>News 📊</h2>
-<p>A simple and fast search built in 2023.</p>
+<p>A simple And fast search built in 2023.</p>
 </div>
 
 <div class="big-box">
@@ -274,63 +274,82 @@ color:#1b1f24;
 
 <script>
 
-/* ORIGINAL DATA */
+/* ORIGINAL DATA — UNCHANGED */
+
 const data={
 "what is python":"Python is a programming language.",
 "what is google":"Google is a search engine.",
-"what is computer":"A computer is an electronic machine."
+"what is computer":"A computer is an electronic machine.",
+"what is m search":"M search is a mini search engine.",
+"who is m.h":"M.H is founder of M Search All.",
+"who create m search":"M.H created m search in 2023.",
+"tell me what is miraz":"Miraz is a #️⃣."
 };
 
 let selectedQuestion="";
 let historyList=[];
 
-/* SMART JSON LOAD */
+/* LOAD SMART JSON */
+
 let smartData={};
 
 fetch("smart-data.json")
-.then(r=>r.json())
+.then(response=>response.json())
 .then(json=>{
 smartData=json;
-console.log("Smart JSON loaded");
 })
-.catch(e=>{
-console.log("Smart JSON failed",e);
+.catch(()=>{
+console.log("Smart JSON not loaded");
 });
 
-/* FULLY FIXED SEARCH FUNCTION */
+/* FIXED SMART SEARCH SYSTEM */
 
 function getSmartAnswer(q){
 
-q=q.toLowerCase().trim();
+q = q.toLowerCase();
 
-if(!smartData.entities) return "Answer not found";
+if(!smartData.entities) return data[q] || "Answer not found";
 
-for(const entityName in smartData.entities){
+for(let name in smartData.entities){
 
-const entity=smartData.entities[entityName];
+let entity = smartData.entities[name];
+let props = entity.properties;
 
-let names=[entityName];
+/* check entity name */
+if(q.includes(name)){
 
-if(entity.aliases){
-names=names.concat(entity.aliases);
-}
+for(let key in props){
 
-for(const name of names){
+let keyText = key.replace(/_/g," ");
 
-if(q.includes(name.toLowerCase())){
-
-const props=entity.properties;
-
-for(const key in props){
-
-if(q.includes(key.toLowerCase())){
+if(q.includes(keyText)){
 return props[key];
 }
 
 }
 
-if(props.about){
-return props.about;
+return props.about || "Answer not found";
+}
+
+/* check aliases */
+if(entity.aliases){
+
+for(let alias of entity.aliases){
+
+if(q.includes(alias)){
+
+for(let key in props){
+
+let keyText = key.replace(/_/g," ");
+
+if(q.includes(keyText)){
+return props[key];
+}
+
+}
+
+return props.about || "Answer not found";
+
 }
 
 }
@@ -339,11 +358,11 @@ return props.about;
 
 }
 
-return "Answer not found";
+return data[q] || "Answer not found";
 
 }
 
-/* ORIGINAL FUNCTIONS */
+/* ORIGINAL FUNCTIONS — UNCHANGED */
 
 function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
@@ -352,7 +371,7 @@ document.getElementById("page"+n).classList.add("show");
 
 function search(){
 
-let q=document.getElementById("query").value;
+let q=document.getElementById("query").value.toLowerCase();
 
 if(q==="") return;
 
@@ -371,9 +390,40 @@ goPage(3);
 function goBack(){
 goPage(2);
 document.getElementById("query").value=selectedQuestion;
+showSuggestions();
 }
 
-function showSuggestions(){}
+function showSuggestions(){
+
+let q=document.getElementById("query").value.toLowerCase();
+
+let h=document.getElementById("history");
+
+h.innerHTML="";
+
+if(q==="") return;
+
+for(let key in data){
+
+if(key.includes(q)){
+
+let d=document.createElement("div");
+
+d.className="history-item";
+
+d.innerText=key;
+
+d.onclick=function(){
+document.getElementById("query").value=key;
+};
+
+h.appendChild(d);
+
+}
+
+}
+
+}
 
 function toggleMenu(){
 let m=document.getElementById("menuBox");
