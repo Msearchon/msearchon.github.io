@@ -229,136 +229,136 @@ color:#1b1f24;
 </div>
 
 <script>
-const data = {
-"what is python":"Python is a programming language.",
-"what is google":"Google is a search engine.",
-"what is computer":"A computer is an electronic machine.",
-"what is m search":"M search is a mini search engine.",
-"who is m.h":"M.H is founder of M Search All.",
-"who create m search":"M.H created m search in 2023.",
-"tell me what is miraz":"Miraz is a #️⃣."
-};
+let selectedQuestion="";
+let historyList=[];
+let smartData={};
 
-let selectedQuestion = "";
-let historyList = [];
-
-let smartData = {};
-
-// load JSON properly
 fetch("smart-data.json")
-.then(res => res.json())
-.then(json => {
-    smartData = json.entities; // use entities directly
-    console.log("Smart JSON loaded:", smartData);
+.then(response=>response.json())
+.then(json=>{
+smartData=json;
 })
-.catch(()=>console.log("Smart JSON not loaded"));
+.catch(()=>{
+console.log("Smart JSON not loaded");
+});
 
+// FULL GOOGLE-LIKE SEARCH FUNCTION
 function getSmartAnswer(q){
-    q = q.toLowerCase().trim();
+q=q.toLowerCase().trim();
 
-    for(let key in smartData){
-        let entity = smartData[key];
-        let names = [key];
-        if(entity.aliases) names = names.concat(entity.aliases);
+// Loop through all entities
+for(let entityKey in smartData.entities){
+let entity=smartData.entities[entityKey];
+let allNames=[entityKey];
+if(entity.aliases) allNames=allNames.concat(entity.aliases);
 
-        for(let name of names){
-            name = name.toLowerCase().trim();
-            if(q.includes(name)){
-                // check for intents
-                if(q.includes("founder") || q.includes("creator") || q.includes("made by") || q.includes("who created")){
-                    return entity.properties.founder || entity.properties.about || "Answer not found";
-                }
-                if(q.includes("owner") || q.includes("owns") || q.includes("owned by")){
-                    return entity.properties.owner || entity.properties.about || "Answer not found";
-                }
-                if(q.includes("create") || q.includes("created") || q.includes("creation") || q.includes("launch") || q.includes("create date")){
-                    return entity.properties.created || entity.properties.about || "Answer not found";
-                }
-                return entity.properties.about || "Answer not found";
-            }
-        }
-    }
-
-    return data[q] || "Answer not found";
+for(let name of allNames){
+if(q.includes(name.toLowerCase())){
+// Search intent dynamically
+let propertyFound=false;
+for(let prop in entity.properties){
+let keywords=smartData.intents[prop] || [];
+for(let kw of keywords){
+if(q.includes(kw)){
+propertyFound=true;
+return entity.properties[prop];
+}
+}
+}
+// If no specific intent found, return 'about'
+if(!propertyFound && entity.properties.about) return entity.properties.about;
+}
+}
 }
 
-/* ORIGINAL FUNCTIONS */
+return "Answer not found";
+}
 
+/* ORIGINAL FUNCTIONS — UNCHANGED */
 function goPage(n){
-    document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
-    document.getElementById("page"+n).classList.add("show");
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+document.getElementById("page"+n).classList.add("show");
 }
 
 function search(){
-    let q=document.getElementById("query").value;
-    if(q==="") return;
-    selectedQuestion=q;
-    historyList.unshift(q);
-    saveHistory();
-    document.getElementById("answer").innerText=getSmartAnswer(q);
-    goPage(3);
+let q=document.getElementById("query").value;
+if(q==="") return;
+selectedQuestion=q;
+historyList.unshift(q);
+saveHistory();
+document.getElementById("answer").innerText=getSmartAnswer(q);
+goPage(3);
 }
 
 function goBack(){
-    goPage(2);
-    document.getElementById("query").value = selectedQuestion;
-    showSuggestions();
+goPage(2);
+document.getElementById("query").value=selectedQuestion;
+showSuggestions();
 }
 
 function showSuggestions(){
-    let q=document.getElementById("query").value.toLowerCase().trim();
-    let h=document.getElementById("history");
-    h.innerHTML="";
-    if(q==="") return;
-
-    for(let key in data){
-        if(key.includes(q)){
-            let d=document.createElement("div");
-            d.className="history-item";
-            d.innerText=key;
-            d.onclick=function(){
-                document.getElementById("query").value=key;
-            };
-            h.appendChild(d);
-        }
-    }
+let q=document.getElementById("query").value.toLowerCase();
+let h=document.getElementById("history");
+h.innerHTML="";
+if(q==="") return;
+for(let key in smartData.entities){
+let entity=smartData.entities[key];
+let allNames=[key];
+if(entity.aliases) allNames=allNames.concat(entity.aliases);
+for(let name of allNames){
+if(name.toLowerCase().includes(q)){
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=name;
+d.onclick=function(){ document.getElementById("query").value=name; };
+h.appendChild(d);
+}
+}
+}
 }
 
 function toggleMenu(){
-    let m=document.getElementById("menuBox");
-    m.style.display=m.style.display==="block"?"none":"block";
+let m=document.getElementById("menuBox");
+m.style.display=m.style.display==="block"?"none":"block";
 }
+
 function toggleMode(){
-    document.body.classList.toggle("light");
+document.body.classList.toggle("light");
 }
+
 function openHistory(){
-    document.getElementById("historyPage").style.display="block";
-    renderFullHistory();
+document.getElementById("historyPage").style.display="block";
+renderFullHistory();
 }
+
 function closeHistory(){
-    document.getElementById("historyPage").style.display="none";
+document.getElementById("historyPage").style.display="none";
 }
+
 function saveHistory(){
-    localStorage.setItem("m_history",JSON.stringify(historyList));
+localStorage.setItem("m_history",JSON.stringify(historyList));
 }
+
 function loadHistory(){
-    let h=localStorage.getItem("m_history");
-    if(h) historyList=JSON.parse(h);
+let h=localStorage.getItem("m_history");
+if(h) historyList=JSON.parse(h);
 }
+
 function renderFullHistory(){
-    let box=document.getElementById("fullHistory");
-    box.innerHTML="";
-    historyList.forEach(item=>{
-        let d=document.createElement("div");
-        d.className="history-item";
-        d.innerText=item;
-        box.appendChild(d);
-    });
+let box=document.getElementById("fullHistory");
+box.innerHTML="";
+historyList.forEach(item=>{
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=item;
+box.appendChild(d);
+});
 }
+
 function clearHistory(){
-    historyList=[];
-    saveHistory();
-    renderFullHistory();
+historyList=[];
+saveHistory();
+renderFullHistory();
 }
 
 loadHistory();
