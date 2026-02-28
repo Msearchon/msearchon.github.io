@@ -174,19 +174,22 @@ color:#1b1f24;
 </head>
 <body>
 <div id="splash">
-<div id="splashLogo"> M <span> Search </span></div>      
+<div id="splashLogo"> M <span> Search </span></div>
 </div>
+
 <div id="menuBtn" onclick="toggleMenu()">⋮</div>
 <div id="menuBox">
 <div class="menu-item" onclick="openHistory()">History</div>
 <div class="menu-item" onclick="toggleMode()">Mode</div>
 </div>
+
 <div id="historyPage">
 <div id="closeHistory" onclick="closeHistory()">✕</div>
 <h2>History</h2>
 <div id="fullHistory"></div>
 <button id="clearBtn" onclick="clearHistory()">Clear History</button>
 </div>
+
 <div id="page1" class="page show">
 <div class="header">
 <h1>M Search</h1>
@@ -205,6 +208,7 @@ color:#1b1f24;
 <p>ALL File information.</p>
 </div>
 </div>
+
 <div id="page2" class="page">
 <div class="page-buttons">
 <button class="page-btn" onclick="goPage(1)">Home</button>
@@ -214,6 +218,7 @@ color:#1b1f24;
 <button class="search-btn" onclick="search()">Search</button>
 <div class="history" id="history"></div>
 </div>
+
 <div id="page3" class="page">
 <h2>M Search Result</h2>
 <p style="font-size:20px">
@@ -224,48 +229,7 @@ color:#1b1f24;
 </div>
 
 <script>
-let selectedQuestion="";
-let historyList=[];
-
-// Load your Smart JSON
-let smartData={};
-fetch("smart-data.json")
-.then(res=>res.json())
-.then(json=>{ smartData=json; })
-.catch(()=>{ console.log("Smart JSON not loaded"); });
-
-// Universal smart answer function
-function getSmartAnswer(q){
-q=q.toLowerCase().trim();
-
-// Iterate over all entities
-for(let key in smartData.entities){
-let entity=smartData.entities[key];
-
-// Match aliases
-let allNames=[key];
-if(entity.aliases) allNames=allNames.concat(entity.aliases);
-
-for(let name of allNames){
-if(q.includes(name)){
-let props=entity.properties;
-
-// Detect intent keywords
-if(q.includes("founder") || q.includes("creator") || q.includes("made by") || q.includes("who created")) return props.founder || props.about;
-if(q.includes("owner") || q.includes("owns") || q.includes("owned by")) return props.owner || props.about;
-if(q.includes("create") || q.includes("created") || q.includes("creation") || q.includes("launch") || q.includes("create date") || q.includes("created on")) return props.created || props.about;
-if(q.includes("apps") || q.includes("applications") || q.includes("app name")) return props.entertainment || props.search || props.music || props.pay || props.food || props.news || props.recharge || props.shopping || props.money || props.share_market || props.boff_werte || props.stock_market || props.message || props.phone || props.other || props.all_apps || props.apps_created || props.about;
-if(q.includes("university") || q.includes("college") || q.includes("school")) return props.mew || props.treepers || props.mdesh || props.about;
-if(q.includes("student") || q.includes("college student") || q.includes("pupil")) return props.amrs || props.about;
-
-// Default to about if no specific intent
-return props.about || "Answer not found";
-}
-}
-}
-
-// Fall back to original data if not found in smart JSON
-const data={
+const data = {
 "what is python":"Python is a programming language.",
 "what is google":"Google is a search engine.",
 "what is computer":"A computer is an electronic machine.",
@@ -275,94 +239,126 @@ const data={
 "tell me what is miraz":"Miraz is a #️⃣."
 };
 
-return data[q] || "Answer not found";
+let selectedQuestion = "";
+let historyList = [];
+
+let smartData = {};
+
+// load JSON properly
+fetch("smart-data.json")
+.then(res => res.json())
+.then(json => {
+    smartData = json.entities; // use entities directly
+    console.log("Smart JSON loaded:", smartData);
+})
+.catch(()=>console.log("Smart JSON not loaded"));
+
+function getSmartAnswer(q){
+    q = q.toLowerCase().trim();
+
+    for(let key in smartData){
+        let entity = smartData[key];
+        let names = [key];
+        if(entity.aliases) names = names.concat(entity.aliases);
+
+        for(let name of names){
+            name = name.toLowerCase().trim();
+            if(q.includes(name)){
+                // check for intents
+                if(q.includes("founder") || q.includes("creator") || q.includes("made by") || q.includes("who created")){
+                    return entity.properties.founder || entity.properties.about || "Answer not found";
+                }
+                if(q.includes("owner") || q.includes("owns") || q.includes("owned by")){
+                    return entity.properties.owner || entity.properties.about || "Answer not found";
+                }
+                if(q.includes("create") || q.includes("created") || q.includes("creation") || q.includes("launch") || q.includes("create date")){
+                    return entity.properties.created || entity.properties.about || "Answer not found";
+                }
+                return entity.properties.about || "Answer not found";
+            }
+        }
+    }
+
+    return data[q] || "Answer not found";
 }
 
-/* ORIGINAL FUNCTIONS — UNCHANGED */
+/* ORIGINAL FUNCTIONS */
+
 function goPage(n){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
-document.getElementById("page"+n).classList.add("show");
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+    document.getElementById("page"+n).classList.add("show");
 }
 
 function search(){
-let q=document.getElementById("query").value.trim();
-if(q==="") return;
-selectedQuestion=q;
-historyList.unshift(q);
-saveHistory();
-document.getElementById("answer").innerText=getSmartAnswer(q);
-goPage(3);
+    let q=document.getElementById("query").value;
+    if(q==="") return;
+    selectedQuestion=q;
+    historyList.unshift(q);
+    saveHistory();
+    document.getElementById("answer").innerText=getSmartAnswer(q);
+    goPage(3);
 }
 
 function goBack(){
-goPage(2);
-document.getElementById("query").value=selectedQuestion;
-showSuggestions();
+    goPage(2);
+    document.getElementById("query").value = selectedQuestion;
+    showSuggestions();
 }
 
 function showSuggestions(){
-let q=document.getElementById("query").value.toLowerCase().trim();
-let h=document.getElementById("history");
-h.innerHTML="";
-if(q==="") return;
-for(let key in smartData.entities){
-let entity=smartData.entities[key];
-let allNames=[key];
-if(entity.aliases) allNames=allNames.concat(entity.aliases);
-for(let name of allNames){
-if(name.includes(q)){
-let d=document.createElement("div");
-d.className="history-item";
-d.innerText=name;
-d.onclick=function(){ document.getElementById("query").value=name; };
-h.appendChild(d);
-}
-}
-}
+    let q=document.getElementById("query").value.toLowerCase().trim();
+    let h=document.getElementById("history");
+    h.innerHTML="";
+    if(q==="") return;
+
+    for(let key in data){
+        if(key.includes(q)){
+            let d=document.createElement("div");
+            d.className="history-item";
+            d.innerText=key;
+            d.onclick=function(){
+                document.getElementById("query").value=key;
+            };
+            h.appendChild(d);
+        }
+    }
 }
 
 function toggleMenu(){
-let m=document.getElementById("menuBox");
-m.style.display=m.style.display==="block"?"none":"block";
+    let m=document.getElementById("menuBox");
+    m.style.display=m.style.display==="block"?"none":"block";
 }
-
 function toggleMode(){
-document.body.classList.toggle("light");
+    document.body.classList.toggle("light");
 }
-
 function openHistory(){
-document.getElementById("historyPage").style.display="block";
-renderFullHistory();
+    document.getElementById("historyPage").style.display="block";
+    renderFullHistory();
 }
-
 function closeHistory(){
-document.getElementById("historyPage").style.display="none";
+    document.getElementById("historyPage").style.display="none";
 }
-
 function saveHistory(){
-localStorage.setItem("m_history",JSON.stringify(historyList));
+    localStorage.setItem("m_history",JSON.stringify(historyList));
 }
-
 function loadHistory(){
-let h=localStorage.getItem("m_history");
-if(h) historyList=JSON.parse(h);
+    let h=localStorage.getItem("m_history");
+    if(h) historyList=JSON.parse(h);
 }
-
 function renderFullHistory(){
-let box=document.getElementById("fullHistory");
-box.innerHTML="";
-historyList.forEach(item=>{
-let d=document.createElement("div");
-d.className="history-item";
-d.innerText=item;
-box.appendChild(d);
-});
+    let box=document.getElementById("fullHistory");
+    box.innerHTML="";
+    historyList.forEach(item=>{
+        let d=document.createElement("div");
+        d.className="history-item";
+        d.innerText=item;
+        box.appendChild(d);
+    });
 }
-
 function clearHistory(){
-historyList=[];
-saveHistory();
-renderFullHistory();
+    historyList=[];
+    saveHistory();
+    renderFullHistory();
 }
 
 loadHistory();
@@ -372,4 +368,4 @@ document.getElementById("splash").style.display="none";
 },2000);
 </script>
 </body>
-    </html>
+</html>
