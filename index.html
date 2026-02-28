@@ -174,7 +174,7 @@ color:#1b1f24;
 </head>
 <body>
 <div id="splash">
-<div id="splashLogo"> M <span> Search </span></div>
+<div id="splashLogo"> M <span> Search </span></div>      
 </div>
 <div id="menuBtn" onclick="toggleMenu()">⋮</div>
 <div id="menuBox">
@@ -198,7 +198,7 @@ color:#1b1f24;
 </div>
 <div class="big-box">
 <h2>News 📊</h2>
-<p>A simple And fast search built in 2023.</p>
+<p>A simple and fast search built in 2023.</p>
 </div>
 <div class="big-box">
 <h2>🌐 M SEARCH </h2>
@@ -222,8 +222,49 @@ color:#1b1f24;
 </p>
 <button class="search-btn" onclick="goBack()">Back</button>
 </div>
+
 <script>
-/* ORIGINAL DATA — UNCHANGED */
+let selectedQuestion="";
+let historyList=[];
+
+// Load your Smart JSON
+let smartData={};
+fetch("smart-data.json")
+.then(res=>res.json())
+.then(json=>{ smartData=json; })
+.catch(()=>{ console.log("Smart JSON not loaded"); });
+
+// Universal smart answer function
+function getSmartAnswer(q){
+q=q.toLowerCase().trim();
+
+// Iterate over all entities
+for(let key in smartData.entities){
+let entity=smartData.entities[key];
+
+// Match aliases
+let allNames=[key];
+if(entity.aliases) allNames=allNames.concat(entity.aliases);
+
+for(let name of allNames){
+if(q.includes(name)){
+let props=entity.properties;
+
+// Detect intent keywords
+if(q.includes("founder") || q.includes("creator") || q.includes("made by") || q.includes("who created")) return props.founder || props.about;
+if(q.includes("owner") || q.includes("owns") || q.includes("owned by")) return props.owner || props.about;
+if(q.includes("create") || q.includes("created") || q.includes("creation") || q.includes("launch") || q.includes("create date") || q.includes("created on")) return props.created || props.about;
+if(q.includes("apps") || q.includes("applications") || q.includes("app name")) return props.entertainment || props.search || props.music || props.pay || props.food || props.news || props.recharge || props.shopping || props.money || props.share_market || props.boff_werte || props.stock_market || props.message || props.phone || props.other || props.all_apps || props.apps_created || props.about;
+if(q.includes("university") || q.includes("college") || q.includes("school")) return props.mew || props.treepers || props.mdesh || props.about;
+if(q.includes("student") || q.includes("college student") || q.includes("pupil")) return props.amrs || props.about;
+
+// Default to about if no specific intent
+return props.about || "Answer not found";
+}
+}
+}
+
+// Fall back to original data if not found in smart JSON
 const data={
 "what is python":"Python is a programming language.",
 "what is google":"Google is a search engine.",
@@ -234,41 +275,7 @@ const data={
 "tell me what is miraz":"Miraz is a #️⃣."
 };
 
-let selectedQuestion="";
-let historyList=[];
-
-/* SMART JSON SYSTEM ADDED */
-let smartData={};
-
-fetch("smart-data.json")
-.then(response=>response.json())
-.then(json=>{
-    smartData=json;
-})
-.catch(()=>{
-    console.log("Smart JSON not loaded");
-});
-
-/* FIXED: getSmartAnswer now checks ALL keys for the entity */
-function getSmartAnswer(q){
-    q = q.toLowerCase().trim();
-
-    for (let topic in smartData) {
-        if (q.includes(topic.toLowerCase())) {
-            let item = smartData[topic];
-
-            for (let key in item) {
-                if (q.includes(key.toLowerCase())) {
-                    return item[key];
-                }
-            }
-
-            if (item.about) return item.about;
-            return Object.values(item)[0];
-        }
-    }
-
-    return data[q] || "Answer not found";
+return data[q] || "Answer not found";
 }
 
 /* ORIGINAL FUNCTIONS — UNCHANGED */
@@ -278,7 +285,7 @@ document.getElementById("page"+n).classList.add("show");
 }
 
 function search(){
-let q=document.getElementById("query").value.toLowerCase();
+let q=document.getElementById("query").value.trim();
 if(q==="") return;
 selectedQuestion=q;
 historyList.unshift(q);
@@ -294,19 +301,22 @@ showSuggestions();
 }
 
 function showSuggestions(){
-let q=document.getElementById("query").value.toLowerCase();
+let q=document.getElementById("query").value.toLowerCase().trim();
 let h=document.getElementById("history");
 h.innerHTML="";
 if(q==="") return;
-for(let key in data){
-if(key.includes(q)){
+for(let key in smartData.entities){
+let entity=smartData.entities[key];
+let allNames=[key];
+if(entity.aliases) allNames=allNames.concat(entity.aliases);
+for(let name of allNames){
+if(name.includes(q)){
 let d=document.createElement("div");
 d.className="history-item";
-d.innerText=key;
-d.onclick=function(){
-document.getElementById("query").value=key;
-};
+d.innerText=name;
+d.onclick=function(){ document.getElementById("query").value=name; };
 h.appendChild(d);
+}
 }
 }
 }
@@ -362,4 +372,4 @@ document.getElementById("splash").style.display="none";
 },2000);
 </script>
 </body>
-  </html>
+    </html>
