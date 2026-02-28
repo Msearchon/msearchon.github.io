@@ -1,242 +1,85 @@
 {
   "entities": {
     "m search": {
-      "aliases": ["msearch", "m search app"],
+      "aliases": ["msearch"],
       "properties": {
-        "about": "M Search is a mini  search engine.",
-        "founder": "M.H",
-        "owner": "MGPLC",
-        "created": "2023"
+        "about": "M Search is a smart search engine.",
+        "founder": "M.H is founder of M Search.",
+        "owner": "M Search is owned by MGPLC.",
+        "created": "M Search was created in 2023."
       }
     },
     "mgplc": {
       "aliases": ["m group pvt ltd", "mgplc company"],
       "properties": {
-        "about": "MGPLC is the parent company of M Search and 19 other companies.",
-        "founder": "M.H",
-        "created": "2017",
-        "companies": [
-          "M SEARCH ALL",
-          "TSC Club",
-          "TComputer",
-          "TC",
-          "XCAR",
-          "DEDF GROUP",
-          "LO",
-          "DAMER",
-          "DX",
-          "BANK OF Mcity",
-          "ORL",
-          "MNEWS",
-          "ESM AIRLINE",
-          "STD SODA",
-          "UN",
-          "OUT STUDIO",
-          "Hoill",
-          "ALLONE",
-          "ETC"
-        ],
-        "network": "1.2 Trillion Dollar"
+        "about": "MGPLC is the parent company that owns multiple businesses.",
+        "founder": "M.H is founder of MGPLC.",
+        "created": "MGPLC was founded in 2017.",
+        "total_companies": "MGPLC owns 19 companies.",
+        "companies": "M SEARCH ALL, TSC Club, Tcomputer, TC, XCAR, DEDF GROUP, LO, DAMER, DX, BANK OF Mcity, ORL, MNEWS, ESM AIRLINE, STD SODA, UN, OUT STUDIO, Hoill, ALLONE, etc."
       }
     },
     "pretext program": {
-      "aliases": ["pretext program app", "pretext program"],
+      "aliases": ["pretext", "pretextprogram"],
       "properties": {
-        "about": "First testing files data transferred to digital data successfully.",
-        "founder": "M.H",
-        "created": "15/1/2096"
+        "about": "Pretext Program is the first testing file data transfer system in digital data.",
+        "founder": "M.H is founder of Pretext Program.",
+        "created": "Pretext Program was created on 15/1/2096."
+      }
+    },
+    "apps": {
+      "aliases": ["app names", "applications"],
+      "properties": {
+        "entertainment": "ATABB, PPLCO, REDX, TIES, PLAY etc.",
+        "search": "M SEARCH, ASM, PVTLTD, HOT SONS LTD etc.",
+        "music": "Music ONE etc.",
+        "pay": "CPAY, SSBPAY etc.",
+        "food": "FOOD ON, Local Road etc.",
+        "news": "MNEWS, Time IBC, MCYCBER etc.",
+        "recharge": "ORL RE, ULCO RE etc.",
+        "shopping": "SORY, SUPER M etc.",
+        "money": "X CO CAT, 1OSTO etc.",
+        "share_market": "TURBO, XCOCAT, CT com etc.",
+        "boff_werte": "CEELL, Toms, ICWRA etc.",
+        "stock_market": "EDI etc.",
+        "message": "M Messege, MY TALK etc.",
+        "phone": "M Phone",
+        "other": "Ivee, ALL, HEIP, PVTLTD CAMRA etc.",
+        "all_apps": "MAPP, PVTLTD STORE, total 48 apps.",
+        "apps_created": "5/12/2024"
+      }
+    },
+    "universities": {
+      "aliases": ["university", "college", "university name"],
+      "properties": {
+        "mew": "University of M.E.W is at Mcity, created 2/Feb/2026.",
+        "treepers": "University of Treepers is at SPL, created 3/Feb/2026.",
+        "mdesh": "University of M Desh Education World"
+      }
+    },
+    "students": {
+      "aliases": ["student", "college student"],
+      "properties": {
+        "amrs": "Students of AMRS College, created 3/Feb/2026."
       }
     },
     "m.h": {
-      "aliases": ["mehdi hasan", "m h"],
+      "aliases": ["mehdi hasan", "m-h"],
       "properties": {
-        "about": "M.H is creator of M Search, PRETEXT PROGRAM, and founder of MGPLC.",
+        "about": "M.H is creator of M Search, Pretext Program, and founder of MGPLC.",
         "full_name": "Mehdi Hasan"
-      }
-    },
-    "atabb": {
-      "aliases": ["atabb app"],
-      "properties": {
-        "about": "ATABB is the first entertainment app.",
-        "category": "Entertainment",
-        "created": "5/12/2024",
-        "owner": "ATABB"
-      }
-    },
-    "pplco": {
-      "aliases": ["pplco app"],
-      "properties": {
-        "about": "PPLCO is an entertainment app under MGPLC.",
-        "category": "Entertainment",
-        "created": "5/12/2024",
-        "owner": "PPLCO"
-      }
-    },
-    "redx": {
-      "aliases": ["redx app"],
-      "properties": {
-        "about": "REDX is an entertainment app under MGPLC.",
-        "category": "Entertainment",
-        "created": "5/12/2024",
-        "owner": "REDX"
-      }
-    },
-    "music one": {
-      "aliases": ["music one app"],
-      "properties": {
-        "about": "Music ONE is a music streaming app.",
-        "category": "Music",
-        "created": "5/12/2024",
-        "owner": "MUSIC ONE"
-      }
-    },
-    "cpay": {
-      "aliases": ["cpay app"],
-      "properties": {
-        "about": "CPAY is a payment app for digital transactions.",
-        "category": "Finance",
-        "created": "5/12/2024",
-        "owner": "CPAY"
-      }
-    },
-    "ssbpay": {
-      "aliases": ["ssbpay app"],
-      "properties": {
-        "about": "SSBPAY is a digital payment app under MGPLC.",
-        "category": "Finance",
-        "created": "5/12/2024",
-        "owner": "SSB"
-      }
-    },
-    "food on": {
-      "aliases": ["food on app"],
-      "properties": {
-        "about": "FOOD ON is a food delivery app.",
-        "category": "Food",
-        "created": "5/12/2024",
-        "owner": "FOOD ON"
-      }
-    },
-    "mnews": {
-      "aliases": ["mnews app"],
-      "properties": {
-        "about": "MNEWS is a news and media app.",
-        "category": "News",
-        "created": "5/12/2024",
-        "owner": "MGPLC"
-      }
-    },
-    "orl re": {
-      "aliases": ["orl re app"],
-      "properties": {
-        "about": "ORL RE is a recharge and utility app.",
-        "category": "Recharge",
-        "created": "5/12/2024",
-        "owner": "MGPLC"
-      }
-    },
-    "super m": {
-      "aliases": ["super m app", "super m"],
-      "properties": {
-        "about": "SUPER M is a shopping app under MGPLC.",
-        "category": "Shopping",
-        "created": "5/12/2024",
-        "owner": "SUPER M"
-      }
-    },
-    "x cocat": {
-      "aliases": ["xcocat app"],
-      "properties": {
-        "about": "XCOCAT is a money doubling app.",
-        "category": "Finance",
-        "created": "5/12/2024",
-        "owner": "XCOCAT"
-      }
-    },
-    "turbo": {
-      "aliases": ["turbo app"],
-      "properties": {
-        "about": "TURBO is a share market app.",
-        "category": "Finance",
-        "created": "5/12/2024",
-        "owner": "TURBO"
-      }
-    },
-    "edi": {
-      "aliases": ["edi app"],
-      "properties": {
-        "about": "EDI is a stock market app.",
-        "category": "Finance",
-        "created": "5/12/2024",
-        "owner": "EDI"
-      }
-    },
-    "m messege": {
-      "aliases": ["m messege app", "my talk app"],
-      "properties": {
-        "about": "M Messege is a messaging app.",
-        "category": "Communication",
-        "created": "5/12/2024",
-        "owner": "MGPLC"
-      }
-    },
-    "m phone": {
-      "aliases": ["m phone app"],
-      "properties": {
-        "about": "M Phone is a phone utility app.",
-        "category": "Communication",
-        "created": "5/12/2024",
-        "owner": "MGPLC"
-      }
-    },
-    "ivee": {
-      "aliases": ["ivee app"],
-      "properties": {
-        "about": "IVEE is a multi-purpose utility app.",
-        "category": "Other",
-        "created": "5/12/2024",
-        "owner": "IVEE"
-      }
-    },
-    "mapp": {
-      "aliases": ["mapp app", "pvtltd store"],
-      "properties": {
-        "about": "MAPP is the holding app for all other apps.",
-        "category": "Utility",
-        "created": "5/12/2024",
-        "owner": "MGPLC"
-      }
-    },
-    "univercity of m desh education": {
-      "aliases": ["m desh education", "university m desh"],
-      "properties": {
-        "about": "University of M Desh Education World.",
-        "location": "AT Mcity",
-        "created": "2/FEB/2026"
-      }
-    },
-    "univercity of treepers": {
-      "aliases": ["treepers university"],
-      "properties": {
-        "about": "University of TREEPERS.",
-        "location": "SPL",
-        "created": "3/FEB/2026"
-      }
-    },
-    "student of college": {
-      "aliases": ["student of college", "student of collage"],
-      "properties": {
-        "about": "Student of College.",
-        "created": "3/FEB/2026"
       }
     }
   },
   "intents": {
-    "about": ["about", "info", "information", "what is", "details"],
-    "founder": ["founder", "creator", "made by"],
+    "about": ["about", "what", "info", "describe"],
+    "founder": ["founder", "creator", "made by", "who created", "owner"],
     "owner": ["owner", "owns", "owned by"],
-    "created": ["created", "create", "launch", "when created"],
-    "category": ["category", "type", "kind of app"],
-    "location": ["location", "place", "where"]
+    "created": ["created", "create", "creation", "when created", "launch"],
+    "total_companies": ["total companies", "how many companies", "number of companies"],
+    "companies": ["companies list", "list of companies", "company names"],
+    "apps": ["apps", "applications", "app name"],
+    "universities": ["university", "college", "school"],
+    "students": ["student", "college student", "pupil"]
   }
-      }
+    }
