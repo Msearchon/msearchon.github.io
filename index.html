@@ -1,10 +1,21 @@
-<!DOCTYPE html>  <html lang="en">  <head>    <meta charset="UTF-8">      <meta name="viewport" content="width=device-width, initial-scale=1.0">        <title>M Search</title>  <style>          body{
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M Search</title>
+
+<style>
+
+body{
 margin:0;
 font-family:Arial, sans-serif;
 background:#0f0f0f;
 color:white;
 overflow-x:hidden;
-}    /* SPLASH */
+}
+
+/* SPLASH */
 #splash{
 position:fixed;
 inset:0;
@@ -13,10 +24,14 @@ display:flex;
 justify-content:center;
 align-items:center;
 z-index:1000;
-}  #splashLogo{
+}
+
+#splashLogo{
 font-size:52px;
 font-weight:bold;
-}  #splashLogo span{ color:#4285F4; }
+}
+
+#splashLogo span{ color:#4285F4; }
 
 /* COMMON */
 .page{ display:none; padding:22px; }
@@ -184,37 +199,85 @@ background:#eef3f9;
 color:#1b1f24;
 }
 
-</style>  </head>  <body>  <div id="splash">
+</style>
+</head>
+<body>
 
-<div id="splashLogo"> M <span> Search </span></div>          
-</div>  <div id="menuBtn" onclick="toggleMenu()">⋮</div>  <div id="menuBox">          
-<div class="menu-item" onclick="openHistory()">History</div>          
-<div class="menu-item" onclick="toggleMode()">Mode</div>          
-</div>  <div id="historyPage">          
-<div id="closeHistory" onclick="closeHistory()">✕</div>          
-<h2>History</h2>          
-<div id="fullHistory"></div>          
-<button id="clearBtn" onclick="clearHistory()">Clear History</button>          
-</div>  <div id="page1" class="page show">  <div class="header">          
-<h1>M Search</h1>          
-</div>  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">  <div class="big-box">          
-<h2>Important Rules</h2>          
-<p>When you open M Search, refresh it once.</p>          
-</div>  <div class="big-box">          
-<h2>News 📊</h2>          
-<p>A simple And fast search built in 2023.</p>          
-</div>  <div class="big-box">          
-<h2>🌐 M SEARCH </h2>          
-<p>ALL File information.</p>          
-</div>  </div>  <div id="page2" class="page">  <div class="page-buttons">          
-<button class="page-btn" onclick="goPage(1)">Home</button>          
-<button class="page-btn" onclick="goPage(3)">Result</button>          
-</div>  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">  <button class="search-btn" onclick="search()">Search</button>  <div class="history" id="history"></div>  </div>  <div id="page3" class="page">  <h2>M Search Result</h2>  <p style="font-size:20px">          
-<b>Answer:</b>          
-<span id="answer"></span>          
-</p>  <button class="search-btn" onclick="goBack()">Back</button>  </div>  <script>
+<div id="splash">
+<div id="splashLogo"> M <span> Search </span></div>
+</div>
+
+<div id="menuBtn" onclick="toggleMenu()">⋮</div>
+
+<div id="menuBox">
+<div class="menu-item" onclick="openHistory()">History</div>
+<div class="menu-item" onclick="toggleMode()">Mode</div>
+</div>
+
+<div id="historyPage">
+<div id="closeHistory" onclick="closeHistory()">✕</div>
+<h2>History</h2>
+<div id="fullHistory"></div>
+<button id="clearBtn" onclick="clearHistory()">Clear History</button>
+</div>
+
+<div id="page1" class="page show">
+
+<div class="header">
+<h1>M Search</h1>
+</div>
+
+<input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">
+
+<div class="big-box">
+<h2>Important Rules</h2>
+<p>When you open M Search, refresh it once.</p>
+</div>
+
+<div class="big-box">
+<h2>News 📊</h2>
+<p>A simple and fast search built in 2023.</p>
+</div>
+
+<div class="big-box">
+<h2>🌐 M SEARCH </h2>
+<p>ALL File information.</p>
+</div>
+
+</div>
+
+<div id="page2" class="page">
+
+<div class="page-buttons">
+<button class="page-btn" onclick="goPage(1)">Home</button>
+<button class="page-btn" onclick="goPage(3)">Result</button>
+</div>
+
+<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">
+
+<button class="search-btn" onclick="search()">Search</button>
+
+<div class="history" id="history"></div>
+
+</div>
+
+<div id="page3" class="page">
+
+<h2>M Search Result</h2>
+
+<p style="font-size:20px">
+<b>Answer:</b>
+<span id="answer"></span>
+</p>
+
+<button class="search-btn" onclick="goBack()">Back</button>
+
+</div>
+
+<script>
 
 /* ORIGINAL DATA — UNCHANGED */
+
 const data={
 "what is python":"Python is a programming language.",
 "what is google":"Google is a search engine.",
@@ -228,72 +291,59 @@ const data={
 let selectedQuestion="";
 let historyList=[];
 
-/* SMART JSON SYSTEM FIXED */
+/* SMART JSON SYSTEM */
 
 let smartData={};
-let smartLoaded=false;
 
 fetch("smart-data.json")
 .then(response=>response.json())
 .then(json=>{
 smartData=json;
-smartLoaded=true;
-console.log("Smart JSON loaded OK");
 })
 .catch(()=>{
 console.log("Smart JSON not loaded");
 });
 
+/* FIXED FUNCTION — SUPPORTS YOUR ADVANCED JSON */
+
 function getSmartAnswer(q){
 
-q=q.toLowerCase().trim();
+q = q.toLowerCase();
 
-if(!smartLoaded){
-return "Loading data, please wait...";
+if(!smartData.entities || !smartData.intents){
+return "Search system not ready";
 }
 
-if(smartData.entities){
+let entities = smartData.entities;
+let intents = smartData.intents;
 
-for(let name in smartData.entities){
+for(let entityKey in entities){
 
-let entity=smartData.entities[name];
-let props=entity.properties;
+let entity = entities[entityKey];
 
-if(q.includes(name)){
+let aliases = entity.aliases || [];
 
-for(let key in props){
+aliases.push(entityKey.replaceAll("_"," "));
 
-if(q.includes(key.replace(/_/g," "))){
-return props[key];
-}
+let matched = aliases.some(a => q.includes(a.toLowerCase()));
 
-}
+if(matched){
 
-return props.about || "Answer not found";
+let props = entity.properties || {};
 
-}
+if(intents.founder?.some(word => q.includes(word)))
+return props.founder || "Founder not available";
 
-if(entity.aliases){
+if(intents.created?.some(word => q.includes(word)))
+return props.created || "Created date not available";
 
-for(let alias of entity.aliases){
+if(intents.owner?.some(word => q.includes(word)))
+return props.owner || "Owner not available";
 
-if(q.includes(alias)){
+if(intents.about?.some(word => q.includes(word)))
+return props.about || "Info not available";
 
-for(let key in props){
-
-if(q.includes(key.replace(/_/g," "))){
-return props[key];
-}
-
-}
-
-return props.about || "Answer not found";
-
-}
-
-}
-
-}
+return props.about || "Info not available";
 
 }
 
@@ -416,6 +466,7 @@ setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
 
-</script>  </body>
+</script>
 
-  </html>
+</body>
+</html>
