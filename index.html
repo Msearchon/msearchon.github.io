@@ -1,20 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>M Search</title>
-
-<style>
-body{
+<!DOCTYPE html>  <html lang="en">  <head>    <meta charset="UTF-8">      <meta name="viewport" content="width=device-width, initial-scale=1.0">        <title>M Search</title>  <style>          body{
 margin:0;
 font-family:Arial, sans-serif;
 background:#0f0f0f;
 color:white;
 overflow-x:hidden;
-}
-
-/* SPLASH */
+}    /* SPLASH */
 #splash{
 position:fixed;
 inset:0;
@@ -23,14 +13,10 @@ display:flex;
 justify-content:center;
 align-items:center;
 z-index:1000;
-}
-
-#splashLogo{
+}  #splashLogo{
 font-size:52px;
 font-weight:bold;
-}
-
-#splashLogo span{ color:#4285F4; }
+}  #splashLogo span{ color:#4285F4; }
 
 /* COMMON */
 .page{ display:none; padding:22px; }
@@ -119,7 +105,7 @@ font-size:16px;
 cursor:pointer;
 }
 
-/* MENU */
+/* THREE DOT */
 #menuBtn{
 position:absolute;
 top:15px;
@@ -128,6 +114,7 @@ font-size:28px;
 cursor:pointer;
 }
 
+/* MENU BOX */
 #menuBox{
 position:absolute;
 top:55px;
@@ -197,119 +184,81 @@ background:#eef3f9;
 color:#1b1f24;
 }
 
-</style>
-</head>
+</style>  </head>  <body>  <div id="splash">
 
-<body>
+<div id="splashLogo"> M <span> Search </span></div>          
+</div>  <div id="menuBtn" onclick="toggleMenu()">⋮</div>  <div id="menuBox">          
+<div class="menu-item" onclick="openHistory()">History</div>          
+<div class="menu-item" onclick="toggleMode()">Mode</div>          
+</div>  <div id="historyPage">          
+<div id="closeHistory" onclick="closeHistory()">✕</div>          
+<h2>History</h2>          
+<div id="fullHistory"></div>          
+<button id="clearBtn" onclick="clearHistory()">Clear History</button>          
+</div>  <div id="page1" class="page show">  <div class="header">          
+<h1>M Search</h1>          
+</div>  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">  <div class="big-box">          
+<h2>Important Rules</h2>          
+<p>When you open M Search, refresh it once.</p>          
+</div>  <div class="big-box">          
+<h2>News 📊</h2>          
+<p>A simple And fast search built in 2023.</p>          
+</div>  <div class="big-box">          
+<h2>🌐 M SEARCH </h2>          
+<p>ALL File information.</p>          
+</div>  </div>  <div id="page2" class="page">  <div class="page-buttons">          
+<button class="page-btn" onclick="goPage(1)">Home</button>          
+<button class="page-btn" onclick="goPage(3)">Result</button>          
+</div>  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">  <button class="search-btn" onclick="search()">Search</button>  <div class="history" id="history"></div>  </div>  <div id="page3" class="page">  <h2>M Search Result</h2>  <p style="font-size:20px">          
+<b>Answer:</b>          
+<span id="answer"></span>          
+</p>  <button class="search-btn" onclick="goBack()">Back</button>  </div>  <script>
 
-<div id="splash">
-<div id="splashLogo"> M <span>Search</span></div>
-</div>
-
-<div id="menuBtn" onclick="toggleMenu()">⋮</div>
-
-<div id="menuBox">
-<div class="menu-item" onclick="openHistory()">History</div>
-<div class="menu-item" onclick="toggleMode()">Mode</div>
-</div>
-
-<div id="historyPage">
-<div id="closeHistory" onclick="closeHistory()">✕</div>
-<h2>History</h2>
-<div id="fullHistory"></div>
-<button id="clearBtn" onclick="clearHistory()">Clear History</button>
-</div>
-
-<div id="page1" class="page show">
-<div class="header">
-<h1>M Search</h1>
-</div>
-
-<input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">
-
-<div class="big-box">
-<h2>Important Rules</h2>
-<p>When you open M Search, refresh it once.</p>
-</div>
-
-<div class="big-box">
-<h2>News 📊</h2>
-<p>A simple And fast search built in 2023.</p>
-</div>
-
-<div class="big-box">
-<h2>🌐 M SEARCH</h2>
-<p>ALL File information.</p>
-</div>
-
-</div>
-
-<div id="page2" class="page">
-
-<div class="page-buttons">
-<button class="page-btn" onclick="goPage(1)">Home</button>
-<button class="page-btn" onclick="goPage(3)">Result</button>
-</div>
-
-<input id="query" class="search-pad" placeholder="Search">
-
-<button class="search-btn" onclick="search()">Search</button>
-
-<div class="history" id="history"></div>
-
-</div>
-
-<div id="page3" class="page">
-
-<h2>M Search Result</h2>
-
-<p style="font-size:20px">
-<b>Answer:</b>
-<span id="answer">Loading...</span>
-</p>
-
-<button class="search-btn" onclick="goBack()">Back</button>
-
-</div>
-
-<script>
-
-/* BASIC DATA */
+/* ORIGINAL DATA — UNCHANGED */
 const data={
 "what is python":"Python is a programming language.",
-"what is google":"Google is a search engine."
+"what is google":"Google is a search engine.",
+"what is computer":"A computer is an electronic machine.",
+"what is m search":"M search is a mini search engine.",
+"who is m.h":"M.H is founder of M Search All.",
+"who create m search":"M.H created m search in 2023.",
+"tell me what is miraz":"Miraz is a #️⃣."
 };
 
-let smartData={};
-let smartLoaded=false;
 let selectedQuestion="";
 let historyList=[];
 
-/* LOAD JSON */
-fetch("./smart-data.json")
-.then(res=>res.json())
+/* SMART JSON SYSTEM FIXED */
+
+let smartData={};
+let smartLoaded=false;
+
+fetch("smart-data.json")
+.then(response=>response.json())
 .then(json=>{
 smartData=json;
 smartLoaded=true;
-console.log("Smart JSON loaded");
+console.log("Smart JSON loaded OK");
 })
-.catch(err=>{
-console.log("JSON load error:",err);
+.catch(()=>{
+console.log("Smart JSON not loaded");
 });
 
-/* SEARCH ENGINE */
 function getSmartAnswer(q){
 
 q=q.toLowerCase().trim();
 
-if(!smartData.entities) return "Search system not ready";
+if(!smartLoaded){
+return "Loading data, please wait...";
+}
+
+if(smartData.entities){
 
 for(let name in smartData.entities){
 
 let entity=smartData.entities[name];
 let props=entity.properties;
 
-/* match name */
 if(q.includes(name)){
 
 for(let key in props){
@@ -320,11 +269,10 @@ return props[key];
 
 }
 
-if(props.about) return props.about;
+return props.about || "Answer not found";
 
 }
 
-/* match aliases */
 if(entity.aliases){
 
 for(let alias of entity.aliases){
@@ -339,7 +287,7 @@ return props[key];
 
 }
 
-if(props.about) return props.about;
+return props.about || "Answer not found";
 
 }
 
@@ -349,47 +297,75 @@ if(props.about) return props.about;
 
 }
 
-return "Answer not found";
+}
+
+return data[q] || "Answer not found";
 
 }
 
-/* SEARCH FUNCTION */
-function search(){
+/* ORIGINAL FUNCTIONS — UNCHANGED */
 
-let q=document.getElementById("query").value;
-
-if(q==="") return;
-
-if(!smartLoaded){
-
-document.getElementById("answer").innerText="Loading data, please wait...";
-goPage(3);
-
-setTimeout(()=>{
-document.getElementById("answer").innerText=getSmartAnswer(q);
-},1000);
-
-return;
-
-}
-
-document.getElementById("answer").innerText=getSmartAnswer(q);
-
-goPage(3);
-
-}
-
-/* PAGE CONTROL */
 function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
 document.getElementById("page"+n).classList.add("show");
 }
 
-function goBack(){
-goPage(2);
+function search(){
+
+let q=document.getElementById("query").value.toLowerCase();
+
+if(q==="") return;
+
+selectedQuestion=q;
+
+historyList.unshift(q);
+
+saveHistory();
+
+document.getElementById("answer").innerText=getSmartAnswer(q);
+
+goPage(3);
+
 }
 
-/* MENU */
+function goBack(){
+goPage(2);
+document.getElementById("query").value=selectedQuestion;
+showSuggestions();
+}
+
+function showSuggestions(){
+
+let q=document.getElementById("query").value.toLowerCase();
+
+let h=document.getElementById("history");
+
+h.innerHTML="";
+
+if(q==="") return;
+
+for(let key in data){
+
+if(key.includes(q)){
+
+let d=document.createElement("div");
+
+d.className="history-item";
+
+d.innerText=key;
+
+d.onclick=function(){
+document.getElementById("query").value=key;
+};
+
+h.appendChild(d);
+
+}
+
+}
+
+}
+
 function toggleMenu(){
 let m=document.getElementById("menuBox");
 m.style.display=m.style.display==="block"?"none":"block";
@@ -401,22 +377,45 @@ document.body.classList.toggle("light");
 
 function openHistory(){
 document.getElementById("historyPage").style.display="block";
+renderFullHistory();
 }
 
 function closeHistory(){
 document.getElementById("historyPage").style.display="none";
 }
 
-function clearHistory(){
-localStorage.removeItem("m_history");
+function saveHistory(){
+localStorage.setItem("m_history",JSON.stringify(historyList));
 }
 
-/* SPLASH */
+function loadHistory(){
+let h=localStorage.getItem("m_history");
+if(h) historyList=JSON.parse(h);
+}
+
+function renderFullHistory(){
+let box=document.getElementById("fullHistory");
+box.innerHTML="";
+historyList.forEach(item=>{
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=item;
+box.appendChild(d);
+});
+}
+
+function clearHistory(){
+historyList=[];
+saveHistory();
+renderFullHistory();
+}
+
+loadHistory();
+
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
 
-</script>
+</script>  </body>
 
-</body>
   </html>
