@@ -277,73 +277,95 @@ color:#1b1f24;
 <script>
 
 /* ORIGINAL DATA — UNCHANGED */
-
-const data={
-"what is python":"Python is a programming language.",
-"what is google":"Google is a search engine.",
-"what is computer":"A computer is an electronic machine.",
-"what is m search":"M search is a mini search engine.",
-"who is m.h":"M.H is founder of M Search All.",
-"who create m search":"M.H created m search in 2023.",
-"tell me what is miraz":"Miraz is a #️⃣."
+const data={    
+"what is python":"Python is a programming language.",    
+"what is google":"Google is a search engine.",    
+"what is computer":"A computer is an electronic machine.",    
+"what is m search":"M search is a mini search engine.",    
+"who is m.h":"M.H is founder of M Search All.",    
+"who create m search":"M.H created m search in 2023.",    
+"tell me what is miraz":"Miraz is a #️⃣."    
 };
 
 let selectedQuestion="";
 let historyList=[];
 
-/* SMART JSON SYSTEM */
+/* FULLY UPDATED SMART JSON SYSTEM */
 
 let smartData={};
+let smartLoaded=false;
 
 fetch("smart-data.json")
-.then(response=>response.json())
-.then(json=>{
-smartData=json;
+.then(function(response){
+return response.json();
 })
-.catch(()=>{
-console.log("Smart JSON not loaded");
+.then(function(json){
+
+smartData=json;
+smartLoaded=true;
+
+console.log("Smart JSON fully connected");
+
+})
+.catch(function(error){
+
+console.log("Smart JSON error:", error);
+
 });
 
-/* FIXED FUNCTION — SUPPORTS YOUR ADVANCED JSON */
 
 function getSmartAnswer(q){
 
-q = q.toLowerCase();
+q=q.toLowerCase();
 
-if(!smartData.entities || !smartData.intents){
-return "Search system not ready";
+if(!smartLoaded){
+return "Loading data please wait";
 }
 
-let entities = smartData.entities;
-let intents = smartData.intents;
+if(!smartData.entities){
+return "Smart system error";
+}
 
-for(let entityKey in entities){
+let entities=smartData.entities;
+let intents=smartData.intents || {};
 
-let entity = entities[entityKey];
+for(let entityName in entities){
 
-let aliases = entity.aliases || [];
+let entity=entities[entityName];
 
-aliases.push(entityKey.replaceAll("_"," "));
+let names=[entityName];
 
-let matched = aliases.some(a => q.includes(a.toLowerCase()));
+if(entity.aliases){
+names=names.concat(entity.aliases);
+}
 
-if(matched){
+for(let name of names){
 
-let props = entity.properties || {};
+if(q.includes(name.toLowerCase())){
 
-if(intents.founder?.some(word => q.includes(word)))
+let props=entity.properties || {};
+
+if(intents.founder && intents.founder.some(word=>q.includes(word)))
 return props.founder || "Founder not available";
 
-if(intents.created?.some(word => q.includes(word)))
+if(intents.created && intents.created.some(word=>q.includes(word)))
 return props.created || "Created date not available";
 
-if(intents.owner?.some(word => q.includes(word)))
+if(intents.owner && intents.owner.some(word=>q.includes(word)))
 return props.owner || "Owner not available";
 
-if(intents.about?.some(word => q.includes(word)))
-return props.about || "Info not available";
+if(intents.total_companies && intents.total_companies.some(word=>q.includes(word)))
+return props.total_companies || "Total companies not available";
 
-return props.about || "Info not available";
+if(intents.companies && intents.companies.some(word=>q.includes(word)))
+return props.companies || "Companies not available";
+
+if(intents.about && intents.about.some(word=>q.includes(word)))
+return props.about || "Information not available";
+
+return props.about || "Information not available";
+
+}
 
 }
 
@@ -352,6 +374,7 @@ return props.about || "Info not available";
 return data[q] || "Answer not found";
 
 }
+
 
 /* ORIGINAL FUNCTIONS — UNCHANGED */
 
@@ -467,6 +490,3 @@ document.getElementById("splash").style.display="none";
 },2000);
 
 </script>
-
-</body>
-</html>
