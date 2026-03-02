@@ -119,7 +119,7 @@ font-size:16px;
 cursor:pointer;
 }
 
-/* THREE DOT */
+/* MENU */
 #menuBtn{
 position:absolute;
 top:15px;
@@ -128,7 +128,6 @@ font-size:28px;
 cursor:pointer;
 }
 
-/* MENU BOX */
 #menuBox{
 position:absolute;
 top:55px;
@@ -197,13 +196,14 @@ color:#111;
 background:#eef3f9;
 color:#1b1f24;
 }
+
 </style>
 </head>
 
 <body>
 
 <div id="splash">
-<div id="splashLogo"> M <span> Search </span></div>
+<div id="splashLogo"> M <span>Search</span></div>
 </div>
 
 <div id="menuBtn" onclick="toggleMenu()">⋮</div>
@@ -234,11 +234,11 @@ color:#1b1f24;
 
 <div class="big-box">
 <h2>News 📊</h2>
-<p>A simple and fast search built in 2023.</p>
+<p>A simple And fast search built in 2023.</p>
 </div>
 
 <div class="big-box">
-<h2>🌐 M SEARCH </h2>
+<h2>🌐 M SEARCH</h2>
 <p>ALL File information.</p>
 </div>
 
@@ -251,7 +251,7 @@ color:#1b1f24;
 <button class="page-btn" onclick="goPage(3)">Result</button>
 </div>
 
-<input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">
+<input id="query" class="search-pad" placeholder="Search">
 
 <button class="search-btn" onclick="search()">Search</button>
 
@@ -265,7 +265,7 @@ color:#1b1f24;
 
 <p style="font-size:20px">
 <b>Answer:</b>
-<span id="answer"></span>
+<span id="answer">Loading...</span>
 </p>
 
 <button class="search-btn" onclick="goBack()">Back</button>
@@ -274,64 +274,57 @@ color:#1b1f24;
 
 <script>
 
-/* ORIGINAL DATA — UNCHANGED */
-
+/* BASIC DATA */
 const data={
 "what is python":"Python is a programming language.",
-"what is google":"Google is a search engine.",
-"what is computer":"A computer is an electronic machine.",
-"what is m search":"M search is a mini search engine.",
-"who is m.h":"M.H is founder of M Search All.",
-"who create m search":"M.H created m search in 2023.",
-"tell me what is miraz":"Miraz is a #️⃣."
+"what is google":"Google is a search engine."
 };
-
-let selectedQuestion="";
-let historyList=[];
-
-/* FINAL SMART JSON SYSTEM */
 
 let smartData={};
 let smartLoaded=false;
+let selectedQuestion="";
+let historyList=[];
 
-fetch("smart-data.json")
-.then(response=>response.json())
+/* LOAD JSON */
+fetch("./smart-data.json")
+.then(res=>res.json())
 .then(json=>{
 smartData=json;
 smartLoaded=true;
-console.log("Smart data loaded successfully");
+console.log("Smart JSON loaded");
 })
-.catch(()=>{
-console.log("Smart JSON not loaded");
+.catch(err=>{
+console.log("JSON load error:",err);
 });
 
+/* SEARCH ENGINE */
 function getSmartAnswer(q){
 
-q=q.toLowerCase();
+q=q.toLowerCase().trim();
 
-if(!smartData.entities) return data[q] || "Answer not found";
+if(!smartData.entities) return "Search system not ready";
 
 for(let name in smartData.entities){
 
 let entity=smartData.entities[name];
 let props=entity.properties;
 
-/* check main name */
+/* match name */
 if(q.includes(name)){
 
 for(let key in props){
 
-let keyText=key.replace(/_/g," ");
-
-if(q.includes(keyText)) return props[key];
+if(q.includes(key.replace(/_/g," "))){
+return props[key];
+}
 
 }
 
-return props.about || "Answer not found";
+if(props.about) return props.about;
 
 }
 
-/* check aliases */
+/* match aliases */
 if(entity.aliases){
 
 for(let alias of entity.aliases){
@@ -340,42 +333,32 @@ if(q.includes(alias)){
 
 for(let key in props){
 
-let keyText=key.replace(/_/g," ");
-
-if(q.includes(keyText)) return props[key];
-
-}
-
-return props.about || "Answer not found";
-
+if(q.includes(key.replace(/_/g," "))){
+return props[key];
 }
 
 }
+
+if(props.about) return props.about;
 
 }
 
 }
 
-return data[q] || "Answer not found";
+}
 
 }
 
-function goPage(n){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
-document.getElementById("page"+n).classList.add("show");
+return "Answer not found";
+
 }
 
+/* SEARCH FUNCTION */
 function search(){
 
-let q=document.getElementById("query").value.toLowerCase();
+let q=document.getElementById("query").value;
 
 if(q==="") return;
-
-selectedQuestion=q;
-
-historyList.unshift(q);
-
-saveHistory();
 
 if(!smartLoaded){
 
@@ -384,9 +367,10 @@ goPage(3);
 
 setTimeout(()=>{
 document.getElementById("answer").innerText=getSmartAnswer(q);
-},500);
+},1000);
 
 return;
+
 }
 
 document.getElementById("answer").innerText=getSmartAnswer(q);
@@ -395,44 +379,17 @@ goPage(3);
 
 }
 
+/* PAGE CONTROL */
+function goPage(n){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+document.getElementById("page"+n).classList.add("show");
+}
+
 function goBack(){
 goPage(2);
-document.getElementById("query").value=selectedQuestion;
-showSuggestions();
 }
 
-function showSuggestions(){
-
-let q=document.getElementById("query").value.toLowerCase();
-
-let h=document.getElementById("history");
-
-h.innerHTML="";
-
-if(q==="") return;
-
-for(let key in data){
-
-if(key.includes(q)){
-
-let d=document.createElement("div");
-
-d.className="history-item";
-
-d.innerText=key;
-
-d.onclick=function(){
-document.getElementById("query").value=key;
-};
-
-h.appendChild(d);
-
-}
-
-}
-
-}
-
+/* MENU */
 function toggleMenu(){
 let m=document.getElementById("menuBox");
 m.style.display=m.style.display==="block"?"none":"block";
@@ -444,41 +401,17 @@ document.body.classList.toggle("light");
 
 function openHistory(){
 document.getElementById("historyPage").style.display="block";
-renderFullHistory();
 }
 
 function closeHistory(){
 document.getElementById("historyPage").style.display="none";
 }
 
-function saveHistory(){
-localStorage.setItem("m_history",JSON.stringify(historyList));
-}
-
-function loadHistory(){
-let h=localStorage.getItem("m_history");
-if(h) historyList=JSON.parse(h);
-}
-
-function renderFullHistory(){
-let box=document.getElementById("fullHistory");
-box.innerHTML="";
-historyList.forEach(item=>{
-let d=document.createElement("div");
-d.className="history-item";
-d.innerText=item;
-box.appendChild(d);
-});
-}
-
 function clearHistory(){
-historyList=[];
-saveHistory();
-renderFullHistory();
+localStorage.removeItem("m_history");
 }
 
-loadHistory();
-
+/* SPLASH */
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
@@ -486,4 +419,4 @@ document.getElementById("splash").style.display="none";
 </script>
 
 </body>
-</html>
+  </html>
