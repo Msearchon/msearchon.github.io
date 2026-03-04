@@ -241,7 +241,9 @@ color:#1a1a1a;
 
 <script>
 
-/* ORIGINAL DATA */
+<script>
+
+/* ORIGINAL DATA — UNCHANGED */
 const data={
 "what is python":"Python is a programming language.",
 "what is google":"Google is a search engine.",
@@ -255,66 +257,106 @@ const data={
 let selectedQuestion="";
 let historyList=[];
 
-/* ADDED FIX */
+/* SMART SYSTEM */
+
 let smartData={};
 let smartLoaded=false;
 
-/* FIXED FETCH */
-fetch("smart-data.json")
+/* SAFE FETCH SYSTEM */
+fetch("./smart-data.json")
 .then(function(response){
+
+if(!response.ok){
+throw new Error("JSON not found");
+}
+
 return response.json();
 })
 .then(function(json){
 
 smartData=json;
 smartLoaded=true;
-
-console.log("Smart JSON loaded");
+console.log("Smart JSON Loaded Successfully");
 
 })
 .catch(function(error){
 
 smartLoaded=false;
-console.log("JSON error:", error);
+console.log("Smart JSON Error:", error);
 
 });
 
-/* SMART ANSWER */
+
 function getSmartAnswer(q){
 
-q=q.toLowerCase();
-
-for(let topic in smartData){
-
-if(q.includes(topic)){
-
-let item=smartData[topic];
-
-if(q.includes("founder")) return item.founder;
-if(q.includes("create date")||q.includes("created")) return item.create_date;
-
-return item.about;
-
-}
-
-}
-
-return data[q]||"Answer not found";
-
-}
-
-/* FIXED SEARCH */
-function search(){
+q=q.toLowerCase().trim();
 
 if(!smartLoaded){
+return "System loading... please wait";
+}
 
-document.getElementById("answer").innerText="Loading data please wait 2 seconds";
+if(!smartData.entities){
+return "Smart system error";
+}
 
-goPage(3);
+let entities=smartData.entities;
+let intents=smartData.intents || {};
 
-return;
+for(let entityName in entities){
+
+let entity=entities[entityName];
+
+let names=[entityName];
+
+if(entity.aliases){
+names=names.concat(entity.aliases);
+}
+
+for(let name of names){
+
+if(q.includes(name.toLowerCase())){
+
+let props=entity.properties || {};
+
+for(let intentName in intents){
+
+let keywords=intents[intentName];
+
+for(let word of keywords){
+
+if(q.includes(word.toLowerCase())){
+
+if(props[intentName]){
+return props[intentName];
+}
 
 }
+
+}
+
+}
+
+return props.about || "Information not available";
+
+}
+
+}
+
+}
+
+return data[q] || "Answer not found";
+
+}
+
+
+/* ORIGINAL FUNCTIONS — UNCHANGED */
+
+function goPage(n){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+document.getElementById("page"+n).classList.add("show");
+}
+
+function search(){
 
 let q=document.getElementById("query").value.toLowerCase();
 
@@ -332,14 +374,9 @@ goPage(3);
 
 }
 
-/* ORIGINAL FUNCTIONS */
-function goPage(n){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
-document.getElementById("page"+n).classList.add("show");
-}
-
 function goBack(){
 goPage(2);
+document.getElementById("query").value=selectedQuestion;
 }
 
 function toggleMenu(){
@@ -353,6 +390,7 @@ document.body.classList.toggle("light");
 
 function openHistory(){
 document.getElementById("historyPage").style.display="block";
+renderFullHistory();
 }
 
 function closeHistory(){
@@ -363,16 +401,32 @@ function saveHistory(){
 localStorage.setItem("m_history",JSON.stringify(historyList));
 }
 
+function loadHistory(){
+let h=localStorage.getItem("m_history");
+if(h) historyList=JSON.parse(h);
+}
+
+function renderFullHistory(){
+let box=document.getElementById("fullHistory");
+box.innerHTML="";
+historyList.forEach(item=>{
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=item;
+box.appendChild(d);
+});
+}
+
 function clearHistory(){
 historyList=[];
 saveHistory();
+renderFullHistory();
 }
+
+loadHistory();
 
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
 },2000);
 
 </script>
-
-</body>
-  </html>
