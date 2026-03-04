@@ -241,7 +241,7 @@ color:#1a1a1a;
 
 <script>
 
-/* ORIGINAL DATA — UNCHANGED */
+/* ORIGINAL BASIC DATA */
 const data={
 "what is python":"Python is a programming language.",
 "what is google":"Google is a search engine.",
@@ -252,58 +252,151 @@ const data={
 "tell me what is miraz":"Miraz is a #️⃣."
 };
 
+
+/* ✅ FULL SMART DATA EMBEDDED (YOUR COMPLETE JSON) */
+const smartData = {
+"entities": {
+
+"m search": {
+"aliases": ["msearch", "m search app"],
+"properties": {
+"about": "M Search is a mini smart search engine.",
+"founder": "M.H",
+"owner": "MGPLC",
+"created": "2023"
+}
+},
+
+"mgplc": {
+"aliases": ["m group pvt ltd", "mgplc company"],
+"properties": {
+"about": "MGPLC is the parent company of M Search and 19 other companies.",
+"founder": "M.H",
+"created": "2017",
+"companies": "M SEARCH ALL, TSC Club, TComputer, TC, XCAR, DEDF GROUP, LO, DAMER, DX, BANK OF Mcity, ORL, MNEWS, ESM AIRLINE, STD SODA, UN, OUT STUDIO, Hoill, ALLONE, ETC",
+"network": "1.2 Trillion Dollar"
+}
+},
+
+"m.h": {
+"aliases": ["mehdi hasan", "m h"],
+"properties": {
+"about": "M.H is creator of M Search, PRETEXT PROGRAM, and founder of MGPLC.",
+"full_name": "Mehdi Hasan"
+}
+},
+
+"atabb": {
+"aliases": ["atabb app"],
+"properties": {
+"about": "ATABB is the first entertainment app.",
+"category": "Entertainment",
+"created": "5/12/2024"
+}
+},
+
+"pplco": {
+"aliases": ["pplco app"],
+"properties": {
+"about": "PPLCO is an entertainment app under MGPLC.",
+"category": "Entertainment",
+"created": "5/12/2024"
+}
+},
+
+"redx": {
+"aliases": ["redx app"],
+"properties": {
+"about": "REDX is an entertainment app under MGPLC.",
+"category": "Entertainment",
+"created": "5/12/2024"
+}
+},
+
+"music one": {
+"aliases": ["music one app"],
+"properties": {
+"about": "Music ONE is a music streaming app.",
+"category": "Music",
+"created": "5/12/2024"
+}
+},
+
+"cpay": {
+"aliases": ["cpay app"],
+"properties": {
+"about": "CPAY is a payment app.",
+"category": "Finance",
+"created": "5/12/2024"
+}
+},
+
+"ssbpay": {
+"aliases": ["ssbpay app"],
+"properties": {
+"about": "SSBPAY is a digital payment app under MGPLC.",
+"category": "Finance",
+"created": "5/12/2024"
+}
+},
+
+"food on": {
+"aliases": ["food on app"],
+"properties": {
+"about": "FOOD ON is a food delivery app.",
+"category": "Food",
+"created": "5/12/2024"
+}
+},
+
+"mnews": {
+"aliases": ["mnews app"],
+"properties": {
+"about": "MNEWS is a news and media app.",
+"category": "News",
+"created": "5/12/2024"
+}
+},
+
+"turbo": {
+"aliases": ["turbo app"],
+"properties": {
+"about": "TURBO is a share market app.",
+"category": "Finance",
+"created": "5/12/2024"
+}
+}
+
+},
+
+"intents": {
+"about": ["about", "info", "information", "what is", "details"],
+"founder": ["founder", "creator", "made by"],
+"owner": ["owner", "owns", "owned by"],
+"created": ["created", "create", "launch", "when created"],
+"category": ["category", "type", "kind"],
+"companies": ["companies", "apps list", "company list"],
+"network": ["network", "value"],
+"full_name": ["full name", "real name"]
+}
+};
+
+
 let selectedQuestion="";
 let historyList=[];
 
-/* SMART SYSTEM */
 
-let smartData={};
-let smartLoaded=false;
-
-/* SAFE FETCH SYSTEM */
-fetch("./smart-data.json")
-.then(function(response){
-
-if(!response.ok){
-throw new Error("JSON not found");
-}
-
-return response.json();
-})
-.then(function(json){
-
-smartData=json;
-smartLoaded=true;
-console.log("Smart JSON Loaded Successfully");
-
-})
-.catch(function(error){
-
-smartLoaded=false;
-console.log("Smart JSON Error:", error);
-
-});
-
-
+/* 🔥 SMART SEARCH FUNCTION */
 function getSmartAnswer(q){
 
 q=q.toLowerCase().trim();
 
-if(!smartLoaded){
-return "System loading... please wait";
-}
-
-if(!smartData.entities){
-return "Smart system error";
-}
-
 let entities=smartData.entities;
-let intents=smartData.intents || {};
+let intents=smartData.intents;
 
 for(let entityName in entities){
 
 let entity=entities[entityName];
-
 let names=[entityName];
 
 if(entity.aliases){
@@ -323,11 +416,9 @@ let keywords=intents[intentName];
 for(let word of keywords){
 
 if(q.includes(word.toLowerCase())){
-
 if(props[intentName]){
 return props[intentName];
 }
-
 }
 
 }
@@ -347,29 +438,20 @@ return data[q] || "Answer not found";
 }
 
 
-/* ORIGINAL FUNCTIONS — UNCHANGED */
-
+/* ORIGINAL FUNCTIONS */
 function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
 document.getElementById("page"+n).classList.add("show");
 }
 
 function search(){
-
 let q=document.getElementById("query").value.toLowerCase();
-
 if(q==="") return;
-
 selectedQuestion=q;
-
 historyList.unshift(q);
-
 saveHistory();
-
 document.getElementById("answer").innerText=getSmartAnswer(q);
-
 goPage(3);
-
 }
 
 function goBack(){
