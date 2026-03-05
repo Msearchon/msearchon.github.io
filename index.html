@@ -132,12 +132,15 @@ cursor:pointer;
 
 /* HISTORY PAGE */
 #historyPage{
-position:fixed;
-inset:0;
-background:#0f0f0f;
-padding:20px;
-display:none;
-z-index:999;
+  position: fixed;
+  inset: 0;
+  background: #0f0f0f;
+  padding: 20px;
+  display: none;
+  z-index: 999;
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 #clearBtn{
@@ -193,8 +196,8 @@ color:#1b1f24;
 </div>  <div id="historyPage">          
 <div id="closeHistory" onclick="closeHistory()">✕</div>          
 <h2>History</h2>          
-<div id="fullHistory"></div>          
-<button id="clearBtn" onclick="clearHistory()">Clear History</button>          
+<div id="fullHistoryContainer" style="max-height:70vh; overflow-y:auto;"></div>
+<button id="clearBtn" onclick="clearHistory()">Clear History</button>       
 </div>  <div id="page1" class="page show">  <div class="header">          
 <h1>M Search</h1>          
 </div>  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">  <div class="big-box">          
@@ -253,7 +256,7 @@ const smartData ={
 "properties": {
 "about": "Pretext Program is the first testing files data transfer into digital data successfully.",
 "founder": "M.H",
-"created": "15/1/2096"
+"created": "15/1/2026"
 }
 },
 
@@ -596,16 +599,15 @@ if(h) historyList=JSON.parse(h);
 }
 
 function renderFullHistory(){
-let box=document.getElementById("fullHistory");
-box.innerHTML="";
-historyList.forEach(item=>{
-let d=document.createElement("div");
-d.className="history-item";
-d.innerText=item;
-box.appendChild(d);
-});
-}
-
+  let box=document.getElementById("fullHistoryContainer");
+  box.innerHTML="";
+  historyList.forEach(item=>{
+    let d=document.createElement("div");
+    d.className="history-item";
+    d.innerText=item;
+    box.appendChild(d);
+  });
+  }
 function clearHistory(){
 historyList=[];
 saveHistory();
