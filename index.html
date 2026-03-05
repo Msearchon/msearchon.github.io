@@ -1,5 +1,4 @@
-<!DOCTYPE html>  <html lang="en">  <head>    <meta charset="UTF-8">      <meta name="viewport" content="width=device-width, initial-scale=1.0">        <title>M Search</title>  <style>          body{
-margin:0;
+<!DOCTYPE html>  <html lang="en">  <head>    <meta charset="UTF-8">      <meta name="viewport" content="width=device-width, initial-scale=1.0">        <title>M Search</title>  <style>          body{  margin:0;
 font-family:Arial, sans-serif;
 background:#0f0f0f;
 color:white;
@@ -132,15 +131,15 @@ cursor:pointer;
 
 /* HISTORY PAGE */
 #historyPage{
-  position: fixed;
-  inset: 0;
-  background: #0f0f0f;
-  padding: 20px;
-  display: none;
-  z-index: 999;
+position: fixed;
+inset: 0;
+background: #0f0f0f;
+padding: 20px;
+display: none;
+z-index: 999;
 
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
 }
 
 #clearBtn{
@@ -189,47 +188,44 @@ color:#1b1f24;
 
 </style>  </head>  <body>  <div id="splash">
 
-<div id="splashLogo"> M <span> Search </span></div>          
-</div>  <div id="menuBtn" onclick="toggleMenu()">⋮</div>  <div id="menuBox">          
-<div class="menu-item" onclick="openHistory()">History</div>          
-<div class="menu-item" onclick="toggleMode()">Mode</div>          
-</div>  <div id="historyPage">          
-<div id="closeHistory" onclick="closeHistory()">✕</div>          
-<h2>History</h2>          
-<div id="fullHistoryContainer" style="max-height:70vh; overflow-y:auto;"></div>
-<button id="clearBtn" onclick="clearHistory()">Clear History</button>       
-</div>  <div id="page1" class="page show">  <div class="header">          
-<h1>M Search</h1>          
-</div>  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">  <div class="big-box">          
-<h2>Important Rules</h2>          
-<p>When you open M Search, refresh it once.</p>          
-</div>  <div class="big-box">          
-<h2>News 📊</h2>          
-<p>A Simple And search engine built in 2023.</p>          
-</div>  <div class="big-box">          
-<h2>🌐 M SEARCH </h2>          
-<p>ALL File information.</p> 
-</div>
-</div>  </div>  <div id="page2" class="page">  <div class="page-buttons">          
-<button class="page-btn" onclick="goPage(1)">Home</button>          
-<button class="page-btn" onclick="goPage(3)">Result</button>          
-</div>  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">  <button class="search-btn" onclick="search()">Search</button>  <div class="history" id="history"></div>  </div>  <div id="page3" class="page">  <h2>M Search Result</h2>  <p style="font-size:20px">          
-<b>Answer:</b>          
-<span id="answer"></span>          
-</p>  <button class="search-btn" onclick="goBack()">Back</button>  </div>  <script>    /* ORIGINAL DATA — UNCHANGED */  const data={    
-"what is python":"Python is a programming language.",    
-"what is google":"Google is a search engine.",    
-"what is computer":"A computer is an electronic machine.",    
-"what is m search":"M search is a mini search engine.",    
-"who is m.h":"M.H is founder of M Search All.",    
-"who create m search":"M.H created m search in 2023.",    
-"tell me what is miraz":"Miraz is a #️⃣."    
-}; 
-  /* ✅ FULL SMART DATA EMBEDDED (YOUR COMPLETE JSON) */
-const smartData ={
-"entities": {
-
-"m search": {
+<div id="splashLogo"> M <span> Search </span></div>            
+</div>  <div id="menuBtn" onclick="toggleMenu()">⋮</div>  <div id="menuBox">            
+<div class="menu-item" onclick="openHistory()">History</div>            
+<div class="menu-item" onclick="toggleMode()">Mode</div>            
+</div>  <div id="historyPage">            
+<div id="closeHistory" onclick="closeHistory()">✕</div>            
+<h2>History</h2>            
+<div id="fullHistoryContainer" style="max-height:70vh; overflow-y:auto;"></div>  
+<button id="clearBtn" onclick="clearHistory()">Clear History</button>         
+</div>  <div id="page1" class="page show">  <div class="header">            
+<h1>M Search</h1>            
+</div>  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">  <div class="big-box">            
+<h2>Important Rules</h2>            
+<p>When you open M Search, refresh it once.</p>            
+</div>  <div class="big-box">            
+<h2>News 📊</h2>            
+<p>A simple and fast search built in 2023.</p>            
+</div>  <div class="big-box">            
+<h2>🌐 M SEARCH </h2>            
+<p>ALL File information.</p>            
+</div>  </div>  <div id="page2" class="page">  <div class="page-buttons">            
+<button class="page-btn" onclick="goPage(1)">Home</button>            
+<button class="page-btn" onclick="goPage(3)">Result</button>            
+</div>  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">  <button class="search-btn" onclick="search()">Search</button>  <div class="history" id="history"></div>  </div>  <div id="page3" class="page">  <h2>M Search Result</h2>  <p style="font-size:20px">            
+<b>Answer:</b>            
+<span id="answer"></span>            
+</p>  <button class="search-btn" onclick="goBack()">Back</button>  </div>  <script>    /* ORIGINAL DATA — UNCHANGED */  const data={      
+"what is python":"Python is a programming language.",      
+"what is google":"Google is a search engine.",      
+"what is computer":"A computer is an electronic machine.",      
+"what is m search":"M search is a mini search engine.",      
+"who is m.h":"M.H is founder of M Search All.",      
+"who create m search":"M.H created m search in 2023.",      
+"tell me what is miraz":"Miraz is a #️⃣."      
+};   
+  /* ✅ FULL SMART DATA EMBEDDED (YOUR COMPLETE JSON) */  
+const smartData ={  
+"entities": {  "m search": {
 "aliases": ["msearch", "m search"],
 "properties": {
 "about": "M Search is a mini search engine.",
@@ -441,15 +437,10 @@ const smartData ={
 "full_name": ["full name", "real name"],
 "location": ["at","AT","location","located"]
 }
-  }
-
-
-
-
+}
 
 let selectedQuestion="";
 let historyList=[];
-
 
 /* 🔥 SMART SEARCH FUNCTION */
 function getSmartAnswer(q){
@@ -500,12 +491,11 @@ return props.about || "Information not available";
 
 return data[q] || "Answer not found";
 
-  }
-  
+}
 
 /* ORIGINAL FUNCTIONS — UNCHANGED */
-  
-function n goPage(n){
+
+function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
 document.getElementById("page"+n).classList.add("show");
 }
@@ -534,45 +524,46 @@ document.getElementById("query").value=selectedQuestion;
 showSuggestions();
 }
 function showSuggestions() {
-    let q = document.getElementById("query").value.toLowerCase();
-    let h = document.getElementById("history");
-    h.innerHTML = "";
+let q = document.getElementById("query").value.toLowerCase();
+let h = document.getElementById("history");
+h.innerHTML = "";
 
-    if (q === "") return;
+if (q === "") return;  
 
-    // 1️⃣ Suggestions from original data
-    for (let key in data) {
-        if (key.includes(q)) {
-            let d = document.createElement("div");
-            d.className = "history-item";
-            d.innerText = key;
-            d.onclick = function() {
-                document.getElementById("query").value = key;
-            };
-            h.appendChild(d);
-        }
-    }
+// 1️⃣ Suggestions from original data  
+for (let key in data) {  
+    if (key.includes(q)) {  
+        let d = document.createElement("div");  
+        d.className = "history-item";  
+        d.innerText = key;  
+        d.onclick = function() {  
+            document.getElementById("query").value = key;  
+        };  
+        h.appendChild(d);  
+    }  
+}  
 
-    // 2️⃣ Suggestions from smartData entities
-    let entities = smartData.entities;
-    for (let entityName in entities) {
-        let entity = entities[entityName];
-        let names = [entityName];
-        if (entity.aliases) names = names.concat(entity.aliases);
+// 2️⃣ Suggestions from smartData entities  
+let entities = smartData.entities;  
+for (let entityName in entities) {  
+    let entity = entities[entityName];  
+    let names = [entityName];  
+    if (entity.aliases) names = names.concat(entity.aliases);  
 
-        for (let name of names) {
-            if (name.toLowerCase().includes(q)) {
-                let d = document.createElement("div");
-                d.className = "history-item";
-                d.innerText = name;
-                d.onclick = function() {
-                    document.getElementById("query").value = name;
-                };
-                h.appendChild(d);
-            }
-        }
-    }
-  }
+    for (let name of names) {  
+        if (name.toLowerCase().includes(q)) {  
+            let d = document.createElement("div");  
+            d.className = "history-item";  
+            d.innerText = name;  
+            d.onclick = function() {  
+                document.getElementById("query").value = name;  
+            };  
+            h.appendChild(d);  
+        }  
+    }  
+}
+
+}
 
 function toggleMenu(){
 let m=document.getElementById("menuBox");
@@ -602,15 +593,15 @@ if(h) historyList=JSON.parse(h);
 }
 
 function renderFullHistory(){
-  let box=document.getElementById("fullHistoryContainer");
-  box.innerHTML="";
-  historyList.forEach(item=>{
-    let d=document.createElement("div");
-    d.className="history-item";
-    d.innerText=item;
-    box.appendChild(d);
-  });
-  }
+let box=document.getElementById("fullHistoryContainer");
+box.innerHTML="";
+historyList.forEach(item=>{
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=item;
+box.appendChild(d);
+});
+}
 function clearHistory(){
 historyList=[];
 saveHistory();
