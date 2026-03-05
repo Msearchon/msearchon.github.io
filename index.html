@@ -76,6 +76,28 @@ margin:0 0 10px;
 font-size:18px;
 color:#ccc;
 }
+  /* TRENDING */
+#trending{
+background:#1f1f1f;
+border-radius:20px;
+padding:20px;
+margin-top:22px;
+}
+
+#trending h3{
+margin-top:0;
+}
+
+#trending li{
+cursor:pointer;
+padding:8px;
+list-style:none;
+border-bottom:1px solid #333;
+}
+
+#trending li:hover{
+color:#4285F4;
+}
 
 /* HISTORY */
 .history{ margin-top:20px; }
@@ -208,7 +230,19 @@ color:#1b1f24;
 <p>A simple and fast search built in 2023.</p>          
 </div>  <div class="big-box">          
 <h2>🌐 M SEARCH </h2>          
-<p>ALL File information.</p>          
+<p>ALL File information.</p> 
+  <!-- TRENDING SEARCHES -->
+<div id="trending">
+<h3>Trending Searches</h3>
+<ul>
+<li onclick="searchTrending('m search founder')">M Search Founder</li>
+<li onclick="searchTrending('mgplc company')">MGPLC Company</li>
+<li onclick="searchTrending('pretext program')">Pretext Program</li>
+<li onclick="searchTrending('mehdi hasan')">Mehdi Hasan</li>
+</ul>
+</div>
+
+</div>
 </div>  </div>  <div id="page2" class="page">  <div class="page-buttons">          
 <button class="page-btn" onclick="goPage(1)">Home</button>          
 <button class="page-btn" onclick="goPage(3)">Result</button>          
@@ -503,6 +537,13 @@ return data[q] || "Answer not found";
   
 
 /* ORIGINAL FUNCTIONS — UNCHANGED */
+  /* TRENDING SEARCH FUNCTION */
+function searchTrending(q){
+
+document.getElementById("query").value=q;
+
+search();
+  
 
 function goPage(n){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
