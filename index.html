@@ -527,38 +527,46 @@ goPage(2);
 document.getElementById("query").value=selectedQuestion;
 showSuggestions();
 }
+function showSuggestions() {
+    let q = document.getElementById("query").value.toLowerCase();
+    let h = document.getElementById("history");
+    h.innerHTML = "";
 
-function showSuggestions(){
+    if (q === "") return;
 
-let q=document.getElementById("query").value.toLowerCase();
+    // 1️⃣ Suggestions from original data
+    for (let key in data) {
+        if (key.includes(q)) {
+            let d = document.createElement("div");
+            d.className = "history-item";
+            d.innerText = key;
+            d.onclick = function() {
+                document.getElementById("query").value = key;
+            };
+            h.appendChild(d);
+        }
+    }
 
-let h=document.getElementById("history");
+    // 2️⃣ Suggestions from smartData entities
+    let entities = smartData.entities;
+    for (let entityName in entities) {
+        let entity = entities[entityName];
+        let names = [entityName];
+        if (entity.aliases) names = names.concat(entity.aliases);
 
-h.innerHTML="";
-
-if(q==="") return;
-
-for(let key in data){
-
-if(key.includes(q)){
-
-let d=document.createElement("div");
-
-d.className="history-item";
-
-d.innerText=key;
-
-d.onclick=function(){
-document.getElementById("query").value=key;
-};
-
-h.appendChild(d);
-
-}
-
-}
-
-}
+        for (let name of names) {
+            if (name.toLowerCase().includes(q)) {
+                let d = document.createElement("div");
+                d.className = "history-item";
+                d.innerText = name;
+                d.onclick = function() {
+                    document.getElementById("query").value = name;
+                };
+                h.appendChild(d);
+            }
+        }
+    }
+  }
 
 function toggleMenu(){
 let m=document.getElementById("menuBox");
