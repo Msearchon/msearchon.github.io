@@ -86,13 +86,15 @@
     
 
     <div id="page2" class="page">
-        <div class="home-pill" onclick="goPage(1)">
-            <span>Home</span>
-        </div>
-        <input id="query" class="search-pad" placeholder="Search..." oninput="showSuggestions()" autofocus>
-        <button class="search-btn" onclick="search()">Search</button>
-        <div id="historySuggestions" style="margin-top:10px;"></div>
-    </div>
+    <div class="home-pill" onclick="goPage(1)"><span>Home</span></div>
+    
+    <form action="" method="GET" onsubmit="event.preventDefault(); search();">
+        <input id="query" type="text" name="q" class="search-pad" placeholder="Search..." oninput="showSuggestions()" autofocus>
+        <button type="submit" class="search-btn">Search</button>
+    </form>
+    
+    <div id="historySuggestions" style="margin-top:10px;"></div>
+</div>
 
     <div id="page3" class="page">
         <h2 style="margin-top:40px;">Result</h2>
@@ -222,4 +224,4 @@
         setTimeout(() => document.getElementById("splash").style.display="none", 2000);
     </script>
 </body>
-  </html>
+    </html>
