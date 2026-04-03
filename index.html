@@ -1,1 +1,1451 @@
+<!DOCTYPE html>  <html lang="en">  <head>    <meta charset="UTF-8">      <meta name="viewport" content="width=device-width, initial-scale=1.0">        <title>M Search</title>  <style>          body{  margin:0;
+font-family:Arial, sans-serif;
+background:#0f0f0f;
+color:white;
+overflow-x:hidden;
+}    /* SPLASH */
+#splash{
+position:fixed;
+inset:0;
+background:#0f0f0f;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
 
+#splashLogo{
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* NEW LOGO */
+.logoCircle{
+width:150px;
+height:150px;
+border-radius:50%;
+background:#4285F4;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:75px;
+font-weight:bold;
+color:white;
+}
+/* COMMON */
+.page{ display:none; padding:22px; }
+.show{ display:block; }
+
+/* HEADER */
+.header{
+text-align:center;
+margin-top:40px;
+}
+
+.header h1{
+font-size:48px;
+margin-bottom:35px;
+}
+
+/* SEARCH BAR */
+.search-pad{
+width:100%;
+height:64px;
+border-radius:40px;
+border:none;
+padding:0 26px;
+font-size:22px;
+background:#1f1f1f;
+color:white;
+outline:none;
+}
+
+/* BUTTON */
+.search-btn{
+width:100%;
+height:56px;
+margin-top:20px;
+border-radius:35px;
+border:none;
+font-size:20px;
+background:#4285F4;
+color:white;
+cursor:pointer;
+}
+
+/* BIG BOXES */
+.big-box{
+background:#1f1f1f;
+border-radius:20px;
+padding:26px;
+margin-top:22px;
+}
+
+.big-box h2{
+font-size:24px;
+margin:0 0 10px;
+}
+
+.big-box p{
+font-size:18px;
+color:#ccc;
+}
+
+/* HISTORY */
+.history{ margin-top:20px; }
+
+.history-item{
+padding:10px;
+font-size:16px;
+color:#aaa;
+cursor:pointer;
+}
+
+/* PAGE BUTTONS */
+.page-buttons{
+display:flex;
+gap:10px;
+margin-bottom:10px;
+}
+
+.page-btn{
+flex:1;
+height:45px;
+border:none;
+border-radius:10px;
+background:#4285F4;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+/* THREE DOT */
+#menuBtn{
+position:absolute;
+top:15px;
+right:15px;
+font-size:28px;
+cursor:pointer;
+}
+
+/* MENU BOX */
+#menuBox{
+position:absolute;
+top:55px;
+right:15px;
+background:#1f1f1f;
+border-radius:10px;
+padding:10px;
+display:none;
+}
+
+.menu-item{
+padding:10px;
+cursor:pointer;
+}
+
+/* HISTORY PAGE */
+#historyPage{
+position: fixed;
+inset: 0;
+background: #0f0f0f;
+padding: 20px;
+display: none;
+z-index: 999;
+
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
+}
+
+#clearBtn{
+background:green;
+color:white;
+border:none;
+padding:10px;
+margin-top:20px;
+width:100%;
+}
+
+#closeHistory{
+position:absolute;
+top:15px;
+right:20px;
+font-size:26px;
+cursor:pointer;
+}
+
+/* LIGHT MODE */
+.light{
+background:linear-gradient(180deg,#f4f7fb,#e9eef5);
+color:#000000;
+}
+
+.light .search-pad{
+background:#ffffff;
+color:#000000;
+border:2px solid #d0d9e5;
+}
+
+.light .big-box{
+background:#ffffff;
+color:#000000;
+}
+
+.light #menuBox{
+background:#ffffff;
+color:#000000;
+}
+
+.light #historyPage{
+background:#eef3f9;
+color:#1b1f24;
+}
+
+</style>  </head>  <body>  <div id="splash">
+
+<div id="splashLogo">
+<div class="logoCircle">M</div>
+</div>            
+</div>  <div id="menuBtn" onclick="toggleMenu()">⋮</div>  <div id="menuBox">            
+<div class="menu-item" onclick="openHistory()">History</div>            
+<div class="menu-item" onclick="toggleMode()">Mode</div>            
+</div>  <div id="historyPage">            
+<div id="closeHistory" onclick="closeHistory()">✕</div>            
+<h2>History</h2>            
+<div id="fullHistoryContainer" style="max-height:70vh; overflow-y:auto;"></div>  
+<button id="clearBtn" onclick="clearHistory()">Clear History</button>         
+</div>  <div id="page1" class="page show">  <div class="header">            
+<h1>M Search</h1>            
+</div>  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">  <div class="big-box">            
+<h2>Important Rules</h2>            
+<p>When you open M Search, refresh it once.</p>            
+</div>  <div class="big-box">            
+<h2>News 📊</h2>            
+<p>A simple and fast search built in 2023.</p>            
+</div>  <div class="big-box">            
+<h2>🌐 M SEARCH </h2>            
+<p>ALL File information.</p>            
+</div>  </div>  <div id="page2" class="page">  <div class="page-buttons">            
+<button class="page-btn" onclick="goPage(1)">Home</button>            
+<button class="page-btn" onclick="goPage(3)">Result</button>            
+</div>  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">  <button class="search-btn" onclick="search()">Search</button>  <div class="history" id="history"></div>  </div>  <div id="page3" class="page">  <h2>M Search Result</h2>  <p style="font-size:20px">            
+<b>Answer:</b>            
+<span id="answer"></span>            
+</p>  <button class="search-btn" onclick="goBack()">Back</button>  </div>  <script>    /* ORIGINAL DATA — UNCHANGED */  const data={      
+"what is python":"Python is a programming language.",      
+"what is google":"Google is a search engine.",      
+"what is computer":"A computer is an electronic machine.",            
+"tell me what is miraz":"Miraz is a #️⃣.",
+"total app":"ToTaL app is 48+.",
+"total continent":"3 is M continent Ron continent EA continent."
+};   
+  /* ✅ FULL SMART DATA EMBEDDED (YOUR COMPLETE JSON) */  
+const smartData ={  
+"entities": {  "m search": {
+"aliases": ["msearch", "m search"],
+"properties": {
+"about": "M Search is a mini search engine.",
+"founder": "M.H",
+"owner": "MGPLC",
+"created": "2023"
+}
+},
+
+"mgplc": {
+"aliases": ["m group private limited","m group pvt Ltd","mgplc"],
+"properties": {
+"about": "MGPLC is the parent company of M Search and 18 other companys.",
+"founder": "M.H",
+"created": "2017",
+"full_name":"M GROUP PRIVATE LIMITED COMPANY",
+"total_company": "18",
+"company": "M SEARCH ALL, TSC Club, TComputer, TC, XCAR, DEDF GROUP, LO, DAMER, DX, BANK OF Mcity, ORL, MNEWS, ESM AIRLINE, STD SODA, UN, OUT STUDIO, Hoill, ALLONE, ETC",
+"network": "1.2 Trillion MSDR",
+"owner": "M.H"
+}
+},
+
+"pretext program": {
+"aliases": ["pretext program", "pretextprogram"],
+"properties": {
+"about": "Pretext Program is the first testing files data transfer into digital data successfully.",
+"founder": "M.H",
+"created": "15/1/2026"
+}
+},
+
+"m.h": {
+"aliases": ["mehdi hasan", "m h"],
+"properties": {
+"about": "M.H is creator of M Search, Pretext Program, and founder of MGPLC.",
+"full_name": "Mehdi Hasan",
+"role": "Founder and Creator"
+}
+},
+
+"atabb": {
+"aliases": ["atabb app","atabb"],
+"properties": {
+"about": "ATABB is the first entertainment app.",
+"owner":"ATABB",
+"category": "Entertainment",
+"created": "5/12/2024"
+}
+},
+
+"pplco": {
+"aliases": ["pplco app"],
+"properties": {
+"about": "PPLCO is an entertainment app.",
+"owner":"PPLCO",
+"category": "Entertainment",
+"created": "5/12/2024"
+}
+},
+
+"redx": {
+"aliases": ["redx app"],
+"properties": {
+"about": "REDX is an entertainment app.",
+"owner":"REDX COMPANY",
+"category": "Entertainment",
+"created": "5/12/2024"
+}
+},
+
+"music one": {
+"aliases": ["music one app"],
+"properties": {
+"about": "Music ONE is a music streaming app.",
+"owner":"MUSIC ONE",
+"category": "Music",
+"created": "5/12/2024"
+}
+},
+
+"cpay": {
+"aliases": ["cpay app"],
+"properties": {
+"about": "CPAY is a payment app.",
+"owner":"CPAY",
+"category": "Finance",
+"created": "5/12/2024"
+}
+},
+
+"ssbpay": {
+"aliases": ["ssbpay app"],
+"properties": {
+"about": "SSBPAY is a digital payment app.",
+"owner":"State so bank",
+"category": "Finance",
+"created": "5/12/2024"
+}
+},
+
+"food on": {
+"aliases": ["food on app"],
+"properties": {
+"about": "FOOD ON is a food delivery app.",
+"owner":"FOOD ON",
+"category": "Food",
+"created": "5/12/2024"
+}
+},
+
+"mnews": {
+"aliases": ["mnews app"],
+"properties": {
+"about": "MNEWS is a news company and media app.",
+"owner":"MGPLC",
+"category": "News",
+"created": "5/12/2024"
+}
+},
+
+"turbo": {
+"aliases": ["turbo app"],
+"properties": {
+"about": "TURBO is a share market app.",
+"owner":"TURBO",
+"category": "Finance",
+"created": "5/12/2024"
+}
+},
+
+"edi": {
+"aliases": ["edi app"],
+"properties": {
+"about": "EDI is a stock market app.",
+"owner":"EDI",
+"category": "Finance",
+"created": "5/12/2024"
+}
+},
+
+"m messege": {
+"aliases": ["m messege app", "my talk"],
+"properties": {
+"about": "M Messege is a messaging app.",
+"owner":"MGPLC",
+"category": "Communication",
+"created": "5/12/2024"
+}
+},
+
+"m phone": {
+"aliases": ["m phone app"],
+"properties": {
+"about": "M Phone is a phone utility app.",
+"owner":"MGPLC",
+"category": "Communication",
+"created": "5/12/2024"
+}
+},
+
+"mapp": {
+"aliases": ["mapp app"],
+"properties": {
+"about": "MAPP is the holding app of all apps.",
+"owner":"MGPLC",
+"category": "Utility",
+"created": "5/12/2024",
+"total apps": "48"
+}
+},
+
+"univercity of m desh education world": {
+"aliases": ["university of m.e.w", "mew"],
+"properties": {
+"about": "University of M Desh Education World.",
+"location": "Mcity",
+"created": "2/FEB/2026"
+}
+},
+
+"univercity of treepers": {
+"aliases": ["treepers university"],
+"properties": {
+"about": "University of TREEPERS.",
+"location": "SPL",
+"created": "3/FEB/2026"
+}
+},
+
+"student of college": {
+"aliases": ["students of collage"],
+"properties": {
+"about": "Students of College.",
+"student_created": "3/FEB/2026",
+"location":"AMRS"
+}
+},
+
+    "ibc": {
+      "aliases": ["international broadcasting company", "ibc company"],
+      "properties": {
+        "full_form": "International Broadcasting Company",
+        "about": "IBC is an international broadcasting company working with government.",
+        "created": "20/5/2025",
+        "under": "M Desh Government"
+      }
+    },
+
+    "cwi": {
+      "aliases": ["creat world intelligent"],
+      "properties": {
+        "full_form": "Creat World Intelligent",
+        "about": "CWI is a system used for saving file data.",
+        "created": "2025"
+      }
+    },
+
+    "centor international game": {
+      "aliases": ["centor game", "cig","centor"],
+      "properties": {
+        "about": "International Game Center is a gaming center.",
+        "created": "2024",
+        "first game": "Swimming Game (2024)",
+        "second game": "Running Game (2025)"
+      }
+    },
+
+    "creat world": {
+      "aliases": ["create world"],
+      "properties": {
+        "about": "Creat World is  created between 2018 and 2019.",
+        "founder": "M.H",
+        "created": "2018-2019"
+      }
+    },
+  
+
+    "company list": {
+      "aliases": ["all companys", "company names"],
+      "properties": {
+        "about":  "AC, AOIL, APL, ALLONE, 9A9A, ABM, ATABB, ASTC, ALB, ADC, ADPLC, AO, BPL, BK, BBS, BUS, BNC, BLUE, BBD, BANK OF Mcity, CO, COLL, CRA, CON, CF BANK, CG, DAMER, DX, DD, DDG, DEDF GROUP, DOCK, DTV, ELETc, EOX, ECO CLUB, ESM AIRLINES, FOX, FC STUDIO, GOME, GK INDUSTRIES, HOIL, HARBER, HOTSONS LTD, HO, HONY, HDF BANK, ICWRA, IBC, ICCD, I NEWS, JAN, TC, T COMPUTER, TWOD, TSC, LALAI, LO, LOVO, NT, NCDD, ORL, OSP, O BANK, OLLE, PISK, PIZK, PPC, POST, PXO, PROO, RC, RVO, ROCK STEN, RAB, STD-SODA, SSB, SUPER M, SORY, SNOW, STER, VOX, VIC, VOL, VIT, WS COMPANY, X CAR, XOT, XFO, XNEWS",
+        "company": "AC, AOIL, APL, ALLONE, 9A9A, ABM, ATABB, ASTC, ALB, ADC, ADPLC, AO, BPL, BK, BBS, BUS, BNC, BLUE, BBD, BANK OF Mcity, CO, COLL, CRA, CON, CF BANK, CG, DAMER, DX, DD, DDG, DEDF GROUP, DOCK, DTV, ELETc, EOX, ECO CLUB, ESM AIRLINES, FOX, FC STUDIO, GOME, GK INDUSTRIES, HOIL, HARBER, HOTSONS LTD, HO, HONY, HDF BANK, ICWRA, IBC, ICCD, I NEWS, JAN, TC, T COMPUTER, TWOD, TSC, LALAI, LO, LOVO, NT, NCDD, ORL, OSP, O BANK, OLLE, PISK, PIZK, PPC, POST, PXO, PROO, RC, RVO, ROCK STEN, RAB, STD-SODA, SSB, SUPER M, SORY, SNOW, STER, VOX, VIC, VOL, VIT, WS COMPANY, X CAR, XOT, XFO, XNEWS"
+      }
+    },
+             
+    "ac": {
+      "aliases": ["ac company"],
+      "properties": {
+        "about": "AC is an internal company.",
+        "category": "Internal",
+        "created": "2020"
+      }
+    },
+    "aoil": {
+      "aliases": ["aoil company"],
+      "properties": {
+        "about": "AOIL is an oil company.",
+        "category": "Oil",
+        "created": "2021"
+      }
+    },
+    "apl": {
+      "aliases": ["apl company"],
+      "properties": {
+        "about": "APL is a power company.",
+        "category": "Power",
+        "created": "2021"
+      }
+    },
+    "allone": {
+      "aliases": ["allone company"],
+      "properties": {
+        "about": "ALLONE is an internal company.",
+        "category": "Internal",
+        "created": "2023",
+        "owner": "MGPLC"
+      }
+    },
+    "9a9a": {
+      "aliases": ["9a9a company"],
+      "properties": {
+        "about": "9A9A is a medicine company.",
+        "category": "Medicine",
+        "created": "2023"
+      }
+    },
+    "abm": {
+      "aliases": ["abm company"],
+      "properties": {
+        "about": "ABM is an unknown type company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+    "atabb": {
+      "aliases": ["atabb company", "atabb online"],
+      "properties": {
+        "about": "ATABB is an online company.",
+        "category": "Online",
+        "created": "2023"
+      }
+    },
+    "astc": {
+      "aliases": ["astc company"],
+      "properties": {
+        "about": "ASTC is an advertising company.",
+        "category": "Advertising",
+        "created": "2024"
+      }
+    },
+    "alb": {
+      "aliases": ["alb company"],
+      "properties": {
+        "about": "ALB is an unknown type company.",
+        "category": "Unknown",
+        "created": "2022"
+      }
+    },
+    "adc": {
+      "aliases": ["adc company"],
+      "properties": {
+        "about": "ADC is a channel company.",
+        "category": "Channel",
+        "created": "2025"
+      }
+    },
+    "adplc": {
+      "aliases": ["adplc company"],
+      "properties": {
+        "about": "ADPLC is an internal company.",
+        "category": "Internal",
+        "created": "29/8/2025"
+      }
+    },
+    "ao": {
+      "aliases": ["ao company"],
+      "properties": {
+        "about": "AO is an unknown type company.",
+        "category": "Unknown",
+        "created": "2025"
+      }
+    },
+    "bpl": {
+      "aliases": ["bpl company"],
+      "properties": {
+        "about": "BPL is a power company.",
+        "category": "Power",
+        "created": "2021"
+      }
+    },
+    "bk": {
+      "aliases": ["bk company"],
+      "properties": {
+        "about": "BK is a food company.",
+        "category": "Food",
+        "created": "2024"
+      }
+    },
+    "bbs": {
+      "aliases": ["bbs company"],
+      "properties": {
+        "about": "BBS is a mobile company.",
+        "category": "Mobile",
+        "created": "2022",
+        "owner":"Lo mobile company"
+      }
+    },
+    "bus": {
+      "aliases": ["bus company"],
+      "properties": {
+        "about": "BUS is a travel company.",
+        "category": "Travel",
+        "created": "2021"
+      }
+    },
+    "bnc": {
+      "aliases": ["bnc company"],
+      "properties": {
+        "about": "BNC is an education company.",
+        "category": "Education",
+        "created": "2021",
+        "under": "M Desh Government"
+      }
+    },
+    "blue": {
+      "aliases": ["blue company"],
+      "properties": {
+        "about": "BLUE is a dress company.",
+        "category": "Dress",
+        "created": "2023"
+      }
+    },
+    "bbd": {
+      "aliases": ["bbd company"],
+      "properties": {
+        "about": "BBD is an unknown type company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+    "bank of mcity": {
+      "aliases": ["mcity bank"],
+      "properties": {
+        "about": "Bank of Mcity is a banking company.",
+        "category": "Banking",
+        "created": "2024",
+        "owner":"MGPLC"
+      }
+    },
+    "co": {
+      "aliases": ["co company"],
+      "properties": {
+        "about": "CO is an internal company.",
+        "category": "Internal",
+        "created": "2020"
+      }
+    },
+    "coll": {
+      "aliases": ["coll company"],
+      "properties": {
+        "about": "COLL is a toothpaste company.",
+        "category": "Toothpaste",
+        "created": "2021"
+      }
+    },
+    "cra": {
+      "aliases": ["cra company"],
+      "properties": {
+        "about": "CRA is a car company.",
+        "category": "Car",
+        "created": "2021"
+      }
+    },
+    "con": {
+      "aliases": ["con company"],
+      "properties": {
+        "about": "CON is an internal company.",
+        "category": "Internal",
+        "created": "2021"
+      }
+    },
+    "cf bank": {
+      "aliases": ["cfbank"],
+      "properties": {
+        "about": "CF Bank is a banking company.",
+        "category": "Banking",
+        "created": "2024"
+      }
+    },
+    "cg": {
+      "aliases": ["cg company"],
+      "properties": {
+        "about": "CG is an unknown type company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+    "damer": {
+      "aliases": ["damer company"],
+      "properties": {
+        "about": "DAMER is a cement company.",
+        "category": "Cement",
+        "created": "2020",
+        "under":"DEDF Group"
+      }
+    },
+    "dx": {
+      "aliases": ["dx company"],
+      "properties": {
+        "about": "DX is a medicine company.",
+        "category": "Medicine",
+        "created": "2021",
+        "under":"DEDF Group"
+      }
+    },
+    "dd": {
+      "aliases": ["dd company"],
+      "properties": {
+        "about": "DD is a mobile company.",
+        "category": "Mobile",
+        "created": "2022"
+      }
+    },
+    "ddg": {
+      "aliases": ["ddg company"],
+      "properties": {
+        "about": "DDG is a car company.",
+        "category": "Car",
+        "created": "2021"
+      }
+    },
+    "dedf group": {
+      "aliases": ["dedf"],
+      "properties": {
+        "about": "DEDF Group is a group company.",
+        "category": "Group",
+        "created": "2021",
+        "owner":"MGPLC"
+      }
+    },
+    "dock": {
+      "aliases": ["dock airlines"],
+      "properties": {
+        "about": "DOCK is an airlines company.",
+        "category": "Airlines",
+        "created": "2025"
+      }
+    },
+    "dtv": {
+      "aliases": ["dtv channel"],
+      "properties": {
+        "about": "DTV is a channel company.",
+        "category": "Channel",
+        "created": "2025"
+      }
+    },
+    "eletc": {
+      "aliases": ["eletc company"],
+      "properties": {
+        "about": "Eletc is a power company.",
+        "category": "Power",
+        "created": "2021"
+      }
+    },
+    "eox": {
+      "aliases": ["eox company"],
+      "properties": {
+        "about": "EOX is an unknown type company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+    "eco club": {
+      "aliases": ["eco team"],
+      "properties": {
+        "about": "Eco Club is a team company.",
+        "category": "Team",
+        "created": "2025"
+      }
+    },
+    "esm airlines": {
+      "aliases": ["esm airline"],
+      "properties": {
+        "about": "ESM Airlines is an airlines company.",
+        "category": "Airlines",
+        "created": "2022",
+        "owner":"MGPLC"
+      }
+    },
+    "fc studio": {
+      "aliases": ["fc comics"],
+      "properties": {
+        "about": "FC Studio is a comic company.",
+        "category": "Comic",
+        "created": "2023"
+      }
+    },
+    "fox": {
+      "aliases": ["fox company"],
+      "properties": {
+        "about": "FOX is an unknown type company.",
+        "category": "Unknown",
+        "created": "2024"
+      }
+    },
+    "gome": {
+      "aliases": ["gome company"],
+      "properties": {
+        "about": "GOME is a mobile parts company.",
+        "category": "Mobile Parts",
+        "created": "2024"
+      }
+    },
+    "gk industries": {
+      "aliases": ["gk industres"],
+      "properties": {
+        "about": "GK Industries is an oil and gas company.",
+        "category": "Oil and Gas",
+        "created": "2023"
+      }
+    },
+    
+     "post": {
+      "aliases": ["post company"],
+      "properties": {
+        "about": "Post is a company.",
+        "category": "Post Company",
+        "created": "2021"
+      }
+    },
+
+    "pxo": {
+      "aliases": ["pxo"],
+      "properties": {
+        "about": "PXO is a car company.",
+        "category": "Car Company",
+        "created": "2021"
+      }
+    },
+
+    "proo": {
+      "aliases": ["proo"],
+      "properties": {
+        "about": "PROO is a car company.",
+        "category": "Car Company",
+        "created": "2021"
+      }
+    },
+
+    "rc": {
+      "aliases": ["rc"],
+      "properties": {
+        "about": "RC is a car company.",
+        "category": "Car Company",
+        "created": "2020"
+      }
+    },
+
+    "rvo": {
+      "aliases": ["rvo"],
+      "properties": {
+        "about": "RVO is a bike company.",
+        "category": "Bike Company",
+        "created": "2021"
+      }
+    },
+
+    "rock sten": {
+      "aliases": ["rock sten"],
+      "properties": {
+        "about": "Rock STEN is a soda company.",
+        "category": "Soda Company",
+        "created": "2025"
+      }
+    },
+
+    "rab": {
+      "aliases": ["rab"],
+      "properties": {
+        "about": "RAB is a company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+
+    "std soda": {
+      "aliases": ["std soda"],
+      "properties": {
+        "about": "STD Soda is a soda company.",
+        "category": "Soda Company",
+        "created": "2024"
+      }
+    },
+
+    "ssb": {
+      "aliases": ["ssb"],
+      "properties": {
+        "about": "SSB is a baking company.",
+        "full_name":"STATE SO BANK",
+        "category": "Baking Company",
+        "created": "2022"
+      }
+    },
+
+    "super m": {
+      "aliases": ["super m"],
+      "properties": {
+        "about": "SUPER M is a shopping company.",
+        "category": "Shopping Company",
+        "created": "2022"
+      }
+    },
+
+    "sory": {
+      "aliases": ["sory"],
+      "properties": {
+        "about": "SORY is a shopping company.",
+        "category": "Shopping Company",
+        "created": "2022"
+      }
+    },
+
+    "snow": {
+      "aliases": ["snow"],
+      "properties": {
+        "about": "Snow is a company.",
+        "category": "Unknown",
+        "created": "2021"
+      }
+    },
+
+    "ster": {
+      "aliases": ["ster"],
+      "properties": {
+        "about": "STER is a company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+
+    "vox": {
+      "aliases": ["vox"],
+      "properties": {
+        "about": "VOX is a company.",
+        "category": "Unknown",
+        "created": "2024"
+      }
+    },
+
+    "vic": {
+      "aliases": ["vic"],
+      "properties": {
+        "about": "VIC is a memory company.",
+        "category": "Memory Company",
+        "created": "2021"
+      }
+    },
+
+    "vol": {
+      "aliases": ["vol"],
+      "properties": {
+        "about": "VOL is a car company.",
+        "category": "Car Company",
+        "created": "2021"
+      }
+    },
+
+    "vit": {
+      "aliases": ["vit"],
+      "properties": {
+        "about": "VIT is a company.",
+        "category": "Unknown",
+        "created": "2022"
+      }
+    },
+
+    "ws company": {
+      "aliases": ["ws"],
+      "properties": {
+        "about": "WS is a channel company.",
+        "category": "Channel Company",
+        "created": "2025"
+      }
+    },
+
+    "x car": {
+      "aliases": ["x car"],
+      "properties": {
+        "about": "X CAR is a car company.",
+        "category": "Car Company",
+        "created": "2021"
+      }
+    },
+
+    "xot": {
+      "aliases": ["xot"],
+      "properties": {
+        "about": "XOT is a racing company.",
+        "category": "Racing Company",
+        "created": "Unknown"
+      }
+    },
+
+    "xfo": {
+      "aliases": ["xfo"],
+      "properties": {
+        "about": "XFO is a company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+
+    "x news": {
+      "aliases": ["x news"],
+      "properties": {
+        "about": "X NEWS is a news company.",
+        "category": "News Company",
+        "created": "2021"
+      }
+    },
+
+    "m desh": {
+      "aliases": ["mdesh"],
+      "properties": {
+        "about": "M Desh is a country.",
+        "category": "Country",
+        "capital": "MCity",
+        "continent":"M Continent"
+      }
+    },
+
+    "ron desh": {
+      "aliases": ["ron desh"],
+      "properties": {
+        "about": "Ron Desh is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"Ron Continent"
+      }
+    },
+
+    "i desh": {
+      "aliases": ["i desh"],
+      "properties": {
+        "about": "I Desh is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "x desh": {
+      "aliases": ["x desh"],
+      "properties": {
+        "about": "X Desh is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "e": {
+      "aliases": ["e"],
+      "properties": {
+        "about": "E is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "kot": {
+      "aliases": ["kot"],
+      "properties": {
+        "about": "Kot is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+  
+      }
+    },
+
+    "bc": {
+      "aliases": ["bc"],
+      "properties": {
+        "about": "BC is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "p desh": {
+      "aliases": ["p desh"],
+      "properties": {
+        "about": "P Desh is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "snm": {
+      "aliases": ["snm"],
+      "properties": {
+        "about": "SNM is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+        
+      }
+    },
+
+    "olo": {
+      "aliases": ["olo"],
+      "properties": {
+        "about": "OLO is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "anasa": {
+      "aliases": ["anasa"],
+      "properties": {
+        "about": "Anasa is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "mri": {
+      "aliases": ["mri"],
+      "properties": {
+        "about": "MRI is an international group.",
+        "category": "International Group",
+        "created": "2019",
+        "member": "11",
+        "leader": "M Desh, Ron Desh, I Desh",
+        "headquarter": "M Desh"
+      }
+    },
+
+    "mrc": {
+      "aliases": ["mrc"],
+      "properties": {
+        "about": "MRC is an international group.",
+        "category": "International Group",
+        "created": "2019",
+        "member": "11",
+        "leader": "M Desh, Ron Desh",
+        "headquarter": "EA Continent"
+      }
+    },
+
+    "sos": {
+      "aliases": ["sos"],
+      "properties": {
+        "about": "SOS is an app system.",
+        "full_name": "Super Of System",
+        "category": "App System",
+        "created": "2024"
+      }
+    },
+
+    "red triangle system": {
+      "aliases": ["red triangle"],
+      "properties": {
+        "about": "Red Triangle is an app system.",
+        "category": "App System",
+        "created": "2024",
+        "owner":"SOS"
+      }
+    },
+
+    "toms": {
+      "aliases": ["technology of mobile"],
+      "properties": {
+        "about": "Technology of Mobile is a system.",
+        "category": "Mobile Technology System",
+        "created": "2014",
+        "owner":"T COMPUTER"
+      }
+    },
+
+    "toc": {
+      "aliases": ["technology of company"],
+      "properties": {
+        "about": "Technology of Company is a system.",
+        "category": "Company System",
+        "created": "2021",
+        "owner":"T COMPUTER"
+      }
+    },
+
+    "tos": {
+      "aliases": ["technology of system"],
+      "properties": {
+        "about": "Technology of System is a build system.",
+        "category": "Build System",
+        "created": "2021",
+        "owner":"T COMPUTER"
+      }
+    },
+
+    "greenai": {
+      "aliases": ["greenai"],
+      "properties": {
+        "about": "GREENAI is a data system.",
+        "category": "Data System",
+        "created": "2024",
+        "owner":"ICWRA"
+      }
+    },
+
+    "cwi": {
+      "aliases": ["cwi"],
+      "properties": {
+        "about": "CWI is a data system.",
+        "category": "Data System",
+        "created": "2025"
+      }
+    },
+
+    "msi": {
+      "aliases": ["msi"],
+      "properties": {
+        "about": "MSI is a data system.",
+        "category": "Data System",
+        "created": "2025",
+        "owner":"M Search"
+      }
+    },
+
+    "circul spin vote system": {
+      "aliases": ["circul spin vote system","csvs"],
+      "properties": {
+        "about": "Circul Spin is a voting system.",
+        "category": "Vote System",
+        "created": "2025",
+        "owner":"ECMD"
+      }
+    }
+
+  },
+
+  "intents": {
+    "about": ["about", "info", "information", "what is", "details"],
+    "founder": ["founder", "creator", "made by"],
+    "owner": ["owner", "owns", "owned by"],
+    "created": ["created", "create", "launch", "when created", "date", "create date", "founded"],
+    "category": ["category", "type", "kind"],
+    "company": ["companies", "company list", "apps list"],
+    "network": ["network", "value"],
+    "full_name": ["full name", "real name"],
+    "location": ["location", "located", "at"],
+    "capital": ["capital", "capital city"],
+    "member": ["member", "total member"],
+    "leader": ["leader"],
+    "under": ["under","taking"],
+    "continent": ["continent", "region", "area"],
+    "headquarter": ["headquarter", "hq"]
+  }
+  }
+
+let selectedQuestion="";
+let historyList=[];
+
+/* 🔥 SMART SEARCH FUNCTION */
+function getSmartAnswer(q){
+
+q=q.toLowerCase().trim();
+
+let entities=smartData.entities;
+let intents=smartData.intents;
+
+for(let entityName in entities){
+
+let entity=entities[entityName];
+let names=[entityName];
+
+if(entity.aliases){
+names=names.concat(entity.aliases);
+}
+
+for(let name of names){
+
+if(q.includes(name.toLowerCase())){
+
+let props=entity.properties || {};
+
+for(let intentName in intents){
+
+let keywords=intents[intentName];
+
+for(let word of keywords){
+
+if(q.includes(word.toLowerCase())){
+if(props[intentName]){
+return props[intentName];
+}
+}
+
+}
+
+}
+
+return props.about || "Information not available";
+
+}
+
+}
+
+}
+
+return data[q] || "Answer not found";
+
+}
+
+/* ORIGINAL FUNCTIONS — UNCHANGED */
+
+function goPage(n){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+document.getElementById("page"+n).classList.add("show");
+}
+
+function search(){
+
+let q=document.getElementById("query").value.toLowerCase();
+
+if(q==="") return;
+
+selectedQuestion=q;
+
+historyList.unshift(q);
+
+saveHistory();
+
+document.getElementById("answer").innerText=getSmartAnswer(q);
+
+goPage(3);
+
+}
+
+function goBack(){
+goPage(2);
+document.getElementById("query").value=selectedQuestion;
+showSuggestions();
+}
+function showSuggestions() {
+let q = document.getElementById("query").value.toLowerCase();
+let h = document.getElementById("history");
+h.innerHTML = "";
+
+if (q === "") return;  
+
+// 1️⃣ Suggestions from original data  
+for (let key in data) {  
+    if (key.includes(q)) {  
+        let d = document.createElement("div");  
+        d.className = "history-item";  
+        d.innerText = key;  
+        d.onclick = function() {  
+            document.getElementById("query").value = key;  
+        };  
+        h.appendChild(d);  
+    }  
+}  
+
+// 2️⃣ Suggestions from smartData entities  
+let entities = smartData.entities;  
+for (let entityName in entities) {  
+    let entity = entities[entityName];  
+    let names = [entityName];  
+    if (entity.aliases) names = names.concat(entity.aliases);  
+
+    for (let name of names) {  
+        if (name.toLowerCase().includes(q)) {  
+            let d = document.createElement("div");  
+            d.className = "history-item";  
+            d.innerText = name;  
+            d.onclick = function() {  
+                document.getElementById("query").value = name;  
+            };  
+            h.appendChild(d);  
+        }  
+    }  
+}
+
+}
+
+function toggleMenu(){
+let m=document.getElementById("menuBox");
+m.style.display=m.style.display==="block"?"none":"block";
+}
+
+function toggleMode(){
+document.body.classList.toggle("light");
+}
+
+function openHistory(){
+document.getElementById("historyPage").style.display="block";
+renderFullHistory();
+}
+
+function closeHistory(){
+document.getElementById("historyPage").style.display="none";
+}
+
+function saveHistory(){
+localStorage.setItem("m_history",JSON.stringify(historyList));
+}
+
+function loadHistory(){
+let h=localStorage.getItem("m_history");
+if(h) historyList=JSON.parse(h);
+}
+
+function renderFullHistory(){
+let box=document.getElementById("fullHistoryContainer");
+box.innerHTML="";
+historyList.forEach(item=>{
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=item;
+box.appendChild(d);
+});
+}
+function clearHistory(){
+historyList=[];
+saveHistory();
+renderFullHistory();
+}
+
+loadHistory();
+
+setTimeout(()=>{
+document.getElementById("splash").style.display="none";
+},2000);
+
+</script>  </body>
+
+</html>        
