@@ -3,58 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M Search - Professional</title>
-    
-    <link rel="icon" type="image/png" href="https://via.placeholder.com/32/4285F4/FFFFFF?text=M">
-
+    <title>M Search - Professional Engine</title>
     <style>
         :root {
             --blue: #4285F4;
             --bg: #0f0f0f;
-            --card: #1f1f1f;
-            --text: #e8eaed;
-            --border: #333;
+            --card: #1a1a1a;
+            --text: #ffffff;
+            --red: #d93025;
         }
 
         body.light-mode {
-            --bg: #ffffff;
-            --card: #f1f3f4;
+            --bg: #f8f9fa;
+            --card: #ffffff;
             --text: #202124;
-            --border: #dadce0;
+            --red: #d93025;
         }
 
-        * { box-sizing: border-box; transition: background 0.2s, color 0.2s; }
+        * { box-sizing: border-box; transition: 0.3s; }
         body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); }
 
-        /* Header Layout */
+        /* Main Header */
         header {
             display: flex;
             align-items: center;
             padding: 15px 5%;
-            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+            border-bottom: 1px solid #333;
             position: sticky;
             top: 0;
-            background: var(--bg);
-            z-index: 1000;
+            z-index: 100;
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            margin-right: 30px;
-            text-decoration: none;
-        }
+        .logo { font-size: 28px; font-weight: bold; color: var(--blue); cursor: pointer; text-decoration: none; margin-right: 20px; }
+        .logo span { color: var(--text); font-size: 20px; margin-left: 5px; }
 
-        .logo-m { font-size: 30px; font-weight: bold; color: var(--blue); }
-        .logo-text { font-size: 20px; font-weight: 500; color: var(--text); margin-left: 8px; }
-
-        .search-box { flex: 1; max-width: 650px; position: relative; }
+        .search-container { flex: 1; max-width: 600px; position: relative; }
         .search-input {
             width: 100%;
             height: 45px;
             border-radius: 24px;
-            border: 1px solid var(--border);
+            border: 1px solid #5f6368;
             background: var(--card);
             color: var(--text);
             padding: 0 20px;
@@ -62,221 +51,177 @@
             outline: none;
         }
 
-        /* Menu System */
-        .menu-btn {
-            font-size: 24px;
-            cursor: pointer;
-            padding: 5px 12px;
-            margin-left: 15px;
-            border-radius: 50%;
-        }
-        .menu-btn:hover { background: var(--card); }
-
-        .dropdown {
-            position: absolute;
-            right: 5%;
-            top: 70px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            width: 220px;
-            display: none;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            z-index: 2000;
-            overflow: hidden;
-        }
-
-        .dropdown div {
-            padding: 12px 16px;
-            cursor: pointer;
-            font-size: 14px;
-            border-bottom: 1px solid var(--border);
-        }
-        .dropdown div:hover { background: var(--blue); color: white; }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 20px;
-            padding: 10px 5% 0 160px;
-            border-bottom: 1px solid var(--border);
-            font-size: 14px;
-        }
+        /* Tabs Section */
+        .tabs { display: flex; gap: 20px; padding: 10px 5% 0 140px; border-bottom: 1px solid #333; font-size: 14px; }
         .tab { padding-bottom: 10px; cursor: pointer; color: #9aa0a6; border-bottom: 3px solid transparent; }
         .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
 
-        /* Results area */
-        main { padding: 20px 5% 40px 160px; max-width: 900px; }
-        
-        .smart-result {
-            background: var(--blue);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-        }
+        /* Dashboard & Results Area */
+        main { padding: 20px 5% 40px 140px; max-width: 900px; }
 
-        .res-item { margin-bottom: 30px; }
+        /* Search History Style (The "Story" System) */
+        .history-box { margin-top: 40px; background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid #333; }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .history-list { display: flex; flex-wrap: wrap; gap: 10px; }
+        .history-tag {
+            background: #303134;
+            color: var(--blue);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            border: 1px solid #444;
+        }
+        .history-tag:hover { background: var(--blue); color: white; }
+
+        /* The Red Clear Button you wanted */
+        .clear-btn {
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .clear-btn:hover { opacity: 0.8; }
+
+        /* Mode Switcher */
+        .mode-btn { margin-left: 15px; cursor: pointer; font-size: 20px; background: none; border: none; color: var(--text); }
+
+        /* Result Items */
+        .res-item { margin-bottom: 30px; animation: fadeIn 0.4s; }
         .res-title { font-size: 19px; color: var(--blue); text-decoration: none; font-weight: 500; }
         .res-snippet { font-size: 14px; color: #bdc1c6; margin-top: 5px; }
-        body.light-mode .res-snippet { color: #4d5156; }
 
-        /* Image Grid */
-        .img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-        .img-card img { width: 100%; height: 130px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        @media (max-width: 850px) {
-            header { flex-direction: column; padding: 10px; }
+        @media (max-width: 800px) {
+            header { flex-direction: column; padding: 15px; }
             .tabs { padding: 10px; justify-content: center; }
             main { padding: 20px; }
-            .logo-container { margin-bottom: 10px; }
+            .logo { margin-bottom: 10px; }
         }
     </style>
 </head>
-<body id="mainBody">
+<body>
 
     <header>
-        <div class="logo-container" onclick="location.href=window.location.pathname">
-            <span class="logo-m">M</span>
-            <span class="logo-text">Search</span>
-        </div>
-        <div class="search-box">
-            <form onsubmit="event.preventDefault(); executeSearch('web');">
-                <input id="searchInput" type="text" class="search-input" placeholder="Search the web..." autocomplete="off">
+        <div class="logo" onclick="location.reload()">M <span>Search</span></div>
+        <div class="search-container">
+            <form onsubmit="event.preventDefault(); startSearch('web');">
+                <input id="qInp" type="text" class="search-input" placeholder="Search anything..." autocomplete="off">
             </form>
         </div>
-        <div class="menu-btn" onclick="toggleMenu()">⋮</div>
+        <button class="mode-btn" onclick="toggleMode()">🌓</button>
     </header>
 
-    <div id="myMenu" class="dropdown">
-        <div onclick="changeTheme()">🌓 Switch Light/Dark Mode</div>
-        <div onclick="viewHistory()">🕒 Search History</div>
-        <div onclick="clearAllHistory()" style="color:#ff5f5f;">🗑️ Clear History</div>
-    </div>
-
     <div class="tabs">
-        <div id="t-web" class="tab active" onclick="executeSearch('web')">All</div>
-        <div id="t-img" class="tab" onclick="executeSearch('images')">Images</div>
-        <div id="t-vid" class="tab" onclick="executeSearch('videos')">Videos</div>
+        <div id="t-web" class="tab active" onclick="startSearch('web')">All Results</div>
+        <div id="t-img" class="tab" onclick="startSearch('images')">Images</div>
+        <div id="t-vid" class="tab" onclick="startSearch('videos')">Videos</div>
     </div>
 
-    <main id="displayArea">
-        <div style="text-align:center; margin-top:100px;">
-            <h1 style="font-size:60px; color:var(--blue); margin:0;">M Search</h1>
-            <p style="color:#9aa0a6;">The professional way to find information.</p>
+    <main id="mainArea">
+        <div id="dashboard">
+            <h1 style="font-size: 50px; color: var(--blue); margin-top: 50px;">Welcome to M Search</h1>
+            <p style="color: #9aa0a6;">Professional database connected with MGPLC systems.</p>
+
+            <div class="history-box">
+                <div class="history-header">
+                    <h3 style="margin:0;">Recent Searches</h3>
+                    <button class="clear-btn" onclick="clearMyHistory()">CLEAR HISTORY</button>
+                </div>
+                <div id="historyContainer" class="history-list">
+                    </div>
+            </div>
         </div>
+
+        <div id="resultsContent" style="display:none;">
+            </div>
     </main>
 
     <script>
-        // --- Smart Database ---
-        const smartData = {
-            "mgplc": { "name": "M Group PLC", "about": "A professional technology organization focused on search and digital innovation.", "founder": "Mehdi Hasan" },
-            "m search": { "name": "M Search", "about": "A private and high-speed search engine developed for precision browsing.", "version": "Pro 2026" }
-        };
-
-        function toggleMenu() {
-            const m = document.getElementById("myMenu");
-            m.style.display = m.style.display === "block" ? "none" : "block";
-        }
-
-        function changeTheme() {
-            document.body.classList.toggle("light-mode");
-            toggleMenu();
-        }
-
-        // --- History Logic ---
-        function saveHistory(q) {
-            let h = JSON.parse(localStorage.getItem("mHistory") || "[]");
+        // --- Smart History & Storage ---
+        function saveQuery(q) {
+            let h = JSON.parse(localStorage.getItem("m_history") || "[]");
             if(!h.includes(q)) {
                 h.unshift(q);
-                localStorage.setItem("mHistory", JSON.stringify(h.slice(0, 10)));
+                localStorage.setItem("m_history", JSON.stringify(h.slice(0, 12)));
             }
+            renderHistory();
         }
 
-        function viewHistory() {
-            let h = JSON.parse(localStorage.getItem("mHistory") || "[]");
-            let area = document.getElementById("displayArea");
-            let html = "<h2>Recent Searches</h2>";
-            if(h.length === 0) html += "<p>History is empty.</p>";
+        function renderHistory() {
+            const h = JSON.parse(localStorage.getItem("m_history") || "[]");
+            const container = document.getElementById("historyContainer");
+            container.innerHTML = h.length ? "" : "<p style='color:#666;'>No history yet.</p>";
             h.forEach(item => {
-                html += `<div style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer; color:var(--blue);" onclick="quickSearch('${item}')">${item}</div>`;
+                const tag = document.createElement("div");
+                tag.className = "history-tag";
+                tag.innerText = item;
+                tag.onclick = () => { document.getElementById("qInp").value = item; startSearch('web'); };
+                container.appendChild(tag);
             });
-            area.innerHTML = html;
-            toggleMenu();
         }
 
-        function clearAllHistory() {
-            localStorage.removeItem("mHistory");
-            viewHistory();
+        function clearMyHistory() {
+            localStorage.removeItem("m_history");
+            renderHistory();
         }
 
-        function quickSearch(q) {
-            document.getElementById("searchInput").value = q;
-            executeSearch('web');
+        // --- Theme Switcher ---
+        function toggleMode() {
+            document.body.classList.toggle("light-mode");
         }
 
-        // --- Core Search Function ---
-        async function executeSearch(type) {
-            const q = document.getElementById("searchInput").value.trim().toLowerCase();
+        // --- Search Logic ---
+        async function startSearch(type) {
+            const q = document.getElementById("qInp").value.trim();
             if(!q) return;
 
-            saveHistory(q);
-            document.getElementById("myMenu").style.display = "none";
+            saveQuery(q);
+            document.getElementById("dashboard").style.display = "none";
+            const resArea = document.getElementById("resultsContent");
+            resArea.style.display = "block";
+            resArea.innerHTML = "<p>Loading professional results...</p>";
 
-            // Tab update
+            // Tab UI update
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.getElementById('t-' + (type === 'web' ? 'web' : type === 'images' ? 'img' : 'vid')).classList.add('active');
 
-            const area = document.getElementById("displayArea");
-            area.innerHTML = "<p>Finding results...</p>";
-
-            let finalHTML = "";
-
-            // 1. Smart Card Check
-            if (type === 'web' && smartData[q]) {
-                finalHTML += `<div class="smart-result">
-                    <small>OFFICIAL DATA</small>
-                    <h2>${smartData[q].name}</h2>
-                    <p>${smartData[q].about}</p>
-                </div>`;
-            }
-
             try {
                 if (type === 'web') {
+                    // mgplc Smart Data Check
+                    let smartResult = "";
+                    if(q.toLowerCase() === "mgplc") {
+                        smartResult = `<div style="background:var(--blue); color:white; padding:20px; border-radius:12px; margin-bottom:20px;">
+                            <h2>M Group PLC (MGPLC)</h2>
+                            <p>Official database result: Leading digital innovation and search architecture company.</p>
+                        </div>`;
+                    }
+
                     const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${q}&format=json&origin=*`);
                     const data = await res.json();
+                    let html = smartResult;
                     data.query.search.forEach(item => {
-                        finalHTML += `<div class="res-item">
+                        html += `<div class="res-item">
                             <a href="https://en.wikipedia.org/wiki/${item.title}" target="_blank" class="res-title">${item.title}</a>
                             <p class="res-snippet">${item.snippet}...</p>
                         </div>`;
                     });
-                } 
-                else if (type === 'images') {
-                    const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&generator=images&titles=${q}&prop=imageinfo&iiprop=url&format=json&origin=*`);
-                    const data = await res.json();
-                    finalHTML += `<div class="img-grid">`;
-                    if(data.query && data.query.pages) {
-                        Object.values(data.query.pages).forEach(img => {
-                            if(img.imageinfo) finalHTML += `<div class="img-card"><img src="${img.imageinfo[0].url}"></div>`;
-                        });
-                    } else { finalHTML = "<p>No images found.</p>"; }
-                    finalHTML += `</div>`;
+                    resArea.innerHTML = html;
+                } else {
+                    resArea.innerHTML = `<p>Results for ${type} are loading within the main page frame.</p>`;
                 }
-                else {
-                    finalHTML = `<div class="res-item">
-                        <a href="https://www.youtube.com/results?search_query=${q}" target="_blank" class="res-title">Watch Videos for "${q}"</a>
-                        <p>Latest video content and streams for your search.</p>
-                    </div>`;
-                }
-            } catch(e) { finalHTML = "<p>Error connecting to database.</p>"; }
-
-            area.innerHTML = finalHTML;
+            } catch(e) {
+                resArea.innerHTML = "<p>Connection error. Please try again.</p>";
+            }
         }
 
-        window.onclick = (e) => {
-            if (!e.target.matches('.menu-btn')) { document.getElementById("myMenu").style.display = "none"; }
-        };
+        // Initial Setup
+        window.onload = renderHistory;
     </script>
 </body>
-</html>
+    </html>
