@@ -4,155 +4,278 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M Search - Professional</title>
-    <style>
-        :root { --blue: #8ab4f8; --bg: #0f0f0f; --text: #e8eaed; --card: #1f1f1f; }
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
-        
-        header { display: flex; align-items: center; padding: 15px 5%; border-bottom: 1px solid #333; position: sticky; top: 0; background: var(--bg); z-index: 100; }
-        .logo { font-size: 24px; font-weight: bold; color: #4285F4; text-decoration: none; margin-right: 25px; cursor: pointer; }
-        .logo span { color: white; }
-        .search-box { flex: 1; max-width: 600px; }
-        .search-input { width: 100%; height: 44px; border-radius: 22px; border: 1px solid #5f6368; background: #202124; color: white; padding: 0 20px; outline: none; }
+    
+    <link rel="icon" type="image/png" href="https://via.placeholder.com/32/4285F4/FFFFFF?text=M">
 
-        .tabs { display: flex; gap: 20px; padding: 10px 5% 0 150px; font-size: 14px; color: #9aa0a6; border-bottom: 1px solid #333; }
-        .tab { padding-bottom: 10px; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.3s; }
+    <style>
+        :root {
+            --blue: #4285F4;
+            --bg: #0f0f0f;
+            --card: #1f1f1f;
+            --text: #e8eaed;
+            --border: #333;
+        }
+
+        body.light-mode {
+            --bg: #ffffff;
+            --card: #f1f3f4;
+            --text: #202124;
+            --border: #dadce0;
+        }
+
+        * { box-sizing: border-box; transition: background 0.2s, color 0.2s; }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); }
+
+        /* Header Layout */
+        header {
+            display: flex;
+            align-items: center;
+            padding: 15px 5%;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 30px;
+            text-decoration: none;
+        }
+
+        .logo-m { font-size: 30px; font-weight: bold; color: var(--blue); }
+        .logo-text { font-size: 20px; font-weight: 500; color: var(--text); margin-left: 8px; }
+
+        .search-box { flex: 1; max-width: 650px; position: relative; }
+        .search-input {
+            width: 100%;
+            height: 45px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            padding: 0 20px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        /* Menu System */
+        .menu-btn {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px 12px;
+            margin-left: 15px;
+            border-radius: 50%;
+        }
+        .menu-btn:hover { background: var(--card); }
+
+        .dropdown {
+            position: absolute;
+            right: 5%;
+            top: 70px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            width: 220px;
+            display: none;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            z-index: 2000;
+            overflow: hidden;
+        }
+
+        .dropdown div {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .dropdown div:hover { background: var(--blue); color: white; }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 20px;
+            padding: 10px 5% 0 160px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+        .tab { padding-bottom: 10px; cursor: pointer; color: #9aa0a6; border-bottom: 3px solid transparent; }
         .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
 
-        main { padding: 20px 5% 40px 150px; max-width: 1000px; }
+        /* Results area */
+        main { padding: 20px 5% 40px 160px; max-width: 900px; }
         
-        /* WEB STYLE */
-        .res-item { margin-bottom: 30px; animation: fadeIn 0.5s; }
-        .res-title { font-size: 20px; color: var(--blue); text-decoration: none; display: block; margin-bottom: 5px; }
-        .res-snippet { font-size: 14px; color: #bdc1c6; line-height: 1.5; }
-        
-        /* IMAGE GRID STYLE */
-        .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
-        .img-card { background: var(--card); border-radius: 8px; overflow: hidden; border: 1px solid #333; }
-        .img-card img { width: 100%; height: 150px; object-fit: cover; display: block; }
-        .img-card p { padding: 8px; font-size: 12px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .smart-result {
+            background: var(--blue);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
 
-        /* VIDEO LIST STYLE */
-        .video-item { display: flex; gap: 15px; background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
-        .video-thumb { width: 160px; height: 90px; background: #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #555; }
+        .res-item { margin-bottom: 30px; }
+        .res-title { font-size: 19px; color: var(--blue); text-decoration: none; font-weight: 500; }
+        .res-snippet { font-size: 14px; color: #bdc1c6; margin-top: 5px; }
+        body.light-mode .res-snippet { color: #4d5156; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Image Grid */
+        .img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        .img-card img { width: 100%; height: 130px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
 
-        @media (max-width: 800px) {
+        @media (max-width: 850px) {
             header { flex-direction: column; padding: 10px; }
             .tabs { padding: 10px; justify-content: center; }
             main { padding: 20px; }
-            .logo { margin-bottom: 10px; }
+            .logo-container { margin-bottom: 10px; }
         }
     </style>
 </head>
-<body>
+<body id="mainBody">
 
     <header>
-        <div class="logo" onclick="location.href=window.location.pathname">M <span>Search</span></div>
+        <div class="logo-container" onclick="location.href=window.location.pathname">
+            <span class="logo-m">M</span>
+            <span class="logo-text">Search</span>
+        </div>
         <div class="search-box">
-            <form onsubmit="event.preventDefault(); startSearch('web');">
-                <input id="qInput" type="text" class="search-input" placeholder="Search M Search...">
+            <form onsubmit="event.preventDefault(); executeSearch('web');">
+                <input id="searchInput" type="text" class="search-input" placeholder="Search the web..." autocomplete="off">
             </form>
         </div>
+        <div class="menu-btn" onclick="toggleMenu()">⋮</div>
     </header>
 
-    <div class="tabs">
-        <div id="tab-web" class="tab active" onclick="startSearch('web')">All</div>
-        <div id="tab-img" class="tab" onclick="startSearch('images')">Images</div>
-        <div id="tab-vid" class="tab" onclick="startSearch('videos')">Videos</div>
+    <div id="myMenu" class="dropdown">
+        <div onclick="changeTheme()">🌓 Switch Light/Dark Mode</div>
+        <div onclick="viewHistory()">🕒 Search History</div>
+        <div onclick="clearAllHistory()" style="color:#ff5f5f;">🗑️ Clear History</div>
     </div>
 
-    <main id="resultsArea">
+    <div class="tabs">
+        <div id="t-web" class="tab active" onclick="executeSearch('web')">All</div>
+        <div id="t-img" class="tab" onclick="executeSearch('images')">Images</div>
+        <div id="t-vid" class="tab" onclick="executeSearch('videos')">Videos</div>
+    </div>
+
+    <main id="displayArea">
         <div style="text-align:center; margin-top:100px;">
-            <h1 style="color:#4285F4; font-size:50px;">M Search</h1>
-            <p>Type something to explore Images, Videos, and Web results.</p>
+            <h1 style="font-size:60px; color:var(--blue); margin:0;">M Search</h1>
+            <p style="color:#9aa0a6;">The professional way to find information.</p>
         </div>
     </main>
 
     <script>
-        async function startSearch(type) {
-            const query = document.getElementById("qInput").value.trim();
-            if(!query) return;
+        // --- Smart Database ---
+        const smartData = {
+            "mgplc": { "name": "M Group PLC", "about": "A professional technology organization focused on search and digital innovation.", "founder": "Mehdi Hasan" },
+            "m search": { "name": "M Search", "about": "A private and high-speed search engine developed for precision browsing.", "version": "Pro 2026" }
+        };
 
-            // UI Tab Change
+        function toggleMenu() {
+            const m = document.getElementById("myMenu");
+            m.style.display = m.style.display === "block" ? "none" : "block";
+        }
+
+        function changeTheme() {
+            document.body.classList.toggle("light-mode");
+            toggleMenu();
+        }
+
+        // --- History Logic ---
+        function saveHistory(q) {
+            let h = JSON.parse(localStorage.getItem("mHistory") || "[]");
+            if(!h.includes(q)) {
+                h.unshift(q);
+                localStorage.setItem("mHistory", JSON.stringify(h.slice(0, 10)));
+            }
+        }
+
+        function viewHistory() {
+            let h = JSON.parse(localStorage.getItem("mHistory") || "[]");
+            let area = document.getElementById("displayArea");
+            let html = "<h2>Recent Searches</h2>";
+            if(h.length === 0) html += "<p>History is empty.</p>";
+            h.forEach(item => {
+                html += `<div style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer; color:var(--blue);" onclick="quickSearch('${item}')">${item}</div>`;
+            });
+            area.innerHTML = html;
+            toggleMenu();
+        }
+
+        function clearAllHistory() {
+            localStorage.removeItem("mHistory");
+            viewHistory();
+        }
+
+        function quickSearch(q) {
+            document.getElementById("searchInput").value = q;
+            executeSearch('web');
+        }
+
+        // --- Core Search Function ---
+        async function executeSearch(type) {
+            const q = document.getElementById("searchInput").value.trim().toLowerCase();
+            if(!q) return;
+
+            saveHistory(q);
+            document.getElementById("myMenu").style.display = "none";
+
+            // Tab update
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('tab-' + (type === 'web' ? 'web' : type === 'images' ? 'img' : 'vid')).classList.add('active');
-            
-            const area = document.getElementById("resultsArea");
-            area.innerHTML = "<p>Searching " + type + "...</p>";
+            document.getElementById('t-' + (type === 'web' ? 'web' : type === 'images' ? 'img' : 'vid')).classList.add('active');
+
+            const area = document.getElementById("displayArea");
+            area.innerHTML = "<p>Finding results...</p>";
+
+            let finalHTML = "";
+
+            // 1. Smart Card Check
+            if (type === 'web' && smartData[q]) {
+                finalHTML += `<div class="smart-result">
+                    <small>OFFICIAL DATA</small>
+                    <h2>${smartData[q].name}</h2>
+                    <p>${smartData[q].about}</p>
+                </div>`;
+            }
 
             try {
                 if (type === 'web') {
-                    // WIKIPEDIA WEB RESULTS
-                    const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&origin=*`);
+                    const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${q}&format=json&origin=*`);
                     const data = await res.json();
-                    let html = "";
                     data.query.search.forEach(item => {
-                        html += `<div class="res-item">
+                        finalHTML += `<div class="res-item">
                             <a href="https://en.wikipedia.org/wiki/${item.title}" target="_blank" class="res-title">${item.title}</a>
                             <p class="res-snippet">${item.snippet}...</p>
                         </div>`;
                     });
-                    area.innerHTML = html || "No web results found.";
                 } 
                 else if (type === 'images') {
-                    // WIKIPEDIA IMAGE DATABASE (In-page results)
-                    const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&titles=${query}&prop=pageimages&format=json&pithumbsize=400&origin=*`);
+                    const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&generator=images&titles=${q}&prop=imageinfo&iiprop=url&format=json&origin=*`);
                     const data = await res.json();
-                    const pages = data.query.pages;
-                    let html = `<div class="image-grid">`;
-                    
-                    // Fetching related images using another Wikipedia API
-                    const imgRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&generator=images&titles=${query}&prop=imageinfo&iiprop=url&format=json&origin=*`);
-                    const imgData = await imgRes.json();
-                    
-                    if (imgData.query && imgData.query.pages) {
-                        Object.values(imgData.query.pages).forEach(img => {
-                            if(img.imageinfo) {
-                                html += `<div class="img-card">
-                                    <img src="${img.imageinfo[0].url}" alt="result">
-                                    <p>${img.title.replace('File:', '')}</p>
-                                </div>`;
-                            }
+                    finalHTML += `<div class="img-grid">`;
+                    if(data.query && data.query.pages) {
+                        Object.values(data.query.pages).forEach(img => {
+                            if(img.imageinfo) finalHTML += `<div class="img-card"><img src="${img.imageinfo[0].url}"></div>`;
                         });
-                        html += `</div>`;
-                        area.innerHTML = html;
-                    } else {
-                        area.innerHTML = "No images found for this keyword in our database.";
-                    }
+                    } else { finalHTML = "<p>No images found.</p>"; }
+                    finalHTML += `</div>`;
                 }
-                else if (type === 'videos') {
-                    // VIDEO RESULTS (Simulated Professional List)
-                    area.innerHTML = `
-                        <div class="video-item">
-                            <div class="video-thumb">VIDEO</div>
-                            <div>
-                                <a href="https://www.youtube.com/results?search_query=${query}" target="_blank" class="res-title">Watch "${query}" on M-Video Player</a>
-                                <p class="res-snippet">Find the latest videos and documentaries related to ${query} on our connected streaming partners.</p>
-                            </div>
-                        </div>
-                        <div class="video-item">
-                            <div class="video-thumb">M-TV</div>
-                            <div>
-                                <a href="https://www.bing.com/videos/search?q=${query}" target="_blank" class="res-title">${query} - Full HD Content</a>
-                                <p class="res-snippet">Browse through high-quality video content indexed from around the web.</p>
-                            </div>
-                        </div>
-                    `;
+                else {
+                    finalHTML = `<div class="res-item">
+                        <a href="https://www.youtube.com/results?search_query=${q}" target="_blank" class="res-title">Watch Videos for "${q}"</a>
+                        <p>Latest video content and streams for your search.</p>
+                    </div>`;
                 }
-            } catch (e) {
-                area.innerHTML = "Error loading results. Please try again.";
-            }
+            } catch(e) { finalHTML = "<p>Error connecting to database.</p>"; }
+
+            area.innerHTML = finalHTML;
         }
 
-        window.onload = () => {
-            const params = new URLSearchParams(window.location.search);
-            const q = params.get('q');
-            if(q) {
-                document.getElementById("qInput").value = q;
-                startSearch('web');
-            }
+        window.onclick = (e) => {
+            if (!e.target.matches('.menu-btn')) { document.getElementById("myMenu").style.display = "none"; }
         };
     </script>
 </body>
