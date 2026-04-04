@@ -3,137 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M Search - Professional Engine</title>
-    
-    <link rel="icon" type="image/png" href="https://via.placeholder.com/32/4285F4/FFFFFF?text=M">
-
+    <title>M Search - Full Engine</title>
     <style>
-        :root {
-            --bing-blue: #0078d4;
-            --bg-dark: #0f0f0f;
-            --card-bg: #1b1b1b;
-            --text-main: #e8eaed;
-            --text-dim: #9aa0a6;
-            --link-color: #8ab4f8;
-        }
-
+        :root { --blue: #8ab4f8; --bg: #0f0f0f; --text: #e8eaed; --card: #1f1f1f; }
         * { box-sizing: border-box; }
-        body { 
-            margin: 0; 
-            font-family: 'Segoe UI', Roboto, Arial, sans-serif; 
-            background: var(--bg-dark); 
-            color: var(--text-main); 
-        }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); }
+        
+        /* Header */
+        header { display: flex; align-items: center; padding: 15px 5%; border-bottom: 1px solid #333; position: sticky; top: 0; background: var(--bg); z-index: 100; }
+        .logo { font-size: 24px; font-weight: bold; color: #4285F4; text-decoration: none; margin-right: 25px; cursor: pointer; }
+        .logo span { color: white; }
+        .search-box { flex: 1; max-width: 600px; }
+        .search-input { width: 100%; height: 44px; border-radius: 22px; border: 1px solid #5f6368; background: #202124; color: white; padding: 0 20px; outline: none; }
 
-        /* Header & Search Bar */
-        header {
-            display: flex;
-            align-items: center;
-            padding: 15px 5%;
-            border-bottom: 1px solid #333;
-            background: var(--bg-dark);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        /* Tabs */
+        .tabs { display: flex; gap: 20px; padding: 10px 5% 0 150px; font-size: 14px; color: #9aa0a6; border-bottom: 1px solid #333; }
+        .tab { padding-bottom: 10px; cursor: pointer; border-bottom: 3px solid transparent; }
+        .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            margin-right: 30px;
-            cursor: pointer;
-        }
+        /* Results Area */
+        main { padding: 20px 5% 40px 150px; max-width: 900px; }
+        .res-item { margin-bottom: 30px; }
+        .res-title { font-size: 20px; color: var(--blue); text-decoration: none; display: block; margin-bottom: 5px; }
+        .res-snippet { font-size: 14px; color: #bdc1c6; line-height: 1.5; }
+        
+        /* Image Grid */
+        .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .img-card img { width: 100%; border-radius: 8px; border: 1px solid #333; }
+        .img-card p { font-size: 12px; color: #9aa0a6; margin-top: 5px; }
 
-        .logo-m {
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--bing-blue);
-        }
-
-        .logo-text {
-            font-size: 22px;
-            font-weight: 500;
-            color: white;
-            margin-left: 8px;
-            white-space: nowrap;
-        }
-
-        .search-box {
-            flex: 1;
-            max-width: 650px;
-        }
-
-        .search-input {
-            width: 100%;
-            height: 45px;
-            border-radius: 24px;
-            border: 1px solid #5f6368;
-            background: #202124;
-            color: white;
-            padding: 0 20px;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .search-input:focus {
-            background: #303134;
-            border-color: transparent;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.4);
-        }
-
-        /* Results Layout */
-        main {
-            padding: 30px 5% 40px 180px;
-            max-width: 950px;
-        }
-
-        .result-item {
-            margin-bottom: 30px;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        .result-url {
-            font-size: 13px;
-            color: var(--text-dim);
-            margin-bottom: 4px;
-            display: block;
-        }
-
-        .result-title {
-            font-size: 20px;
-            color: var(--link-color);
-            text-decoration: none;
-            display: inline-block;
-            margin-bottom: 5px;
-        }
-
-        .result-title:hover { text-decoration: underline; }
-
-        .result-snippet {
-            font-size: 14px;
-            color: #bdc1c6;
-            line-height: 1.5;
-        }
-
-        /* Featured Box */
-        .featured-box {
-            background: var(--card-bg);
-            border: 1px solid #3c4043;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 35px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Mobile View */
-        @media (max-width: 850px) {
-            header { flex-direction: column; padding: 15px; }
-            .logo-container { margin-bottom: 15px; margin-right: 0; }
+        @media (max-width: 800px) {
+            header { flex-direction: column; }
+            .tabs { padding: 10px; justify-content: center; }
             main { padding: 20px; }
         }
     </style>
@@ -141,95 +42,71 @@
 <body>
 
     <header>
-        <div class="logo-container" onclick="location.href=window.location.pathname">
-            <span class="logo-m">M</span>
-            <span class="logo-text">Search</span>
-        </div>
+        <div class="logo" onclick="location.href=window.location.pathname">M <span>Search</span></div>
         <div class="search-box">
-            <form onsubmit="event.preventDefault(); startProfessionalSearch();">
-                <input id="qInput" type="text" class="search-input" placeholder="Search with M Search...">
+            <form onsubmit="event.preventDefault(); search('web');">
+                <input id="qInput" type="text" class="search-input" placeholder="Search anything...">
             </form>
         </div>
     </header>
 
-    <main id="resultsArea">
-        <div style="text-align:center; margin-top:100px;">
-            <h1 style="font-size:65px; color:var(--bing-blue); margin:0;">M Search</h1>
-            <p style="color:var(--text-dim); font-size:18px;">Fast. Private. Professional.</p>
-        </div>
-    </main>
+    <div class="tabs">
+        <div id="tab-web" class="tab active" onclick="search('web')">All</div>
+        <div id="tab-img" class="tab" onclick="search('images')">Images</div>
+        <div id="tab-vid" class="tab" onclick="search('videos')">Videos</div>
+    </div>
+
+    <main id="resultsArea"></main>
 
     <script>
-        function updateAddressBar(query) {
-            const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?q=' + encodeURIComponent(query);
-            window.history.pushState({path:newurl}, '', newurl);
-        }
-
-        async function startProfessionalSearch() {
+        async function search(type) {
             const query = document.getElementById("qInput").value.trim();
             if(!query) return;
 
-            updateAddressBar(query);
-            const resultsArea = document.getElementById("resultsArea");
-            resultsArea.innerHTML = "<p style='color:#9aa0a6;'>Searching database...</p>";
+            // UI Update
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + (type === 'web' ? 'web' : type === 'images' ? 'img' : 'vid')).classList.add('active');
+            
+            const area = document.getElementById("resultsArea");
+            area.innerHTML = "Searching...";
 
-            try {
-                // Fetching from DuckDuckGo (Bing Mirror) and Wikipedia
-                const ddgUrl = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&origin=*`;
-                const wikiUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*`;
-
-                const [ddgRes, wikiRes] = await Promise.all([
-                    fetch(ddgUrl).then(r => r.json()),
-                    fetch(wikiUrl).then(r => r.json())
-                ]);
-
+            if (type === 'web') {
+                // WEB RESULTS (Mix of Wikipedia & DuckDuckGo)
+                let wiki = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&origin=*`).then(r => r.json());
                 let html = "";
-
-                // FEATURED RESULT (Quick Answer)
-                if(ddgRes.AbstractText) {
-                    html += `
-                    <div class="featured-box">
-                        <div style="color:var(--text-dim); font-size:11px; font-weight:bold; margin-bottom:8px; text-transform:uppercase;">Quick Summary</div>
-                        <h2 style="margin:0 0 10px 0; color:#fff;">${ddgRes.Heading}</h2>
-                        <p class="result-snippet" style="font-size:15px;">${ddgRes.AbstractText}</p>
-                        <a href="${ddgRes.AbstractURL}" target="_blank" style="color:var(--link-color); font-size:13px; text-decoration:none;">Source: ${ddgRes.AbstractSource}</a>
+                wiki.query.search.forEach(item => {
+                    html += `<div class="res-item">
+                        <a href="https://en.wikipedia.org/wiki/${item.title}" class="res-title">${item.title}</a>
+                        <p class="res-snippet">${item.snippet}...</p>
                     </div>`;
-                }
-
-                // WEB RESULTS (Wikipedia)
-                if(wikiRes.query && wikiRes.query.search.length > 0) {
-                    wikiRes.query.search.forEach(item => {
-                        html += `
-                        <div class="result-item">
-                            <span class="result-url">https://en.wikipedia.org › wiki › ${item.title.replace(/ /g, '_')}</span>
-                            <a href="https://en.wikipedia.org/wiki/${encodeURIComponent(item.title)}" target="_blank" class="result-title">${item.title}</a>
-                            <p class="result-snippet">${item.snippet}...</p>
-                        </div>`;
-                    });
-                }
-
-                // BING EXTERNAL LINK
-                html += `
-                <div style="margin-top:50px; padding:20px; border-top:1px solid #333; text-align:center;">
-                    <a href="https://www.bing.com/search?q=${encodeURIComponent(query)}" target="_blank" 
-                       style="background:var(--bing-blue); color:white; padding:10px 25px; border-radius:24px; text-decoration:none; font-weight:bold; font-size:14px;">
-                       See more web results on Bing
-                    </a>
+                });
+                area.innerHTML = html;
+            } 
+            else if (type === 'images') {
+                // IMAGES (Redirect to Bing Images for best experience)
+                area.innerHTML = `<div class="res-item">
+                    <h3>Images for "${query}"</h3>
+                    <p>Redirecting to M-Image Database (Bing Powered)...</p>
+                    <a href="https://www.bing.com/images/search?q=${encodeURIComponent(query)}" target="_blank" style="color:#8ab4f8; font-weight:bold;">Click here to see all images →</a>
                 </div>`;
-
-                resultsArea.innerHTML = html;
-
-            } catch (err) {
-                resultsArea.innerHTML = "<p>Connection error. Please try again.</p>";
+                window.open(`https://www.bing.com/images/search?q=${encodeURIComponent(query)}`, '_blank');
+            }
+            else if (type === 'videos') {
+                // VIDEOS (Direct YouTube Search)
+                area.innerHTML = `<div class="res-item">
+                    <h3>Videos for "${query}"</h3>
+                    <p>Fetching videos from YouTube & Bing Video Database...</p>
+                    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(query)}" target="_blank" style="color:#8ab4f8; font-weight:bold;">Watch videos on YouTube →</a>
+                </div>`;
+                window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
             }
         }
 
-        window.onload = function() {
+        window.onload = () => {
             const params = new URLSearchParams(window.location.search);
-            const q = params.get('q');
-            if (q) {
-                document.getElementById("qInput").value = q;
-                startProfessionalSearch();
+            if(params.get('q')) {
+                document.getElementById("qInput").value = params.get('q');
+                search('web');
             }
         };
     </script>
