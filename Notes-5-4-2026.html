@@ -1,0 +1,191 @@
+<html>
+        <head><title>Downloaded HTML</title></head>
+        <body>
+            <pre style="white-space: pre-wrap; word-wrap: break-word;"><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>M Search - Professional Knowledge Engine</title>
+    <meta name="description" content="M Search: A professional web portal for Images, Videos, and Wikipedia-powered knowledge.">
+    <meta name="author" content="Mehdi Hasan / MGPLC">
+
+    <link rel="search" type="application/opensearchdescription+xml" title="M Search" href="opensearch.xml">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://msearchon.github.io/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://msearchon.github.io/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <style>
+        :root { --blue: #8ab4f8; --bg: #0f0f0f; --text: #e8eaed; --card: #1f1f1f; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+        
+        header { display: flex; align-items: center; padding: 15px 5%; border-bottom: 1px solid #333; position: sticky; top: 0; background: var(--bg); z-index: 100; }
+        .logo { font-size: 24px; font-weight: bold; color: #4285F4; text-decoration: none; margin-right: 25px; cursor: pointer; }
+        .logo span { color: white; }
+        .search-box { flex: 1; max-width: 600px; }
+        .search-input { width: 100%; height: 44px; border-radius: 22px; border: 1px solid #5f6368; background: #202124; color: white; padding: 0 20px; outline: none; transition: 0.3s; }
+        .search-input:focus { border-color: var(--blue); background: #303134; }
+
+        .tabs { display: flex; gap: 20px; padding: 10px 5% 0 150px; font-size: 14px; color: #9aa0a6; border-bottom: 1px solid #333; }
+        .tab { padding-bottom: 10px; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.3s; }
+        .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+        main { padding: 20px 5% 40px 150px; max-width: 1000px; min-height: 80vh; }
+        
+        .res-item { margin-bottom: 30px; animation: fadeIn 0.4s; }
+        .res-title { font-size: 20px; color: var(--blue); text-decoration: none; display: block; margin-bottom: 5px; }
+        .res-title:hover { text-decoration: underline; }
+        .res-snippet { font-size: 14px; color: #bdc1c6; line-height: 1.5; }
+        
+        .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .img-card { background: var(--card); border-radius: 8px; overflow: hidden; border: 1px solid #333; transition: 0.3s; }
+        .img-card:hover { transform: translateY(-5px); border-color: var(--blue); }
+        .img-card img { width: 100%; height: 150px; object-fit: cover; display: block; }
+        .img-card p { padding: 8px; font-size: 12px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .video-item { display: flex; gap: 15px; background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; transition: 0.3s; }
+        .video-item:hover { border-color: var(--blue); }
+        .video-thumb { width: 160px; height: 90px; background: #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #555; overflow: hidden; }
+
+        .loading-dots:after { content: ' .'; animation: dots 1s steps(5, end) infinite; }
+        @keyframes dots { 0%, 20% { color: rgba(0,0,0,0); text-shadow: .5em 0 0 rgba(0,0,0,0), 1em 0 0 rgba(0,0,0,0); } 40% { color: var(--blue); text-shadow: .5em 0 0 rgba(0,0,0,0), 1em 0 0 rgba(0,0,0,0); } 60% { text-shadow: .5em 0 0 var(--blue), 1em 0 0 rgba(0,0,0,0); } 80%, 100% { text-shadow: .5em 0 0 var(--blue), 1em 0 0 var(--blue); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 800px) {
+            header { flex-direction: column; padding: 10px; }
+            .tabs { padding: 10px; justify-content: center; }
+            main { padding: 20px; }
+            .logo { margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="location.href=window.location.pathname">M <span>Search</span></div>
+        <div class="search-box">
+            <form onsubmit="event.preventDefault(); startSearch('web');">
+                <input id="qInput" type="text" class="search-input" placeholder="Search M Search..." autocomplete="off">
+            </form>
+        </div>
+    </header>
+
+    <div class="tabs">
+        <div id="tab-web" class="tab active" onclick="startSearch('web')">All</div>
+        <div id="tab-img" class="tab" onclick="startSearch('images')">Images</div>
+        <div id="tab-vid" class="tab" onclick="startSearch('videos')">Videos</div>
+    </div>
+
+    <main id="resultsArea">
+        <div style="text-align:center; margin-top:100px;">
+            <h1 style="color:#4285F4; font-size:50px;">M Search</h1>
+            <p>Official knowledge engine for Web, Images, and Videos.</p>
+        </div>
+    </main>
+
+    <script>
+        async function startSearch(type) {
+            const query = document.getElementById("qInput").value.trim();
+            if(!query) return;
+
+            // Official Tab UI Change
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + (type === 'web' ? 'web' : type === 'images' ? 'img' : 'vid')).classList.add('active');
+            
+            // Update Tab Title
+            document.title = query + " - M Search";
+            
+            const area = document.getElementById("resultsArea");
+            area.innerHTML = `<div style="text-align:center; margin-top:50px;"><p class="loading-dots">Consulting Global Database</p></div>`;
+
+            try {
+                if (type === 'web') {
+                    const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&origin=*`);
+                    const data = await res.json();
+                    let html = `<p style="color:#9aa0a6; font-size:13px; margin-bottom:20px;">About ${data.query.searchinfo.totalhits} official results found.</p>`;
+                    
+                    data.query.search.forEach(item => {
+                        html += `<div class="res-item">
+                            <a href="https://en.wikipedia.org/wiki/${item.title}" target="_blank" class="res-title">${item.title}</a>
+                            <p class="res-snippet">${item.snippet}...</p>
+                        </div>`;
+                    });
+
+                    // External Helper Links
+                    html += `<hr style="border:0; border-top:1px solid #333; margin:40px 0;">
+                             <p>Try searching <b>${query}</b> on: 
+                             <a href="https://www.google.com/search?q=${query}" target="_blank" style="color:var(--blue); margin-left:10px;">Google</a> | 
+                             <a href="https://www.bing.com/search?q=${query}" target="_blank" style="color:var(--blue); margin-left:10px;">Bing</a></p>`;
+                    
+                    area.innerHTML = html;
+                } 
+                else if (type === 'images') {
+                    const imgRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&generator=images&titles=${query}&prop=imageinfo&iiprop=url&format=json&origin=*`);
+                    const imgData = await imgRes.json();
+                    
+                    let html = `<div class="image-grid">`;
+                    if (imgData.query && imgData.query.pages) {
+                        Object.values(imgData.query.pages).forEach(img => {
+                            if(img.imageinfo) {
+                                html += `<div class="img-card">
+                                    <img src="${img.imageinfo[0].url}" alt="${img.title}" loading="lazy">
+                                    <p>${img.title.replace('File:', '')}</p>
+                                </div>`;
+                            }
+                        });
+                        html += `</div>`;
+                        area.innerHTML = html;
+                    } else {
+                        area.innerHTML = `<div style="text-align:center; margin-top:50px;">No official images found. <a href="https://www.google.com/search?tbm=isch&q=${query}" target="_blank" style="color:var(--blue);">Search Google Images</a></div>`;
+                    }
+                }
+                else if (type === 'videos') {
+                    area.innerHTML = `
+                        <div class="video-item">
+                            <div class="video-thumb"><img src="https://www.youtube.com/favicon.ico" width="20"></div>
+                            <div>
+                                <a href="https://www.youtube.com/results?search_query=${query}" target="_blank" class="res-title">Watch "${query}" on YouTube</a>
+                                <p class="res-snippet">Explore high-definition video content and tutorials for ${query}.</p>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <div class="video-thumb">M</div>
+                            <div>
+                                <a href="https://www.bing.com/videos/search?q=${query}" target="_blank" class="res-title">Stream ${query} Content</a>
+                                <p class="res-snippet">Verified video index from global streaming partners.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                area.innerHTML = "<p style='text-align:center; color:red;'>Network timeout. Please check your connection.</p>";
+            }
+        }
+
+        // AUTO-SEARCH FROM URL
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            const q = params.get('q');
+            if(q) {
+                document.getElementById("qInput").value = q;
+                startSearch('web');
+            }
+        };
+    </script>
+</body>
+</html>
+</pre>
+        </body>
+    </html>
