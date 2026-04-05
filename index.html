@@ -105,7 +105,7 @@
             document.title = query + " - M Search";
             
             const area = document.getElementById("resultsArea");
-            area.innerHTML = `<div style="text-align:center; margin-top:50px;"><p class="loading-dots">Consulting Global Database</p></div>`;
+            area.innerHTML = `<div style="text-align:center; margin-top:50px;"><p class="loading-dots">Searching</p></div>`;
 
             try {
                 if (type === 'web') {
@@ -123,7 +123,7 @@
                     // External Helper Links
                     html += `<hr style="border:0; border-top:1px solid #333; margin:40px 0;">
                              <p>Try searching <b>${query}</b> on: 
-                             <a href="https://www.google.com/search?q=${query}" target="_blank" style="color:var(--blue); margin-left:10px;">Google</a> | 
+                             <a href="https://www..com/search?q=${query}" target="_blank" style="color:var(--blue); margin-left:10px;">Google</a> | 
                              <a href="https://www.bing.com/search?q=${query}" target="_blank" style="color:var(--blue); margin-left:10px;">Bing</a></p>`;
                     
                     area.innerHTML = html;
@@ -145,7 +145,7 @@
                         html += `</div>`;
                         area.innerHTML = html;
                     } else {
-                        area.innerHTML = `<div style="text-align:center; margin-top:50px;">No official images found. <a href="https://www.google.com/search?tbm=isch&q=${query}" target="_blank" style="color:var(--blue);">Search Google Images</a></div>`;
+                        area.innerHTML = `<div style="text-align:center; margin-top:50px;">No official images found. <a href="https://www.google.com/search?tbm=isch&q=${query}" target="_blank" style="color:var(--blue);">No</a></div>`;
                     }
                 }
                 else if (type === 'videos') {
