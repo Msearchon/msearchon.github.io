@@ -139,6 +139,7 @@ header {
         </div>
         <div id="mainLinks">
             <div class="menu-item" onclick="toggleTheme()"> Switch Theme Mode</div>
+            <div class="menu-item" onclick="showPane('devPane')"> Developer</div>
             <div class="menu-item" onclick="showPane('historyPane')"> Search History</div>
             <div class="menu-item" onclick="showPane('notePane')">Notes</div>
         </div>
@@ -147,6 +148,15 @@ header {
             <div id="historyList"></div>
             <button onclick="clearHistory()" style="margin-top:15px; width:100%; padding:10px; background:#ea4335; color:white; border:none; border-radius:5px; cursor:pointer;">Clear History</button>
             <p onclick="backToMain()" style="text-align:center; color:var(--blue); cursor:pointer; margin-top:20px;">Back</p>
+        </div>
+        <div id="devPane" class="pane" style="text-align:center;">
+    <h3 style="color:var(--blue);">Developer Information</h3>
+    <p>Developed & Maintained by:</p>
+    <h2 style="margin:5px 0;">M.H (Mehdi Hasan)</h2>
+    <p style="font-size:14px; opacity:0.8;">Founder & Ceo of M search</p>
+    <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
+    <p style="font-size:12px;">M Search Project started in 2023.</p>
+    <p onclick="backToMain()" style="color:var(--blue); cursor:pointer; margin-top:20px;">Back</p>
         </div>
 
         <div id="notePane" class="pane">
