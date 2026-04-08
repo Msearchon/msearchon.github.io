@@ -9,17 +9,28 @@
     <meta name="author" content="Mehdi Hasan / MGPLC">
 
     <style>
-        /* ======================================================== */
         /* AAPKA EXACT ORIGINAL UI SYSTEM */
-        /* ======================================================== */
         :root { --blue: #8ab4f8; --bg: #0f0f0f; --text: #e8eaed; --card: #1f1f1f; --green: #34a853; }
         * { box-sizing: border-box; }
         body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; transition: 0.3s; }
         
-        header { display: flex; align-items: center; padding: 15px 5%; border-bottom: 1px solid #333; position: sticky; top: 0; background: var(--bg); z-index: 100; }
-        .logo { font-size: 24px; font-weight: bold; color: #4285F4; text-decoration: none; margin-right: 25px; cursor: pointer; }
+        /* HEADER ALIGNMENT FOR CORNER MENU */
+        header { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; /* Ise corner mein rakhne ke liye */
+            padding: 15px 5%; 
+            border-bottom: 1px solid #333; 
+            position: sticky; 
+            top: 0; 
+            background: var(--bg); 
+            z-index: 100; 
+        }
+        .logo { font-size: 24px; font-weight: bold; color: #4285F4; text-decoration: none; cursor: pointer; }
         .logo span { color: white; }
-        .search-box { flex: 1; max-width: 600px; }
+        
+        /* SEARCH BOX CENTERED */
+        .search-box { flex: 1; max-width: 600px; margin: 0 20px; }
         .search-input { width: 100%; height: 44px; border-radius: 22px; border: 1px solid #5f6368; background: #202124; color: white; padding: 0 20px; outline: none; transition: 0.3s; }
         .search-input:focus { border-color: var(--blue); background: #303134; }
 
@@ -29,6 +40,7 @@
 
         main { padding: 20px 5% 40px 150px; max-width: 1000px; min-height: 80vh; }
         
+        /* WEB & MEDIA STYLES */
         .res-item { margin-bottom: 30px; animation: fadeIn 0.4s; }
         .res-url { font-size: 13px; color: #bdc1c6; margin-bottom: 2px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .res-title { font-size: 20px; color: var(--blue); text-decoration: none; display: block; margin-bottom: 5px; }
@@ -46,8 +58,9 @@
 
         .video-item { display: flex; gap: 15px; background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; transition: 0.3s; }
         .video-item:hover { border-color: var(--blue); }
-        .video-thumb { width: 160px; height: 90px; background: #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #555; overflow: hidden; }
+        .video-thumb { width: 160px; height: 90px; background: #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 
+        /* AI CHAT UI */
         #aiChatView { display: none; flex-direction: column; height: 70vh; }
         #chatMessages { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 15px; }
         .msg { max-width: 80%; padding: 12px 18px; border-radius: 18px; line-height: 1.5; font-size: 15px; animation: fadeIn 0.3s; }
@@ -57,9 +70,7 @@
         #chatInput { flex: 1; background: transparent; border: none; color: white; padding: 10px 20px; outline: none; }
         .send-btn { background: #4285f4; border: none; color: white; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-right: 5px; }
 
-        /* ======================================================== */
-        /* NAYA SIDE MENU (M STUDIO) - ADDED FOR POWER */
-        /* ======================================================== */
+        /* SIDE MENU (M STUDIO) */
         body.light-mode { --bg: #ffffff; --text: #202124; --card: #f1f3f4; }
         #sideMenu {
             position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
@@ -80,7 +91,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
 
         @media (max-width: 800px) {
-            header { flex-direction: column; padding: 10px; }
+            header { padding: 10px; }
             .tabs { padding: 10px; justify-content: center; }
             main { padding: 20px; }
             .chat-input-container { width: 90%; }
@@ -91,12 +102,14 @@
 
     <header>
         <div class="logo" onclick="location.href=window.location.pathname">M <span>Search</span></div>
+        
         <div class="search-box">
             <form onsubmit="event.preventDefault(); handleGlobalSearch();">
                 <input id="qInput" type="text" class="search-input" placeholder="Search on M Search" autocomplete="off">
             </form>
         </div>
-        <div onclick="openMenu()" style="font-size:24px; cursor:pointer; margin-left:15px; color:var(--text);">&#9776;</div>
+        
+        <div onclick="openMenu()" style="font-size:24px; cursor:pointer; color:var(--text);">&#9776;</div>
     </header>
 
     <div id="sideMenu">
@@ -149,13 +162,11 @@
     </main>
 
     <script>
-        /* ======================================================== */
-        /* AAPKA ORIGINAL SEARCH ENGINE LOGIC */
-        /* ======================================================== */
+        /* AAPKA EXACT ORIGINAL LOGIC */
         function handleGlobalSearch() {
             const query = document.getElementById("qInput").value.trim();
             if(!query) return;
-            saveToHistory(query); // Added history save
+            saveToHistory(query);
             setTab('web');
             startSearch('web');
         }
@@ -192,8 +203,7 @@
 
             const loadingId = "bot-" + Date.now();
             box.innerHTML += `<div class="msg bot-msg" id="${loadingId}"><p class="loading-dots">Thinking</p></div>`;
-            box.scrollTop = box.scrollHeight;
-
+            
             try {
                 const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(msg)}`);
                 const data = await res.json();
@@ -279,32 +289,25 @@
             }
         }
 
-        /* ======================================================== */
-        /* M STUDIO FUNCTIONS (SYSTEM CONTROLS) */
-        /* ======================================================== */
+        /* M STUDIO FUNCTIONS */
         function openMenu() { document.getElementById("sideMenu").classList.add("active"); }
         function closeMenu() { document.getElementById("sideMenu").classList.remove("active"); backToMain(); }
         function toggleTheme() { document.body.classList.toggle("light-mode"); }
-        
         function showPane(id) {
             document.getElementById("mainLinks").style.display = "none";
             document.querySelectorAll(".pane").forEach(p => p.style.display = "none");
             document.getElementById(id).style.display = "flex";
             if(id === 'historyPane') updateHistoryList();
-            if(id === 'notePane') document.getElementById("noteArea").value = localStorage.getItem("mNote") || "";
         }
-
         function backToMain() {
             document.getElementById("mainLinks").style.display = "block";
             document.querySelectorAll(".pane").forEach(p => p.style.display = "none");
         }
-
         function saveToHistory(q) {
             let h = JSON.parse(localStorage.getItem("mHist") || "[]");
             h = h.filter(x => x !== q); h.unshift(q);
             localStorage.setItem("mHist", JSON.stringify(h.slice(0, 15)));
         }
-
         function updateHistoryList() {
             const list = document.getElementById("historyList");
             const h = JSON.parse(localStorage.getItem("mHist") || "[]");
@@ -315,7 +318,6 @@
                 list.appendChild(d);
             });
         }
-
         function clearHistory() { localStorage.removeItem("mHist"); updateHistoryList(); }
         function saveNote() { localStorage.setItem("mNote", document.getElementById("noteArea").value); }
 
