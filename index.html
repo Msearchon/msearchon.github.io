@@ -14,18 +14,36 @@
         * { box-sizing: border-box; }
         body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; transition: 0.3s; }
         
-        /* HEADER ALIGNMENT FOR CORNER MENU */
-        header { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; /* Ise corner mein rakhne ke liye */
-            padding: 15px 5%; 
-            border-bottom: 1px solid #333; 
-            position: sticky; 
-            top: 0; 
-            background: var(--bg); 
-            z-index: 100; 
-        }
+        /* Header ko vertical stack se badal kar row alignment mein lana */
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 5%;
+}
+
+/* Yeh main container hai jo search aur lines ko bagal mein rakhta hai */
+.search-container-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px; /* Dono ke beech ka gap */
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-box {
+    flex: 1; /* Search bar bachi hui puri jagah lega */
+}
+
+/* Teen lines ki styling */
+.menu-trigger {
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--text);
+    line-height: 1;
+    user-select: none;
+}
         .logo { font-size: 24px; font-weight: bold; color: #4285F4; text-decoration: none; cursor: pointer; }
         .logo span { color: white; }
         
@@ -101,16 +119,18 @@
 <body>
 
     <header>
-        <div class="logo" onclick="location.href=window.location.pathname">M <span>Search</span></div>
-        
+    <div class="logo" onclick="location.reload()">M <span>Search</span></div>
+    
+    <div class="search-container-row">
         <div class="search-box">
             <form onsubmit="event.preventDefault(); handleGlobalSearch();">
-                <input id="qInput" type="text" class="search-input" placeholder="Search on M Search" autocomplete="off">
+                <input id="qInput" type="text" class="search-input" placeholder="Search on M Search">
             </form>
         </div>
         
-        <div onclick="openMenu()" style="font-size:24px; cursor:pointer; color:var(--text);">&#9776;</div>
-    </header>
+        <div class="menu-trigger" onclick="openMenu()">&#9776;</div>
+    </div>
+</header>
 
     <div id="sideMenu">
         <div class="menu-header">
