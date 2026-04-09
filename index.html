@@ -3,67 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M Search - Google Verified</title>
-    
+    <title>M Search - Professional Engine</title>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <style>
-        :root { --blue: #8ab4f8; --bg: #0f0f0f; --text: #e8eaed; --card: #1f1f1f; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
+        :root { --blue: #8ab4f8; --bg: #0f0f0f; --text: #e8eaed; --card: #1f1f1f; --green: #34a853; }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* Login Screen */
-        #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
-        .google-btn { background: white; color: #444; padding: 12px 24px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        /* 1. LOGIN SCREEN (Original Style) */
+        #authOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        .auth-card { background: var(--card); padding: 30px; border-radius: 15px; text-align: center; border: 1px solid #333; width: 90%; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .auth-card input { width: 100%; padding: 14px; margin: 10px 0; background: #000; border: 1px solid #444; color: white; border-radius: 8px; outline: none; font-size: 15px; }
+        .auth-card button { width: 100%; padding: 14px; background: var(--blue); color: #000; border: none; font-weight: bold; cursor: pointer; border-radius: 8px; margin-top: 15px; font-size: 16px; }
+        .error-msg { color: #ff4444; font-size: 12px; margin-top: 5px; display: none; }
+
+        /* 2. MAIN INTERFACE (Your Original UI) */
+        #mainApp { display: none; }
+        header { display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .logo { font-size: 32px; font-weight: bold; color: #4285F4; margin-bottom: 20px; }
+        .logo span { color: white; }
+        .search-box { width: 90%; max-width: 600px; display: flex; gap: 10px; }
+        .search-input { flex: 1; padding: 14px 25px; border-radius: 30px; border: 1px solid #5f6368; background: #202124; color: white; outline: none; }
         
-        /* Ban Screen */
+        /* 3. SIDE MENU & PROFILE */
+        #sideMenu { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--card); border-left: 1px solid #333; z-index: 1001; transition: 0.3s; padding: 20px; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+        #sideMenu.active { right: 0; }
+        .profile-box { text-align: center; padding: 20px; border-bottom: 1px solid #333; margin-bottom: 20px; }
+        .profile-pic { width: 80px; height: 80px; background: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; color: #000; margin: 0 auto 15px; font-weight: bold; }
+        .profile-info b { display: block; color: var(--blue); font-size: 18px; margin-bottom: 5px; }
+        .profile-info span { font-size: 12px; color: #aaa; word-break: break-all; }
+        
+        /* BAN SCREEN */
         #banScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: #ff4444; text-align: center; justify-content: center; align-items: center; flex-direction: column; z-index: 10000; }
-
-        /* Profile Section (Inside Header) */
-        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; }
-        .user-profile { display: flex; align-items: center; gap: 10px; background: var(--card); padding: 5px 15px; border-radius: 50px; border: 1px solid #333; cursor: pointer; }
-        .user-profile img { width: 30px; height: 30px; border-radius: 50%; }
-        .user-profile span { font-size: 13px; color: var(--blue); }
-
-        /* Main Search UI */
-        #mainContent { display: none; }
-        .search-area { text-align: center; margin-top: 50px; }
-        .m-input { width: 80%; max-width: 600px; padding: 14px 25px; border-radius: 30px; border: 1px solid #5f6368; background: #202124; color: white; outline: none; font-size: 16px; }
     </style>
 </head>
 <body>
 
-    <div id="loginScreen">
-        <h1 style="color:var(--blue); font-size: 40px; margin-bottom: 30px;">M Search</h1>
-        <button class="google-btn" onclick="googleLogin()">
-            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="20">
-            Sign in with Google
-        </button>
-        <p id="loadMsg" style="margin-top: 15px; font-size: 12px; color: gray;"></p>
-    </div>
-
     <div id="banScreen">
-        <h1 style="font-size: 50px;">CEO ALERT: BANNED</h1>
-        <p style="font-size: 18px; color: white;">Your Account ID has been blocked by the Administrator.</p>
-        <button onclick="logout()" style="margin-top:20px; padding:10px 20px; background:#444; color:white; border:none; border-radius:5px; cursor:pointer;">Try Another Account</button>
+        <h1 style="font-size: 45px;">CEO ALERT: BANNED</h1>
+        <p style="color:white; font-size: 18px;">Your access has been blocked by Mehdi Hasan.</p>
+        <button onclick="localStorage.clear(); location.reload();" style="margin-top:20px; padding:10px 20px; background:#333; color:white; border:none; border-radius:5px; cursor:pointer;">Try Login Again</button>
     </div>
 
-    <div id="mainContent">
-        <div class="header-top">
-            <div style="font-size: 20px; font-weight: bold; color: var(--blue);">M Search</div>
-            <div class="user-profile" id="userMenu">
-                <img id="userPhoto" src="" alt="">
-                <span id="userName">User</span>
-                <button onclick="logout()" style="background:transparent; border:none; color:gray; font-size:10px; cursor:pointer; margin-left:10px;">Logout</button>
+    <div id="authOverlay">
+        <div class="auth-card">
+            <h1 style="color:var(--blue); margin-bottom:10px;">M Search</h1>
+            <p style="color:gray; font-size:13px; margin-bottom:20px;">Enter Official Details to Access</p>
+            <input type="text" id="uName" placeholder="Full Name">
+            <input type="email" id="uEmail" placeholder="Asali Gmail Address (e.g. name@gmail.com)">
+            <p id="errorBox" class="error-msg">Asali Gmail ID zaroori hai!</p>
+            <button onclick="validateAndRegister()">ENTER ENGINE</button>
+        </div>
+    </div>
+
+    <div id="mainApp">
+        <header>
+            <div style="width:100%; display:flex; justify-content:flex-end;">
+                <div onclick="toggleMenu()" style="cursor:pointer; font-size:25px; padding:10px;">&#9776;</div>
+            </div>
+            <div class="logo">M <span>Search</span></div>
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search globally...">
+                <button style="background:var(--blue); border:none; padding:10px 20px; border-radius:20px; cursor:pointer; font-weight:bold;">Search</button>
+            </div>
+        </header>
+
+        <main style="text-align:center; padding:50px; color:gray;">
+            <h2>Welcome to M-Search Engine</h2>
+            <p>Your ID is verified. Use the menu to see your profile.</p>
+        </main>
+    </div>
+
+    <div id="sideMenu">
+        <div style="text-align:right; font-size:30px; cursor:pointer;" onclick="toggleMenu()">&times;</div>
+        <div class="profile-box">
+            <div class="profile-pic" id="pLetter">M</div>
+            <div class="profile-info">
+                <b id="pName">Loading...</b>
+                <span id="pEmail">Loading...</span>
+                <p style="color:yellow; font-size:11px; margin-top:10px;">Verified ID: <span id="pID"></span></p>
             </div>
         </div>
-
-        <div class="search-area">
-            <h1 style="color:#4285F4; font-size: 60px; margin-top: 80px;">M</h1>
-            <p style="margin-top: -30px; margin-bottom: 40px; color: gray;">Verified ID: <span id="userID" style="color:yellow;"></span></p>
-            <input type="text" class="m-input" placeholder="Search globally with Google verification...">
-        </div>
+        <div style="padding:10px; color:gray; font-size:14px; cursor:pointer;" onclick="localStorage.clear(); location.reload();">Logout</div>
     </div>
 
     <script>
@@ -75,65 +98,71 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        const auth = firebase.auth();
 
-        // --- AUTH OBSERVER (Automatic Login Check) ---
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                checkBanStatus(user);
-            } else {
-                document.getElementById("loginScreen").style.display = "flex";
-                document.getElementById("mainContent").style.display = "none";
-                document.getElementById("banScreen").style.display = "none";
+        // --- CHECK LOGIN ON LOAD ---
+        window.onload = () => {
+            const savedID = localStorage.getItem("m_id");
+            if (savedID) checkBan(savedID);
+        };
+
+        // --- ASALI GMAIL VALIDATION ---
+        function validateAndRegister() {
+            const name = document.getElementById("uName").value.trim();
+            const email = document.getElementById("uEmail").value.trim();
+            const errorBox = document.getElementById("errorBox");
+
+            // Check if Gmail is Real (Basic Format + @gmail.com check)
+            const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+            
+            if (name.length < 3) {
+                alert("Please enter full name.");
+                return;
             }
-        });
+            if (!gmailPattern.test(email)) {
+                errorBox.style.display = "block";
+                errorBox.innerText = "Error: Sirf asali @gmail.com account hi chalega!";
+                return;
+            }
 
-        // --- GOOGLE LOGIN FUNCTION ---
-        function googleLogin() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            document.getElementById("loadMsg").innerText = "Verifying Google Account...";
-            auth.signInWithPopup(provider).catch(err => alert(err.message));
+            errorBox.style.display = "none";
+            const mID = "M-ID-" + Math.floor(10000 + Math.random() * 90000);
+            
+            // Save to Database
+            db.ref('users/' + mID).set({
+                name: name,
+                email: email,
+                status: "Active",
+                mID: mID
+            }).then(() => {
+                localStorage.setItem("m_id", mID);
+                checkBan(mID);
+            });
         }
 
-        // --- BAN CHECK LOGIC ---
-        function checkBanStatus(user) {
-            const safeId = user.uid; // Unique Google ID
-            db.ref('users/' + safeId).on('value', (snap) => {
+        // --- REAL-TIME BAN CHECK ---
+        function checkBan(id) {
+            db.ref('users/' + id).on('value', (snap) => {
                 const data = snap.val();
-                
-                // Pehli baar login par data save karein
-                if (!data) {
-                    db.ref('users/' + safeId).set({
-                        name: user.displayName,
-                        email: user.email,
-                        photo: user.photoURL,
-                        status: "Active",
-                        mID: safeId
-                    });
-                }
+                if (!data) return;
 
-                if (data && data.status === "Banned") {
-                    document.getElementById("mainContent").style.display = "none";
-                    document.getElementById("loginScreen").style.display = "none";
+                if (data.status === "Banned") {
+                    document.getElementById("authOverlay").style.display = "none";
+                    document.getElementById("mainApp").style.display = "none";
                     document.getElementById("banScreen").style.display = "flex";
                 } else {
-                    showApp(user);
+                    document.getElementById("authOverlay").style.display = "none";
+                    document.getElementById("mainApp").style.display = "block";
+                    // Update Profile
+                    document.getElementById("pName").innerText = data.name;
+                    document.getElementById("pEmail").innerText = data.email;
+                    document.getElementById("pID").innerText = data.mID;
+                    document.getElementById("pLetter").innerText = data.name.charAt(0).toUpperCase();
                 }
             });
         }
 
-        function showApp(user) {
-            document.getElementById("loginScreen").style.display = "none";
-            document.getElementById("banScreen").style.display = "none";
-            document.getElementById("mainContent").style.display = "block";
-            
-            document.getElementById("userName").innerText = user.displayName;
-            document.getElementById("userPhoto").src = user.photoURL;
-            document.getElementById("userID").innerText = user.uid.substring(0, 10) + "...";
-        }
-
-        function logout() {
-            auth.signOut().then(() => location.reload());
+        function toggleMenu() {
+            document.getElementById("sideMenu").classList.toggle("active");
         }
     </script>
 </body>
