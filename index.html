@@ -3,96 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M Search - Global Engine</title>
-
+    <title>M Search - Google Verified</title>
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <style>
         :root { --blue: #8ab4f8; --bg: #0f0f0f; --text: #e8eaed; --card: #1f1f1f; }
-        body { margin: 0; font-family: sans-serif; background: var(--bg); color: var(--text); }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
+
+        /* Login Screen */
+        #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
+        .google-btn { background: white; color: #444; padding: 12px 24px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         
-        /* Account Login Box */
-        #authOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-        .auth-card { background: var(--card); padding: 30px; border-radius: 12px; text-align: center; border: 1px solid #333; width: 320px; }
-        .auth-card input { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #444; color: white; border-radius: 6px; }
-        .auth-card button { width: 100%; padding: 12px; background: var(--blue); color: #000; border: none; font-weight: bold; cursor: pointer; border-radius: 6px; }
-        
-        #mainApp { display: none; padding: 20px; text-align: center; }
+        /* Ban Screen */
+        #banScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: #ff4444; text-align: center; justify-content: center; align-items: center; flex-direction: column; z-index: 10000; }
+
+        /* Profile Section (Inside Header) */
+        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; }
+        .user-profile { display: flex; align-items: center; gap: 10px; background: var(--card); padding: 5px 15px; border-radius: 50px; border: 1px solid #333; cursor: pointer; }
+        .user-profile img { width: 30px; height: 30px; border-radius: 50%; }
+        .user-profile span { font-size: 13px; color: var(--blue); }
+
+        /* Main Search UI */
+        #mainContent { display: none; }
+        .search-area { text-align: center; margin-top: 50px; }
+        .m-input { width: 80%; max-width: 600px; padding: 14px 25px; border-radius: 30px; border: 1px solid #5f6368; background: #202124; color: white; outline: none; font-size: 16px; }
     </style>
 </head>
 <body>
 
-    <div id="authOverlay">
-        <div class="auth-card">
-            <h2 style="color:var(--blue);">M-Verify</h2>
-            <input type="text" id="uName" placeholder="Full Name">
-            <input type="email" id="uEmail" placeholder="Gmail Address">
-            <button id="regBtn" onclick="mRegister()">LOGIN</button>
-            <p id="statusMsg" style="font-size:12px; margin-top:10px; color:gray;"></p>
+    <div id="loginScreen">
+        <h1 style="color:var(--blue); font-size: 40px; margin-bottom: 30px;">M Search</h1>
+        <button class="google-btn" onclick="googleLogin()">
+            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="20">
+            Sign in with Google
+        </button>
+        <p id="loadMsg" style="margin-top: 15px; font-size: 12px; color: gray;"></p>
+    </div>
+
+    <div id="banScreen">
+        <h1 style="font-size: 50px;">CEO ALERT: BANNED</h1>
+        <p style="font-size: 18px; color: white;">Your Account ID has been blocked by the Administrator.</p>
+        <button onclick="logout()" style="margin-top:20px; padding:10px 20px; background:#444; color:white; border:none; border-radius:5px; cursor:pointer;">Try Another Account</button>
+    </div>
+
+    <div id="mainContent">
+        <div class="header-top">
+            <div style="font-size: 20px; font-weight: bold; color: var(--blue);">M Search</div>
+            <div class="user-profile" id="userMenu">
+                <img id="userPhoto" src="" alt="">
+                <span id="userName">User</span>
+                <button onclick="logout()" style="background:transparent; border:none; color:gray; font-size:10px; cursor:pointer; margin-left:10px;">Logout</button>
+            </div>
+        </div>
+
+        <div class="search-area">
+            <h1 style="color:#4285F4; font-size: 60px; margin-top: 80px;">M</h1>
+            <p style="margin-top: -30px; margin-bottom: 40px; color: gray;">Verified ID: <span id="userID" style="color:yellow;"></span></p>
+            <input type="text" class="m-input" placeholder="Search globally with Google verification...">
         </div>
     </div>
 
-    <div id="mainApp">
-        <h1 style="color:var(--blue);">M SEARCH</h1>
-        <p>Welcome, <b id="userName"></b></p>
-        <input type="text" placeholder="Search..." style="padding:10px; border-radius:20px; width:80%;">
-    </div>
-
     <script>
-        // 1. Aapka Config
+        // --- FIREBASE CONFIG ---
         const firebaseConfig = {
             apiKey: "AIzaSyCtaYOmvdfYCR6xl_T6538v-8H-pLNoXyY",
             databaseURL: "https://m-bot-server-default-rtdb.asia-southeast1.firebasedatabase.app/",
             projectId: "m-bot-server"
         };
-
-        // 2. Initialize (Error handling ke saath)
-        try {
-            firebase.initializeApp(firebaseConfig);
-        } catch (e) {
-            console.log("Firebase already exists");
-        }
-
+        firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        const auth = firebase.auth();
 
-        // 3. Auto Login Check
-        window.onload = () => {
-            const id = localStorage.getItem("m_id");
-            if(id) showDashboard(id);
+        // --- AUTH OBSERVER (Automatic Login Check) ---
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                checkBanStatus(user);
+            } else {
+                document.getElementById("loginScreen").style.display = "flex";
+                document.getElementById("mainContent").style.display = "none";
+                document.getElementById("banScreen").style.display = "none";
+            }
+        });
+
+        // --- GOOGLE LOGIN FUNCTION ---
+        function googleLogin() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            document.getElementById("loadMsg").innerText = "Verifying Google Account...";
+            auth.signInWithPopup(provider).catch(err => alert(err.message));
         }
 
-        function showDashboard(id) {
-            document.getElementById("authOverlay").style.display = "none";
-            document.getElementById("mainApp").style.display = "block";
-            db.ref('users/' + id).once('value').then(s => {
-                if(s.val()) document.getElementById("userName").innerText = s.val().name;
+        // --- BAN CHECK LOGIC ---
+        function checkBanStatus(user) {
+            const safeId = user.uid; // Unique Google ID
+            db.ref('users/' + safeId).on('value', (snap) => {
+                const data = snap.val();
+                
+                // Pehli baar login par data save karein
+                if (!data) {
+                    db.ref('users/' + safeId).set({
+                        name: user.displayName,
+                        email: user.email,
+                        photo: user.photoURL,
+                        status: "Active",
+                        mID: safeId
+                    });
+                }
+
+                if (data && data.status === "Banned") {
+                    document.getElementById("mainContent").style.display = "none";
+                    document.getElementById("loginScreen").style.display = "none";
+                    document.getElementById("banScreen").style.display = "flex";
+                } else {
+                    showApp(user);
+                }
             });
         }
 
-        // 4. Registration Function
-        function mRegister() {
-            const n = document.getElementById("uName").value;
-            const e = document.getElementById("uEmail").value;
-            const msg = document.getElementById("statusMsg");
+        function showApp(user) {
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("banScreen").style.display = "none";
+            document.getElementById("mainContent").style.display = "block";
+            
+            document.getElementById("userName").innerText = user.displayName;
+            document.getElementById("userPhoto").src = user.photoURL;
+            document.getElementById("userID").innerText = user.uid.substring(0, 10) + "...";
+        }
 
-            if(!n || !e) { alert("Details bhariye!"); return; }
-
-            msg.innerText = "Connecting to Server...";
-            const mID = "M-" + Math.floor(Math.random()*9999);
-
-            // Database mein data bhej raha hai
-            db.ref('users/' + mID).set({
-                name: n,
-                email: e,
-                status: "Active"
-            }).then(() => {
-                localStorage.setItem("m_id", mID);
-                showDashboard(mID);
-            }).catch(err => {
-                msg.innerText = "Error: Check Internet or Rules!";
-                console.error(err);
-            });
+        function logout() {
+            auth.signOut().then(() => location.reload());
         }
     </script>
 </body>
