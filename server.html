@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-SEARCH | CEO DASHBOARD</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body { background: #000; color: #0f0; font-family: monospace; padding: 20px; }
+        h1 { border-bottom: 2px solid #0f0; padding-bottom: 10px; }
+        .user-card { background: #111; border: 1px solid #333; padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .user-info p { margin: 5px 0; }
+        .id { color: yellow; font-size: 1.2em; font-weight: bold; }
+        .status-active { color: #34a853; font-weight: bold; }
+        .status-banned { color: #ea4335; font-weight: bold; }
+        .btn { padding: 10px 15px; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; margin-left: 5px; }
+        .btn-ban { background: #ea4335; color: white; }
+        .btn-unban { background: #34a853; color: white; }
+    </style>
+</head>
+<body>
+
+    <h1>M-SEARCH CENTRAL SERVER (LIVE)</h1>
+    <p>System Status: <b style="color:lime;">ONLINE</b></p>
+    
+    <div id="usersList">Loading Global Users...</div>
+
+    <script>
+        // FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyCtaYOmvdfYCR6xl_T6538v-8H-pLNoXyY", 
+            databaseURL: "https://m-bot-server-default-rtdb.asia-southeast1.firebasedatabase.app/", 
+            projectId: "m-bot-server"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // REAL-TIME USER SYNC
+        db.ref('users').on('value', (snapshot) => {
+            const users = snapshot.val();
+            const list = document.getElementById("usersList");
+            list.innerHTML = ""; // Clear old data
+            
+            if(!users) { list.innerHTML = "<p>No users registered yet.</p>"; return; }
+
+            for(let id in users) {
+                let u = users[id];
+                let statusClass = u.status === "Banned" ? "status-banned" : "status-active";
+                
+                list.innerHTML += `
+                    <div class="user-card">
+                        <div class="user-info">
+                            <p><b>Name:</b> ${u.name} | <b>Email:</b> ${u.email}</p>
+                            <p><b>M-ID:</b> <span class="id">${id}</span></p>
+                            <p><b>Status:</b> <span class="${statusClass}">${u.status}</span></p>
+                        </div>
+                        <div class="controls">
+                            <button class="btn btn-ban" onclick="changeStatus('${id}', 'Banned')">BLOCK / BAN</button>
+                            <button class="btn btn-unban" onclick="changeStatus('${id}', 'Active')">UNBAN</button>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        // ACTION FUNCTION
+        function changeStatus(id, newStatus) {
+            db.ref('users/' + id).update({ status: newStatus })
+              .then(() => alert(id + " is now " + newStatus))
+              .catch(e => alert("Error: " + e));
+        }
+    </script>
+</body>
+</html>
