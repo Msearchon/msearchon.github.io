@@ -9,88 +9,77 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <style>
-        :root { --blue: #8ab4f8; --bg: #0f0f0f; --text: #e8eaed; --card: #1f1f1f; --green: #34a853; }
-        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+        :root { --blue: #8ab4f8; --bg: #0f0f0f; --text: #e8eaed; --card: #1f1f1f; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
 
-        /* 1. LOGIN SCREEN (Original Style) */
+        /* 1. LOGIN SCREEN */
         #authOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-        .auth-card { background: var(--card); padding: 30px; border-radius: 15px; text-align: center; border: 1px solid #333; width: 90%; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
-        .auth-card input { width: 100%; padding: 14px; margin: 10px 0; background: #000; border: 1px solid #444; color: white; border-radius: 8px; outline: none; font-size: 15px; }
-        .auth-card button { width: 100%; padding: 14px; background: var(--blue); color: #000; border: none; font-weight: bold; cursor: pointer; border-radius: 8px; margin-top: 15px; font-size: 16px; }
-        .error-msg { color: #ff4444; font-size: 12px; margin-top: 5px; display: none; }
+        .auth-card { background: var(--card); padding: 30px; border-radius: 15px; text-align: center; border: 1px solid #333; width: 350px; }
+        .auth-card input { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #444; color: white; border-radius: 8px; outline: none; }
+        .auth-card button { width: 100%; padding: 12px; background: var(--blue); color: #000; border: none; font-weight: bold; cursor: pointer; border-radius: 8px; margin-top: 10px; }
 
-        /* 2. MAIN INTERFACE (Your Original UI) */
-        #mainApp { display: none; }
-        header { display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .logo { font-size: 32px; font-weight: bold; color: #4285F4; margin-bottom: 20px; }
-        .logo span { color: white; }
-        .search-box { width: 90%; max-width: 600px; display: flex; gap: 10px; }
-        .search-input { flex: 1; padding: 14px 25px; border-radius: 30px; border: 1px solid #5f6368; background: #202124; color: white; outline: none; }
-        
-        /* 3. SIDE MENU & PROFILE */
-        #sideMenu { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--card); border-left: 1px solid #333; z-index: 1001; transition: 0.3s; padding: 20px; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
-        #sideMenu.active { right: 0; }
-        .profile-box { text-align: center; padding: 20px; border-bottom: 1px solid #333; margin-bottom: 20px; }
-        .profile-pic { width: 80px; height: 80px; background: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; color: #000; margin: 0 auto 15px; font-weight: bold; }
-        .profile-info b { display: block; color: var(--blue); font-size: 18px; margin-bottom: 5px; }
-        .profile-info span { font-size: 12px; color: #aaa; word-break: break-all; }
-        
-        /* BAN SCREEN */
+        /* 2. BAN SCREEN (Professional) */
         #banScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: #ff4444; text-align: center; justify-content: center; align-items: center; flex-direction: column; z-index: 10000; }
+        .ban-box { border: 2px solid #ff4444; padding: 40px; border-radius: 20px; background: #110000; }
+
+        /* 3. MAIN UI */
+        #mainApp { display: none; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; border-bottom: 1px solid #333; }
+        .search-area { text-align: center; margin-top: 100px; }
+        .search-input { width: 80%; max-width: 500px; padding: 15px 25px; border-radius: 30px; border: 1px solid #5f6368; background: #202124; color: white; outline: none; font-size: 16px; }
+
+        /* PROFILE SIDE MENU */
+        #sideMenu { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: var(--card); border-left: 1px solid #333; z-index: 1001; transition: 0.3s; padding: 20px; }
+        #sideMenu.active { right: 0; }
+        .p-img { width: 60px; height: 60px; background: var(--blue); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 25px; color: black; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="banScreen">
-        <h1 style="font-size: 45px;">CEO ALERT: BANNED</h1>
-        <p style="color:white; font-size: 18px;">Your access has been blocked by Mehdi Hasan.</p>
-        <button onclick="localStorage.clear(); location.reload();" style="margin-top:20px; padding:10px 20px; background:#333; color:white; border:none; border-radius:5px; cursor:pointer;">Try Login Again</button>
+        <div class="ban-box">
+            <h1 style="margin:0;">ACCESS REVOKED</h1>
+            <p style="color:white; margin: 20px 0;">M BOT has BANNED your device/ID.</p>
+            <button onclick="localStorage.clear(); location.reload();" style="background:#333; color:white; border:none; padding:10px; cursor:pointer; border-radius:5px;">Logout & Switch Account</button>
+        </div>
     </div>
 
     <div id="authOverlay">
         <div class="auth-card">
-            <h1 style="color:var(--blue); margin-bottom:10px;">M Search</h1>
-            <p style="color:gray; font-size:13px; margin-bottom:20px;">Enter Official Details to Access</p>
+            <h2 style="color:var(--blue);">M-Search Register</h2>
             <input type="text" id="uName" placeholder="Full Name">
-            <input type="email" id="uEmail" placeholder="Asali Gmail Address (e.g. name@gmail.com)">
-            <p id="errorBox" class="error-msg">Asali Gmail ID zaroori hai!</p>
-            <button onclick="validateAndRegister()">ENTER ENGINE</button>
+            <input type="email" id="uEmail" placeholder="Official Gmail (name@gmail.com)">
+            <button onclick="register()">ENTER SYSTEM</button>
+            <p id="err" style="color:red; font-size:12px; margin-top:10px;"></p>
         </div>
     </div>
 
     <div id="mainApp">
         <header>
-            <div style="width:100%; display:flex; justify-content:flex-end;">
-                <div onclick="toggleMenu()" style="cursor:pointer; font-size:25px; padding:10px;">&#9776;</div>
-            </div>
-            <div class="logo">M <span>Search</span></div>
-            <div class="search-box">
-                <input type="text" class="search-input" placeholder="Search globally...">
-                <button style="background:var(--blue); border:none; padding:10px 20px; border-radius:20px; cursor:pointer; font-weight:bold;">Search</button>
-            </div>
+            <div style="font-weight:bold; color:var(--blue); font-size:20px;">M-Search</div>
+            <div onclick="toggleMenu()" style="cursor:pointer; font-size:24px;">&#9776;</div>
         </header>
 
-        <main style="text-align:center; padding:50px; color:gray;">
-            <h2>Welcome to M-Search Engine</h2>
-            <p>Your ID is verified. Use the menu to see your profile.</p>
-        </main>
-    </div>
-
-    <div id="sideMenu">
-        <div style="text-align:right; font-size:30px; cursor:pointer;" onclick="toggleMenu()">&times;</div>
-        <div class="profile-box">
-            <div class="profile-pic" id="pLetter">M</div>
-            <div class="profile-info">
-                <b id="pName">Loading...</b>
-                <span id="pEmail">Loading...</span>
-                <p style="color:yellow; font-size:11px; margin-top:10px;">Verified ID: <span id="pID"></span></p>
-            </div>
+        <div class="search-area">
+            <h1 style="color:#4285F4; font-size: 50px;">M</h1>
+            <input type="text" class="search-input" placeholder="Search with M-ID verification...">
         </div>
-        <div style="padding:10px; color:gray; font-size:14px; cursor:pointer;" onclick="localStorage.clear(); location.reload();">Logout</div>
+
+        <div id="sideMenu">
+            <div style="text-align:right; cursor:pointer; font-size:30px;" onclick="toggleMenu()">&times;</div>
+            <div class="p-img" id="pLetter">U</div>
+            <div style="text-align:center;">
+                <b id="pName" style="color:var(--blue);">User</b><br>
+                <span id="pEmail" style="font-size:12px; color:gray;">email@gmail.com</span><br><br>
+                <span style="color:yellow; font-size:10px;">ID: <span id="pID"></span></span>
+            </div>
+            <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
+            <div onclick="localStorage.clear(); location.reload();" style="cursor:pointer; color:gray;">Sign Out</div>
+        </div>
     </div>
 
     <script>
-        // --- FIREBASE CONFIG ---
+        // FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyCtaYOmvdfYCR6xl_T6538v-8H-pLNoXyY",
             databaseURL: "https://m-bot-server-default-rtdb.asia-southeast1.firebasedatabase.app/",
@@ -99,64 +88,57 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // --- CHECK LOGIN ON LOAD ---
+        // HAR WAQT CHECK KARNE WALA SYSTEM
         window.onload = () => {
-            const savedID = localStorage.getItem("m_id");
-            if (savedID) checkBan(savedID);
+            const m_id = localStorage.getItem("m_id");
+            if(m_id) {
+                monitorAccount(m_id);
+            }
         };
 
-        // --- ASALI GMAIL VALIDATION ---
-        function validateAndRegister() {
+        function register() {
             const name = document.getElementById("uName").value.trim();
             const email = document.getElementById("uEmail").value.trim();
-            const errorBox = document.getElementById("errorBox");
-
-            // Check if Gmail is Real (Basic Format + @gmail.com check)
-            const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
             
-            if (name.length < 3) {
-                alert("Please enter full name.");
-                return;
-            }
-            if (!gmailPattern.test(email)) {
-                errorBox.style.display = "block";
-                errorBox.innerText = "Error: Sirf asali @gmail.com account hi chalega!";
+            if(!name || !email.includes("@gmail.com")) {
+                document.getElementById("err").innerText = "Asali Gmail ID zaroori hai!";
                 return;
             }
 
-            errorBox.style.display = "none";
-            const mID = "M-ID-" + Math.floor(10000 + Math.random() * 90000);
-            
-            // Save to Database
-            db.ref('users/' + mID).set({
+            const id = "M-" + Math.floor(1000 + Math.random() * 9000);
+            db.ref('users/' + id).set({
                 name: name,
                 email: email,
                 status: "Active",
-                mID: mID
+                mID: id
             }).then(() => {
-                localStorage.setItem("m_id", mID);
-                checkBan(mID);
+                localStorage.setItem("m_id", id);
+                monitorAccount(id);
             });
         }
 
-        // --- REAL-TIME BAN CHECK ---
-        function checkBan(id) {
+        // YEH HAI ASALI "BAN MONITOR"
+        function monitorAccount(id) {
+            // '.on' lagane se database se live connection ban jata hai
             db.ref('users/' + id).on('value', (snap) => {
-                const data = snap.val();
-                if (!data) return;
+                const user = snap.val();
+                if(!user) return;
 
-                if (data.status === "Banned") {
-                    document.getElementById("authOverlay").style.display = "none";
+                if(user.status === "Banned") {
+                    // Agar status 'Banned' hua, toh engine turant gayab
                     document.getElementById("mainApp").style.display = "none";
+                    document.getElementById("authOverlay").style.display = "none";
                     document.getElementById("banScreen").style.display = "flex";
                 } else {
+                    // Agar Active hai, toh app dikhao
                     document.getElementById("authOverlay").style.display = "none";
                     document.getElementById("mainApp").style.display = "block";
-                    // Update Profile
-                    document.getElementById("pName").innerText = data.name;
-                    document.getElementById("pEmail").innerText = data.email;
-                    document.getElementById("pID").innerText = data.mID;
-                    document.getElementById("pLetter").innerText = data.name.charAt(0).toUpperCase();
+                    
+                    // Profile Update
+                    document.getElementById("pName").innerText = user.name;
+                    document.getElementById("pEmail").innerText = user.email;
+                    document.getElementById("pID").innerText = user.mID;
+                    document.getElementById("pLetter").innerText = user.name[0].toUpperCase();
                 }
             });
         }
