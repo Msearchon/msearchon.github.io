@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-  <ShortName>M Search</ShortName>
-  <Description>Official search with M Search</Description>
-  <Url type="text/html" template="https://msearchon.github.io/?q={searchTerms}"/>
-  </Opensearchdescription>
