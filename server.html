@@ -3,47 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M-SEARCH | ADVANCED CEO COMMAND</title>
+    <title>M-SEARCH | CEO ADVANCED COMMAND</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        :root { --neon-green: #0f0; --neon-red: #ff4444; --bg: #050505; --card: #111; }
+        :root { --neon-green: #0f0; --neon-red: #ff4444; --bg: #050505; --card: #111; --blue: #8ab4f8; }
         body { background: var(--bg); color: #ccc; font-family: 'Segoe UI', monospace; padding: 20px; }
-        h1 { color: var(--neon-green); border-bottom: 2px solid var(--neon-green); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
         
-        .stats { display: flex; gap: 20px; margin-bottom: 30px; }
-        .stat-box { background: var(--card); padding: 15px; border-radius: 8px; border: 1px solid #333; flex: 1; text-align: center; }
-        .stat-box b { font-size: 20px; color: var(--neon-green); }
+        .header-panel { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--neon-green); padding-bottom: 15px; margin-bottom: 20px; }
+        h1 { color: var(--neon-green); margin: 0; text-transform: uppercase; letter-spacing: 2px; font-size: 22px; }
 
-        .user-card { background: var(--card); border: 1px solid #222; padding: 20px; margin-bottom: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
-        .user-card:hover { border-color: #444; background: #161616; }
+        /* SEARCH SYSTEM IN SERVER */
+        .server-search-box { background: var(--card); padding: 15px; border-radius: 10px; border: 1px solid #333; margin-bottom: 20px; display: flex; gap: 10px; }
+        .server-search-box input { flex: 1; background: #000; border: 1px solid #444; color: #fff; padding: 12px; border-radius: 8px; outline: none; }
         
-        .user-info p { margin: 4px 0; }
-        .id { color: #8ab4f8; font-family: monospace; }
-        .status-active { color: #34a853; font-weight: bold; text-transform: uppercase; font-size: 12px; }
-        .status-suspended { color: #fbbc05; font-weight: bold; text-transform: uppercase; font-size: 12px; }
-        .status-banned { color: var(--neon-red); font-weight: bold; text-transform: uppercase; font-size: 12px; }
+        .user-card { background: var(--card); border: 1px solid #222; padding: 20px; margin-bottom: 15px; border-radius: 12px; display: flex; flex-direction: column; gap: 15px; transition: 0.3s; }
+        .user-card:hover { border-color: #444; }
+        
+        .main-info { display: flex; justify-content: space-between; align-items: flex-start; }
+        .id { color: var(--blue); font-weight: bold; }
+        
+        .history-box { background: #000; padding: 15px; border-radius: 8px; border: 1px solid #222; display: none; margin-top: 10px; max-height: 200px; overflow-y: auto; }
+        .history-tag { display: inline-block; background: #222; color: var(--blue); padding: 4px 10px; border-radius: 4px; margin: 3px; font-size: 12px; border: 1px solid #333; }
 
-        .controls { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
-        .suspend-input-group { display: flex; gap: 5px; }
-        input[type="number"] { width: 60px; background: #000; border: 1px solid #444; color: #fff; padding: 5px; border-radius: 4px; }
-        select { background: #000; border: 1px solid #444; color: #fff; padding: 5px; border-radius: 4px; }
-
-        .btn { padding: 8px 12px; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; font-size: 11px; text-transform: uppercase; }
+        .btn { padding: 8px 15px; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; font-size: 11px; text-transform: uppercase; }
+        .btn-history { background: #444; color: white; margin-top: 10px; }
         .btn-ban { background: var(--neon-red); color: white; }
         .btn-sus { background: #fbbc05; color: black; }
         .btn-active { background: #34a853; color: white; }
+        
+        .controls-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #222; pt: 15px; margin-top: 10px; padding-top: 15px; }
     </style>
 </head>
 <body>
 
-    <h1>M-SEARCH CONTROL CENTER</h1>
-    <div class="stats">
-        <div class="stat-box">System Status<br><b id="sysStatus">ONLINE</b></div>
-        <div class="stat-box">Total Users<br><b id="totalUsers">0</b></div>
+    <div class="header-panel">
+        <h1>M-SEARCH CENTRAL SERVER</h1>
+        <div style="text-align:right">
+            <small>System Status:</small> <b style="color:lime;">ONLINE</b><br>
+            <small>Total Users:</small> <b id="totalUsers" style="color:var(--blue);">0</b>
+        </div>
+    </div>
+
+    <div class="server-search-box">
+        <input type="text" id="serverSearchInput" placeholder="Search by Name or M-ID..." oninput="filterUsers()">
+        <div style="color:gray; font-size:12px; align-self:center;">CEO Filtering Mode</div>
     </div>
     
-    <div id="usersList">Initialising Advanced Link...</div>
+    <div id="usersList">Syncing Encrypted Data...</div>
 
     <script>
         const firebaseConfig = {
@@ -54,89 +61,98 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // REAL-TIME SYNC WITH SORTING
+        let allUsersData = [];
+
+        // REAL-TIME DATA FETCH
         db.ref('users').on('value', (snapshot) => {
             const users = snapshot.val();
+            allUsersData = [];
+            for(let id in users) { allUsersData.push({ id, ...users[id] }); }
+            
+            // Sort: Newest First
+            allUsersData.sort((a, b) => (b.lastLogin || 0) - (a.lastLogin || 0));
+            
+            document.getElementById("totalUsers").innerText = allUsersData.length;
+            renderUsers(allUsersData);
+        });
+
+        function renderUsers(data) {
             const list = document.getElementById("usersList");
-            const totalBox = document.getElementById("totalUsers");
             list.innerHTML = "";
             
-            if(!users) { list.innerHTML = "<p>Empty Database.</p>"; return; }
-
-            // SORTING: Newest (Timestamp) first
-            let userArray = [];
-            for(let id in users) { userArray.push({ id, ...users[id] }); }
-            userArray.sort((a, b) => (b.lastLogin || 0) - (a.lastLogin || 0));
-
-            totalBox.innerText = userArray.length;
-
-            userArray.forEach(u => {
-                let statusClass = "status-active";
-                let statusText = u.status;
-                let banCountdown = "";
-
-                // Check if Suspension is expired
-                if(u.status === "Suspended" && u.banUntil) {
-                    if(Date.now() > u.banUntil) {
-                        statusText = "Active (Suspension Expired)";
-                        statusClass = "status-active";
-                    } else {
-                        statusClass = "status-suspended";
-                        let timeLeft = Math.round((u.banUntil - Date.now()) / 60000);
-                        banCountdown = `<br><span style="color:orange; font-size:11px;">Expires in: ${timeLeft} min</span>`;
-                    }
-                } else if(u.status === "Banned") {
-                    statusClass = "status-banned";
+            data.forEach(u => {
+                const safeEmail = u.email ? u.email.replace(/\./g, ',') : u.id;
+                
+                // History Items
+                let historyHtml = "";
+                if(u.history) {
+                    const logs = Object.values(u.history).reverse();
+                    logs.forEach(query => {
+                        historyHtml += `<span class="history-tag">${query}</span>`;
+                    });
+                } else {
+                    historyHtml = "<i style='color:gray; font-size:12px;'>No recent searches.</i>";
                 }
 
                 list.innerHTML += `
-                    <div class="user-card">
-                        <div class="user-info">
-                            <p><b style="color:white; font-size:16px;">${u.name}</b></p>
-                            <p>Email: ${u.email}</p>
-                            <p>M-ID: <span class="id">${u.id}</span></p>
-                            <p>Status: <span class="${statusClass}">${statusText}</span> ${banCountdown}</p>
+                    <div class="user-card" id="card_${u.id}">
+                        <div class="main-info">
+                            <div>
+                                <p><b style="color:white; font-size:18px;">${u.name}</b></p>
+                                <p style="font-size:13px;">Email: ${u.email}</p>
+                                <p style="font-size:13px;">M-ID: <span class="id">${u.id}</span></p>
+                            </div>
+                            <div style="text-align:right;">
+                                <span style="font-size:10px; color:gray;">STATUS</span><br>
+                                <b style="color:${u.status === 'Banned' ? 'red' : u.status === 'Suspended' ? 'orange' : 'lime'}">${u.status}</b>
+                            </div>
                         </div>
-                        <div class="controls">
-                            <div class="suspend-input-group">
-                                <input type="number" id="val_${u.id}" value="10">
-                                <select id="unit_${u.id}">
-                                    <option value="m">Min</option>
-                                    <option value="h">Hrs</option>
-                                    <option value="d">Days</option>
-                                </select>
-                                <button class="btn btn-sus" onclick="suspendUser('${u.id}')">Suspend</button>
+
+                        <button class="btn btn-history" onclick="toggleHistory('${u.id}')">View User Search History ▼</button>
+                        <div class="history-box" id="hist_${u.id}">
+                            <p style="font-size:11px; color:gray; margin-bottom:10px;">RECENT SEARCH LOGS:</p>
+                            ${historyHtml}
+                        </div>
+
+                        <div class="controls-row">
+                            <div style="display:flex; gap:5px;">
+                                <input type="number" id="val_${u.id}" value="10" style="width:50px; background:#000; border:1px solid #444; color:white; padding:5px; border-radius:4px;">
+                                <button class="btn btn-sus" onclick="suspendUser('${u.id}')">Suspend (Min)</button>
                             </div>
                             <div style="display:flex; gap:5px;">
-                                <button class="btn btn-ban" onclick="changeStatus('${u.id}', 'Banned')">Perm Ban</button>
-                                <button class="btn btn-active" onclick="changeStatus('${u.id}', 'Active')">Activate</button>
+                                <button class="btn btn-ban" onclick="changeStatus('${u.id}', 'Banned')">Ban</button>
+                                <button class="btn btn-active" onclick="changeStatus('${u.id}', 'Active')">Active</button>
                             </div>
                         </div>
                     </div>
                 `;
             });
-        });
+        }
+
+        // SERVER INTERIOR SEARCH LOGIC
+        function filterUsers() {
+            const term = document.getElementById("serverSearchInput").value.toLowerCase();
+            const filtered = allUsersData.filter(u => 
+                u.name.toLowerCase().includes(term) || 
+                u.id.toLowerCase().includes(term) ||
+                u.email.toLowerCase().includes(term)
+            );
+            renderUsers(filtered);
+        }
+
+        function toggleHistory(id) {
+            const box = document.getElementById("hist_" + id);
+            box.style.display = box.style.display === "block" ? "none" : "block";
+        }
 
         function changeStatus(id, status) {
-            db.ref('users/' + id).update({ status: status, banUntil: null })
-              .then(() => alert(id + " is " + status));
+            db.ref('users/' + id).update({ status: status });
         }
 
         function suspendUser(id) {
-            let val = document.getElementById("val_" + id).value;
-            let unit = document.getElementById("unit_" + id).value;
-            let ms = 0;
-
-            if(unit === 'm') ms = val * 60 * 1000;
-            if(unit === 'h') ms = val * 60 * 60 * 1000;
-            if(unit === 'd') ms = val * 24 * 60 * 60 * 1000;
-
-            let banUntil = Date.now() + ms;
-
-            db.ref('users/' + id).update({ 
-                status: "Suspended", 
-                banUntil: banUntil 
-            }).then(() => alert(id + " suspended for " + val + unit));
+            const mins = document.getElementById("val_" + id).value;
+            const until = Date.now() + (mins * 60 * 1000);
+            db.ref('users/' + id).update({ status: "Suspended", banUntil: until });
         }
     </script>
 </body>
