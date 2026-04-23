@@ -1015,39 +1015,47 @@ const smartData ={
       }
     }
     <script>
-  // 1. Aapka purana data yahan pehle se hai
-  const basicData = { ... };
-  const smartData = { ... };
+// Create search box dynamically
+const searchBox = document.createElement("input");
+searchBox.placeholder = "Search anything...";
+searchBox.style.width = "100%";
+searchBox.style.padding = "10px";
+searchBox.style.marginBottom = "20px";
+document.body.prepend(searchBox);
 
-  // 2. YAHAN PAR PASTE KAREIN (API CODE)
-  const M_MASTER_DATABASE = {
-      knowledge: typeof basicData !== 'undefined' ? basicData : {},
-      entities: typeof smartData !== 'undefined' ? smartData.entities : {}
-  };
+// Create result container
+const resultBox = document.createElement("div");
+document.body.appendChild(resultBox);
 
-  function mUniversalSearchAPI(query) {
-      const q = query.toLowerCase().trim();
-      if (M_MASTER_DATABASE.knowledge[q]) {
-          return { status: "success", type: "knowledge_base", result: M_MASTER_DATABASE.knowledge[q] };
-      }
-      for (let key in M_MASTER_DATABASE.entities) {
-          let item = M_MASTER_DATABASE.entities[key];
-          if (key === q || (item.aliases && item.aliases.includes(q))) {
-              return { status: "success", type: "smart_entity", result: item.properties };
-          }
-      }
-      return { status: "error", message: "Data not found" };
+// Get all text content from page
+const allContent = document.body.innerText.toLowerCase();
+
+// Split into lines
+const lines = allContent.split("\n").filter(line => line.trim() !== "");
+
+// Search function
+searchBox.addEventListener("keyup", function () {
+  const query = this.value.toLowerCase();
+  resultBox.innerHTML = "";
+
+  if (query === "") return;
+
+  const results = lines.filter(line => line.includes(query));
+
+  if (results.length === 0) {
+    resultBox.innerHTML = "<p>No results found</p>";
+    return;
   }
 
-  window.M_Universal = {
-      info: { name: "M-Universal Global Database", founder: "M.H", version: "1.0.0" },
-      search: mUniversalSearchAPI,
-      getSuggestions: function(input) {
-          const val = input.toLowerCase();
-          const keys = [...Object.keys(M_MASTER_DATABASE.knowledge), ...Object.keys(M_MASTER_DATABASE.entities)];
-          return keys.filter(k => k.includes(val)).slice(0, 10);
-      }
-  };
-  
-  console.log("API Ready!");
-          </script>
+  results.forEach(r => {
+    const div = document.createElement("div");
+    div.style.background = "#fff";
+    div.style.margin = "5px 0";
+    div.style.padding = "10px";
+    div.style.borderRadius = "6px";
+    div.style.boxShadow = "0 0 5px rgba(0,0,0,0.1)";
+    div.innerText = r;
+    resultBox.appendChild(div);
+  });
+});
+    </script>
