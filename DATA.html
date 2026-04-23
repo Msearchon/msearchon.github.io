@@ -1015,47 +1015,78 @@ const smartData ={
       }
     }
     <script>
-// Create search box dynamically
-const searchBox = document.createElement("input");
-searchBox.placeholder = "Search anything...";
-searchBox.style.width = "100%";
-searchBox.style.padding = "10px";
-searchBox.style.marginBottom = "20px";
-document.body.prepend(searchBox);
 
-// Create result container
-const resultBox = document.createElement("div");
-document.body.appendChild(resultBox);
+// ===== CLEAN TEXT FUNCTION =====
+function clean(text) {
+  return text.toLowerCase().replace(/[^\w\s]/g, "");
+}
 
-// Get all text content from page
-const allContent = document.body.innerText.toLowerCase();
+// ===== SEARCH FUNCTION =====
+function smartSearch(query) {
+  query = clean(query);
+  let words = query.split(" ");
+  let results = [];
 
-// Split into lines
-const lines = allContent.split("\n").filter(line => line.trim() !== "");
+  // SEARCH IN BASIC DATA (top Q&A)
+  for (let key in window.basicData || {}) {
+    let keyClean = clean(key);
 
-// Search function
-searchBox.addEventListener("keyup", function () {
-  const query = this.value.toLowerCase();
-  resultBox.innerHTML = "";
+    let match = words.every(w => keyClean.includes(w));
+    if (match) {
+      results.push(key + " → " + basicData[key]);
+    }
+  }
 
-  if (query === "") return;
+  // SEARCH IN SMART DATA (entities)
+  if (window.smartData && smartData.entities) {
+    for (let name in smartData.entities) {
+      let entity = smartData.entities[name];
 
-  const results = lines.filter(line => line.includes(query));
+      let allNames = [name, ...(entity.aliases || [])]
+        .map(n => clean(n));
 
-  if (results.length === 0) {
-    resultBox.innerHTML = "<p>No results found</p>";
+      let match = words.every(w =>
+        allNames.some(n => n.includes(w))
+      );
+
+      if (match) {
+        let text = name.toUpperCase() + ":\n";
+
+        for (let prop in entity.properties) {
+          text += prop + ": " + entity.properties[prop] + "\n";
+        }
+
+        results.push(text);
+      }
+    }
+  }
+
+  return results;
+}
+
+// ===== UI FUNCTION =====
+function searchNow() {
+  let q = document.getElementById("search").value;
+  let output = document.getElementById("results");
+
+  let res = smartSearch(q);
+
+  output.innerHTML = "";
+
+  if (res.length === 0) {
+    output.innerHTML = "<div>No result found</div>";
     return;
   }
 
-  results.forEach(r => {
-    const div = document.createElement("div");
-    div.style.background = "#fff";
-    div.style.margin = "5px 0";
+  res.forEach(r => {
+    let div = document.createElement("div");
+    div.style.background = "#111";
     div.style.padding = "10px";
-    div.style.borderRadius = "6px";
-    div.style.boxShadow = "0 0 5px rgba(0,0,0,0.1)";
+    div.style.margin = "5px";
     div.innerText = r;
-    resultBox.appendChild(div);
+    output.appendChild(div);
   });
-});
+}
+
     </script>
+
