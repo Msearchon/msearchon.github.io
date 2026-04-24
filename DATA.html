@@ -1019,77 +1019,82 @@ const smartData ={
 }; // closes smartData
     <script>
 
-// ===== CLEAN TEXT FUNCTION =====
-function clean(text) {
-  return text.toLowerCase().replace(/[^\w\s]/g, "");
-}
+/* ======================================================
+   M-SEARCH ENGINE & CHATBOT LOGIC
+   ====================================================== */
 
-// ===== SEARCH FUNCTION =====
-function smartSearch(query) {
-  query = clean(query);
-  let words = query.split(" ");
-  let results = [];
+// 1. UI Create karna (Chat Interface)
+document.body.innerHTML = `
+    <div id="m-chat-container" style="max-width:600px; margin:20px auto; font-family:sans-serif; background:#0f0f0f; color:#e8eaed; height:95vh; display:flex; flex-direction:column; border:1px solid #333; border-radius:15px; overflow:hidden;">
+        <div style="padding:20px; border-bottom:1px solid #333; text-align:center; font-size:24px; font-weight:bold; color:#8ab4f8;">M-Search Engine</div>
+        <div id="chat-window" style="flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:15px;"></div>
+        <div style="padding:20px; position:relative;">
+            <div id="m-suggestions" style="position:absolute; bottom:80px; width:92%; background:#2d2e30; border-radius:10px; display:none; border:1px solid #5f6368; z-index:100;"></div>
+            <input type="text" id="m-input" placeholder="Yahan search karein ya type karein..." 
+                style="width:100%; height:50px; border-radius:25px; border:1px solid #5f6368; background:#2d2e30; color:white; padding:0 20px; outline:none; box-sizing:border-box;">
+        </div>
+    </div>
+`;
 
-  // SEARCH IN BASIC DATA (top Q&A)
-  for (let key in window.basicData || {}) {
-    let keyClean = clean(key);
+const chatWindow = document.getElementById('chat-window');
+const mInput = document.getElementById('m-input');
+const sugBox = document.getElementById('m-suggestions');
 
-    let match = words.every(w => keyClean.includes(w));
-    if (match) {
-      results.push(key + " → " + basicData[key]);
+// Bot ka pehla message
+addMsg("Hello! Main M-Universal Search Engine hoon. Aap m-search, mgplc ya kisi bhi sawal ke baare mein pooch sakte hain.", 'bot');
+
+// 2. Suggestion Logic (Jaise aapne kaha, search karne par related questions dikhaye)
+mInput.oninput = function() {
+    const val = this.value.toLowerCase().trim();
+    if (!val) { sugBox.style.display = "none"; return; }
+
+    const allKeys = [...Object.keys(basicData), ...Object.keys(smartData.entities)];
+    const matches = allKeys.filter(k => k.includes(val)).slice(0, 6);
+
+    if (matches.length > 0) {
+        sugBox.innerHTML = matches.map(m => `
+            <div style="padding:12px 20px; cursor:pointer; border-bottom:1px solid #3c4043;" onclick="processSearch('${m}')">${m}</div>
+        `).join('');
+        sugBox.style.display = "block";
+    } else {
+        sugBox.style.display = "none";
     }
-  }
+};
 
-  // SEARCH IN SMART DATA (entities)
-  if (window.smartData && smartData.entities) {
-    for (let name in smartData.entities) {
-      let entity = smartData.entities[name];
+// 3. Search aur Response Logic
+window.processSearch = function(q) {
+    mInput.value = "";
+    sugBox.style.display = "none";
+    addMsg(q, 'user');
 
-      let allNames = [name, ...(entity.aliases || [])]
-        .map(n => clean(n));
+    let reply = "Maaf kijiye, mere database mein iska jawab nahi mila.";
+    const query = q.toLowerCase().trim();
 
-      let match = words.every(w =>
-        allNames.some(n => n.includes(w))
-      );
-
-      if (match) {
-        let text = name.toUpperCase() + ":\n";
-
-        for (let prop in entity.properties) {
-          text += prop + ": " + entity.properties[prop] + "\n";
-        }
-
-        results.push(text);
-      }
+    // Smart Data Check
+    if (smartData.entities[query]) {
+        const p = smartData.entities[query].properties;
+        reply = `<b>${query.toUpperCase()}</b><br>${p.about}<br><br>` + 
+                (p.founder ? `<b>Founder:</b> ${p.founder}<br>` : "") +
+                (p.owner ? `<b>Owner:</b> ${p.owner}` : "");
+    } 
+    // Basic Data Check
+    else if (basicData[query]) {
+        reply = basicData[query];
     }
-  }
 
-  return results;
+    setTimeout(() => addMsg(reply, 'bot'), 400);
+};
+
+// Enter key se search
+mInput.onkeypress = (e) => { if(e.key === "Enter") processSearch(mInput.value); };
+
+// Message UI helper
+function addMsg(text, type) {
+    const d = document.createElement('div');
+    d.style.cssText = type === 'user' ? 
+        "align-self:flex-end; background:#8ab4f8; color:#000; padding:10px 15px; border-radius:15px 15px 0 15px; max-width:80%;" : 
+        "align-self:flex-start; background:#1f1f1f; color:#fff; padding:10px 15px; border-radius:15px 15px 15px 0; max-width:80%; border-left:4px solid #8ab4f8;";
+    d.innerHTML = text;
+    chatWindow.appendChild(d);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
 }
-
-// ===== UI FUNCTION =====
-function searchNow() {
-  let q = document.getElementById("search").value;
-  let output = document.getElementById("results");
-
-  let res = smartSearch(q);
-
-  output.innerHTML = "";
-
-  if (res.length === 0) {
-    output.innerHTML = "<div>No result found</div>";
-    return;
-  }
-
-  res.forEach(r => {
-    let div = document.createElement("div");
-    div.style.background = "#111";
-    div.style.padding = "10px";
-    div.style.margin = "5px";
-    div.innerText = r;
-    output.appendChild(div);
-  });
-}
-
-    </script>
-
