@@ -1,381 +1,1451 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>M Search - Professional Knowledge Engine</title>
-    <meta name="description" content="M Search: A professional web portal for Global Web Results, Images, and Videos.">
-    <meta name="author" content="Mehdi Hasan / MGPLC">
-
-    <style>
-        /* AAPKA EXACT ORIGINAL UI SYSTEM */
-        :root { --blue: #8ab4f8; --bg: #0f0f0f; --text: #e8eaed; --card: #1f1f1f; --green: #34a853; }
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; transition: 0.3s; }
-        
-        /* Header ko vertical stack se badal kar row alignment mein lana */
-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px 5%;
+<!DOCTYPE html>  <html lang="en">  <head>    <meta charset="UTF-8">      <meta name="viewport" content="width=device-width, initial-scale=1.0">        <title>M Search</title>  <style>          body{  margin:0;
+font-family:Arial, sans-serif;
+background:#0f0f0f;
+color:white;
+overflow-x:hidden;
+}    /* SPLASH */
+#splash{
+position:fixed;
+inset:0;
+background:#0f0f0f;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:1000;
 }
 
-/* Yeh main container hai jo search aur lines ko bagal mein rakhta hai */
-.search-container-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px; /* Dono ke beech ka gap */
-    width: 100%;
-    max-width: 600px;
+#splashLogo{
+display:flex;
+justify-content:center;
+align-items:center;
 }
 
-.search-box {
-    flex: 1; /* Search bar bachi hui puri jagah lega */
+/* NEW LOGO */
+.logoCircle{
+width:150px;
+height:150px;
+border-radius:50%;
+background:#4285F4;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:75px;
+font-weight:bold;
+color:white;
+}
+/* COMMON */
+.page{ display:none; padding:22px; }
+.show{ display:block; }
+
+/* HEADER */
+.header{
+text-align:center;
+margin-top:40px;
 }
 
-/* Teen lines ki styling */
-.menu-trigger {
-    font-size: 28px;
-    cursor: pointer;
-    color: var(--text);
-    line-height: 1;
-    user-select: none;
+.header h1{
+font-size:48px;
+margin-bottom:35px;
 }
-        .logo { font-size: 24px; font-weight: bold; color: #4285F4; text-decoration: none; cursor: pointer; }
-        .logo span { color: white; }
-        
-        /* SEARCH BOX CENTERED */
-        .search-box { flex: 1; max-width: 600px; margin: 0 20px; }
-        .search-input { width: 100%; height: 44px; border-radius: 22px; border: 1px solid #5f6368; background: #202124; color: white; padding: 0 20px; outline: none; transition: 0.3s; }
-        .search-input:focus { border-color: var(--blue); background: #303134; }
 
-        .tabs { display: flex; gap: 20px; padding: 10px 5% 0 150px; font-size: 14px; color: #9aa0a6; border-bottom: 1px solid #333; }
-        .tab { padding-bottom: 10px; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.3s; }
-        .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+/* SEARCH BAR */
+.search-pad{
+width:100%;
+height:64px;
+border-radius:40px;
+border:none;
+padding:0 26px;
+font-size:22px;
+background:#1f1f1f;
+color:white;
+outline:none;
+}
 
-        main { padding: 20px 5% 40px 150px; max-width: 1000px; min-height: 80vh; }
-        
-        /* WEB & MEDIA STYLES */
-        .res-item { margin-bottom: 30px; animation: fadeIn 0.4s; }
-        .res-url { font-size: 13px; color: #bdc1c6; margin-bottom: 2px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .res-title { font-size: 20px; color: var(--blue); text-decoration: none; display: block; margin-bottom: 5px; }
-        .res-title:hover { text-decoration: underline; }
-        .res-snippet { font-size: 14px; color: #bdc1c6; line-height: 1.5; }
-        .badge { font-size: 10px; padding: 1px 5px; border-radius: 3px; margin-right: 8px; border: 1px solid; vertical-align: middle; }
-        .badge-web { color: var(--green); border-color: var(--green); }
-        .badge-ref { color: #fbbc05; border-color: #fbbc05; }
+/* BUTTON */
+.search-btn{
+width:100%;
+height:56px;
+margin-top:20px;
+border-radius:35px;
+border:none;
+font-size:20px;
+background:#4285F4;
+color:white;
+cursor:pointer;
+}
 
-        .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
-        .img-card { background: var(--card); border-radius: 8px; overflow: hidden; border: 1px solid #333; transition: 0.3s; }
-        .img-card:hover { transform: translateY(-5px); border-color: var(--blue); }
-        .img-card img { width: 100%; height: 150px; object-fit: cover; display: block; }
-        .img-card p { padding: 8px; font-size: 12px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* BIG BOXES */
+.big-box{
+background:#1f1f1f;
+border-radius:20px;
+padding:26px;
+margin-top:22px;
+}
 
-        .video-item { display: flex; gap: 15px; background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; transition: 0.3s; }
-        .video-item:hover { border-color: var(--blue); }
-        .video-thumb { width: 160px; height: 90px; background: #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.big-box h2{
+font-size:24px;
+margin:0 0 10px;
+}
 
-        /* AI CHAT UI */
-        #aiChatView { display: none; flex-direction: column; height: 70vh; }
-        #chatMessages { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 15px; }
-        .msg { max-width: 80%; padding: 12px 18px; border-radius: 18px; line-height: 1.5; font-size: 15px; animation: fadeIn 0.3s; }
-        .user-msg { align-self: flex-end; background: #4285f4; color: white; border-bottom-right-radius: 4px; }
-        .bot-msg { align-self: flex-start; background: #303134; color: #e8eaed; border-bottom-left-radius: 4px; border: 1px solid #444; }
-        .chat-input-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 60%; background: #303134; padding: 10px; border-radius: 30px; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 1000; }
-        #chatInput { flex: 1; background: transparent; border: none; color: white; padding: 10px 20px; outline: none; }
-        .send-btn { background: #4285f4; border: none; color: white; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-right: 5px; }
+.big-box p{
+font-size:18px;
+color:#ccc;
+}
 
-        /* SIDE MENU (M STUDIO) */
-        body.light-mode { --bg: #ffffff; --text: #202124; --card: #f1f3f4; }
-        #sideMenu {
-            position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
-            background: var(--card); border-left: 1px solid #333; z-index: 1001;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.5);
-        }
-        #sideMenu.active { right: 0; }
-        .menu-header { padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
-        .menu-item { padding: 15px 25px; cursor: pointer; border-bottom: 1px solid #333; transition: 0.2s; font-size: 14px; }
-        .menu-item:hover { background: rgba(66, 133, 244, 0.1); color: var(--blue); }
-        .pane { display: none; flex-direction: column; flex: 1; padding: 15px; overflow-y: auto; }
-        #noteArea { width: 100%; height: 350px; background: rgba(0,0,0,0.2); color: var(--text); border: 1px solid #444; padding: 12px; border-radius: 8px; resize: none; outline: none; }
-        .history-entry { padding: 12px; border-bottom: 1px solid #333; cursor: pointer; font-size: 13px; }
+/* HISTORY */
+.history{ margin-top:20px; }
 
-        .loading-dots:after { content: ' .'; animation: dots 1s steps(5, end) infinite; }
-        @keyframes dots { 0%, 20% { color: rgba(0,0,0,0); text-shadow: .5em 0 0 rgba(0,0,0,0), 1em 0 0 rgba(0,0,0,0); } 40% { color: var(--blue); text-shadow: .5em 0 0 rgba(0,0,0,0), 1em 0 0 rgba(0,0,0,0); } 60% { text-shadow: .5em 0 0 var(--blue), 1em 0 0 rgba(0,0,0,0); } 80%, 100% { text-shadow: .5em 0 0 var(--blue), 1em 0 0 var(--blue); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+.history-item{
+padding:10px;
+font-size:16px;
+color:#aaa;
+cursor:pointer;
+}
 
-        @media (max-width: 800px) {
-            header { padding: 10px; }
-            .tabs { padding: 10px; justify-content: center; }
-            main { padding: 20px; }
-            .chat-input-container { width: 90%; }
-        }
-    </style>
-</head>
-<body>
+/* PAGE BUTTONS */
+.page-buttons{
+display:flex;
+gap:10px;
+margin-bottom:10px;
+}
 
-    <header>
-    <div class="logo" onclick="location.reload()">M <span>Search</span></div>
+.page-btn{
+flex:1;
+height:45px;
+border:none;
+border-radius:10px;
+background:#4285F4;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+/* THREE DOT */
+#menuBtn{
+position:absolute;
+top:15px;
+right:15px;
+font-size:28px;
+cursor:pointer;
+}
+
+/* MENU BOX */
+#menuBox{
+position:absolute;
+top:55px;
+right:15px;
+background:#1f1f1f;
+border-radius:10px;
+padding:10px;
+display:none;
+}
+
+.menu-item{
+padding:10px;
+cursor:pointer;
+}
+
+/* HISTORY PAGE */
+#historyPage{
+position: fixed;
+inset: 0;
+background: #0f0f0f;
+padding: 20px;
+display: none;
+z-index: 999;
+
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
+}
+
+#clearBtn{
+background:green;
+color:white;
+border:none;
+padding:10px;
+margin-top:20px;
+width:100%;
+}
+
+#closeHistory{
+position:absolute;
+top:15px;
+right:20px;
+font-size:26px;
+cursor:pointer;
+}
+
+/* LIGHT MODE */
+.light{
+background:linear-gradient(180deg,#f4f7fb,#e9eef5);
+color:#000000;
+}
+
+.light .search-pad{
+background:#ffffff;
+color:#000000;
+border:2px solid #d0d9e5;
+}
+
+.light .big-box{
+background:#ffffff;
+color:#000000;
+}
+
+.light #menuBox{
+background:#ffffff;
+color:#000000;
+}
+
+.light #historyPage{
+background:#eef3f9;
+color:#1b1f24;
+}
+
+</style>  </head>  <body>  <div id="splash">
+
+<div id="splashLogo">
+<div class="logoCircle">M</div>
+</div>            
+</div>  <div id="menuBtn" onclick="toggleMenu()">⋮</div>  <div id="menuBox">            
+<div class="menu-item" onclick="openHistory()">History</div>            
+<div class="menu-item" onclick="toggleMode()">Mode</div>            
+</div>  <div id="historyPage">            
+<div id="closeHistory" onclick="closeHistory()">✕</div>            
+<h2>History</h2>            
+<div id="fullHistoryContainer" style="max-height:70vh; overflow-y:auto;"></div>  
+<button id="clearBtn" onclick="clearHistory()">Clear History</button>         
+</div>  <div id="page1" class="page show">  <div class="header">            
+<h1>M Search</h1>            
+</div>  <input class="search-pad" placeholder="Search on M Search" onclick="goPage(2)">  <div class="big-box">            
+<h2>Important Rules</h2>            
+<p>When you open M Search, refresh it once.</p>            
+</div>  <div class="big-box">            
+<h2>News 📊</h2>            
+<p>A simple and fast search built in 2023.</p>            
+</div>  <div class="big-box">            
+<h2>🌐 M SEARCH </h2>            
+<p>ALL File information.</p>            
+</div>  </div>  <div id="page2" class="page">  <div class="page-buttons">            
+<button class="page-btn" onclick="goPage(1)">Home</button>            
+<button class="page-btn" onclick="goPage(3)">Result</button>            
+</div>  <input id="query" class="search-pad" placeholder="Search" oninput="showSuggestions()">  <button class="search-btn" onclick="search()">Search</button>  <div class="history" id="history"></div>  </div>  <div id="page3" class="page">  <h2>M Search Result</h2>  <p style="font-size:20px">            
+<b>Answer:</b>            
+<span id="answer"></span>            
+</p>  <button class="search-btn" onclick="goBack()">Back</button>  </div>  <script>    /* ORIGINAL DATA — UNCHANGED */  const data={      
+"what is python":"Python is a programming language.",      
+"what is google":"Google is a search engine.",      
+"what is computer":"A computer is an electronic machine.",            
+"tell me what is miraz":"Miraz is a #️⃣.",
+"total app":"ToTaL app is 48+.",
+"total continent":"3 is M continent Ron continent EA continent."
+};   
+  /* ✅ FULL SMART DATA EMBEDDED (YOUR COMPLETE JSON) */  
+const smartData ={  
+"entities": {  "m search": {
+"aliases": ["msearch", "m search"],
+"properties": {
+"about": "M Search is a mini search engine.",
+"founder": "M.H",
+"owner": "MGPLC",
+"created": "2023"
+}
+},
+
+"mgplc": {
+"aliases": ["m group private limited","m group pvt Ltd","mgplc"],
+"properties": {
+"about": "MGPLC is the parent company of M Search and 18 other companys.",
+"founder": "M.H",
+"created": "2017",
+"full_name":"M GROUP PRIVATE LIMITED COMPANY",
+"total_company": "18",
+"company": "M SEARCH ALL, TSC Club, TComputer, TC, XCAR, DEDF GROUP, LO, DAMER, DX, BANK OF Mcity, ORL, MNEWS, ESM AIRLINE, STD SODA, UN, OUT STUDIO, Hoill, ALLONE, ETC",
+"network": "1.2 Trillion MSDR",
+"owner": "M.H"
+}
+},
+
+"pretext program": {
+"aliases": ["pretext program", "pretextprogram"],
+"properties": {
+"about": "Pretext Program is the first testing files data transfer into digital data successfully.",
+"founder": "M.H",
+"created": "15/1/2026"
+}
+},
+
+"m.h": {
+"aliases": ["mehdi hasan", "m h"],
+"properties": {
+"about": "M.H is creator of M Search, Pretext Program, and founder of MGPLC.",
+"full_name": "Mehdi Hasan",
+"role": "Founder and Creator"
+}
+},
+
+"atabb": {
+"aliases": ["atabb app","atabb"],
+"properties": {
+"about": "ATABB is the first entertainment app.",
+"owner":"ATABB",
+"category": "Entertainment",
+"created": "5/12/2024"
+}
+},
+
+"pplco": {
+"aliases": ["pplco app"],
+"properties": {
+"about": "PPLCO is an entertainment app.",
+"owner":"PPLCO",
+"category": "Entertainment",
+"created": "5/12/2024"
+}
+},
+
+"redx": {
+"aliases": ["redx app"],
+"properties": {
+"about": "REDX is an entertainment app.",
+"owner":"REDX COMPANY",
+"category": "Entertainment",
+"created": "5/12/2024"
+}
+},
+
+"music one": {
+"aliases": ["music one app"],
+"properties": {
+"about": "Music ONE is a music streaming app.",
+"owner":"MUSIC ONE",
+"category": "Music",
+"created": "5/12/2024"
+}
+},
+
+"cpay": {
+"aliases": ["cpay app"],
+"properties": {
+"about": "CPAY is a payment app.",
+"owner":"CPAY",
+"category": "Finance",
+"created": "5/12/2024"
+}
+},
+
+"ssbpay": {
+"aliases": ["ssbpay app"],
+"properties": {
+"about": "SSBPAY is a digital payment app.",
+"owner":"State so bank",
+"category": "Finance",
+"created": "5/12/2024"
+}
+},
+
+"food on": {
+"aliases": ["food on app"],
+"properties": {
+"about": "FOOD ON is a food delivery app.",
+"owner":"FOOD ON",
+"category": "Food",
+"created": "5/12/2024"
+}
+},
+
+"mnews": {
+"aliases": ["mnews app"],
+"properties": {
+"about": "MNEWS is a news company and media app.",
+"owner":"MGPLC",
+"category": "News",
+"created": "5/12/2024"
+}
+},
+
+"turbo": {
+"aliases": ["turbo app"],
+"properties": {
+"about": "TURBO is a share market app.",
+"owner":"TURBO",
+"category": "Finance",
+"created": "5/12/2024"
+}
+},
+
+"edi": {
+"aliases": ["edi app"],
+"properties": {
+"about": "EDI is a stock market app.",
+"owner":"EDI",
+"category": "Finance",
+"created": "5/12/2024"
+}
+},
+
+"m messege": {
+"aliases": ["m messege app", "my talk"],
+"properties": {
+"about": "M Messege is a messaging app.",
+"owner":"MGPLC",
+"category": "Communication",
+"created": "5/12/2024"
+}
+},
+
+"m phone": {
+"aliases": ["m phone app"],
+"properties": {
+"about": "M Phone is a phone utility app.",
+"owner":"MGPLC",
+"category": "Communication",
+"created": "5/12/2024"
+}
+},
+
+"mapp": {
+"aliases": ["mapp app"],
+"properties": {
+"about": "MAPP is the holding app of all apps.",
+"owner":"MGPLC",
+"category": "Utility",
+"created": "5/12/2024",
+"total apps": "48"
+}
+},
+
+"univercity of m desh education world": {
+"aliases": ["university of m.e.w", "mew"],
+"properties": {
+"about": "University of M Desh Education World.",
+"location": "Mcity",
+"created": "2/FEB/2026"
+}
+},
+
+"univercity of treepers": {
+"aliases": ["treepers university"],
+"properties": {
+"about": "University of TREEPERS.",
+"location": "SPL",
+"created": "3/FEB/2026"
+}
+},
+
+"student of college": {
+"aliases": ["students of collage"],
+"properties": {
+"about": "Students of College.",
+"student_created": "3/FEB/2026",
+"location":"AMRS"
+}
+},
+
+    "ibc": {
+      "aliases": ["international broadcasting company", "ibc company"],
+      "properties": {
+        "full_form": "International Broadcasting Company",
+        "about": "IBC is an international broadcasting company working with government.",
+        "created": "20/5/2025",
+        "under": "M Desh Government"
+      }
+    },
+
+    "cwi": {
+      "aliases": ["creat world intelligent"],
+      "properties": {
+        "full_form": "Creat World Intelligent",
+        "about": "CWI is a system used for saving file data.",
+        "created": "2025"
+      }
+    },
+
+    "centor international game": {
+      "aliases": ["centor game", "cig","centor"],
+      "properties": {
+        "about": "International Game Center is a gaming center.",
+        "created": "2024",
+        "first game": "Swimming Game (2024)",
+        "second game": "Running Game (2025)"
+      }
+    },
+
+    "creat world": {
+      "aliases": ["create world"],
+      "properties": {
+        "about": "Creat World is  created between 2018 and 2019.",
+        "founder": "M.H",
+        "created": "2018-2019"
+      }
+    },
+  
+
+    "company list": {
+      "aliases": ["all companys", "company names"],
+      "properties": {
+        "about":  "AC, AOIL, APL, ALLONE, 9A9A, ABM, ATABB, ASTC, ALB, ADC, ADPLC, AO, BPL, BK, BBS, BUS, BNC, BLUE, BBD, BANK OF Mcity, CO, COLL, CRA, CON, CF BANK, CG, DAMER, DX, DD, DDG, DEDF GROUP, DOCK, DTV, ELETc, EOX, ECO CLUB, ESM AIRLINES, FOX, FC STUDIO, GOME, GK INDUSTRIES, HOIL, HARBER, HOTSONS LTD, HO, HONY, HDF BANK, ICWRA, IBC, ICCD, I NEWS, JAN, TC, T COMPUTER, TWOD, TSC, LALAI, LO, LOVO, NT, NCDD, ORL, OSP, O BANK, OLLE, PISK, PIZK, PPC, POST, PXO, PROO, RC, RVO, ROCK STEN, RAB, STD-SODA, SSB, SUPER M, SORY, SNOW, STER, VOX, VIC, VOL, VIT, WS COMPANY, X CAR, XOT, XFO, XNEWS",
+        "company": "AC, AOIL, APL, ALLONE, 9A9A, ABM, ATABB, ASTC, ALB, ADC, ADPLC, AO, BPL, BK, BBS, BUS, BNC, BLUE, BBD, BANK OF Mcity, CO, COLL, CRA, CON, CF BANK, CG, DAMER, DX, DD, DDG, DEDF GROUP, DOCK, DTV, ELETc, EOX, ECO CLUB, ESM AIRLINES, FOX, FC STUDIO, GOME, GK INDUSTRIES, HOIL, HARBER, HOTSONS LTD, HO, HONY, HDF BANK, ICWRA, IBC, ICCD, I NEWS, JAN, TC, T COMPUTER, TWOD, TSC, LALAI, LO, LOVO, NT, NCDD, ORL, OSP, O BANK, OLLE, PISK, PIZK, PPC, POST, PXO, PROO, RC, RVO, ROCK STEN, RAB, STD-SODA, SSB, SUPER M, SORY, SNOW, STER, VOX, VIC, VOL, VIT, WS COMPANY, X CAR, XOT, XFO, XNEWS"
+      }
+    },
+             
+    "ac": {
+      "aliases": ["ac company"],
+      "properties": {
+        "about": "AC is an internal company.",
+        "category": "Internal",
+        "created": "2020"
+      }
+    },
+    "aoil": {
+      "aliases": ["aoil company"],
+      "properties": {
+        "about": "AOIL is an oil company.",
+        "category": "Oil",
+        "created": "2021"
+      }
+    },
+    "apl": {
+      "aliases": ["apl company"],
+      "properties": {
+        "about": "APL is a power company.",
+        "category": "Power",
+        "created": "2021"
+      }
+    },
+    "allone": {
+      "aliases": ["allone company"],
+      "properties": {
+        "about": "ALLONE is an internal company.",
+        "category": "Internal",
+        "created": "2023",
+        "owner": "MGPLC"
+      }
+    },
+    "9a9a": {
+      "aliases": ["9a9a company"],
+      "properties": {
+        "about": "9A9A is a medicine company.",
+        "category": "Medicine",
+        "created": "2023"
+      }
+    },
+    "abm": {
+      "aliases": ["abm company"],
+      "properties": {
+        "about": "ABM is an unknown type company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+    "atabb": {
+      "aliases": ["atabb company", "atabb online"],
+      "properties": {
+        "about": "ATABB is an online company.",
+        "category": "Online",
+        "created": "2023"
+      }
+    },
+    "astc": {
+      "aliases": ["astc company"],
+      "properties": {
+        "about": "ASTC is an advertising company.",
+        "category": "Advertising",
+        "created": "2024"
+      }
+    },
+    "alb": {
+      "aliases": ["alb company"],
+      "properties": {
+        "about": "ALB is an unknown type company.",
+        "category": "Unknown",
+        "created": "2022"
+      }
+    },
+    "adc": {
+      "aliases": ["adc company"],
+      "properties": {
+        "about": "ADC is a channel company.",
+        "category": "Channel",
+        "created": "2025"
+      }
+    },
+    "adplc": {
+      "aliases": ["adplc company"],
+      "properties": {
+        "about": "ADPLC is an internal company.",
+        "category": "Internal",
+        "created": "29/8/2025"
+      }
+    },
+    "ao": {
+      "aliases": ["ao company"],
+      "properties": {
+        "about": "AO is an unknown type company.",
+        "category": "Unknown",
+        "created": "2025"
+      }
+    },
+    "bpl": {
+      "aliases": ["bpl company"],
+      "properties": {
+        "about": "BPL is a power company.",
+        "category": "Power",
+        "created": "2021"
+      }
+    },
+    "bk": {
+      "aliases": ["bk company"],
+      "properties": {
+        "about": "BK is a food company.",
+        "category": "Food",
+        "created": "2024"
+      }
+    },
+    "bbs": {
+      "aliases": ["bbs company"],
+      "properties": {
+        "about": "BBS is a mobile company.",
+        "category": "Mobile",
+        "created": "2022",
+        "owner":"Lo mobile company"
+      }
+    },
+    "bus": {
+      "aliases": ["bus company"],
+      "properties": {
+        "about": "BUS is a travel company.",
+        "category": "Travel",
+        "created": "2021"
+      }
+    },
+    "bnc": {
+      "aliases": ["bnc company"],
+      "properties": {
+        "about": "BNC is an education company.",
+        "category": "Education",
+        "created": "2021",
+        "under": "M Desh Government"
+      }
+    },
+    "blue": {
+      "aliases": ["blue company"],
+      "properties": {
+        "about": "BLUE is a dress company.",
+        "category": "Dress",
+        "created": "2023"
+      }
+    },
+    "bbd": {
+      "aliases": ["bbd company"],
+      "properties": {
+        "about": "BBD is an unknown type company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+    "bank of mcity": {
+      "aliases": ["mcity bank"],
+      "properties": {
+        "about": "Bank of Mcity is a banking company.",
+        "category": "Banking",
+        "created": "2024",
+        "owner":"MGPLC"
+      }
+    },
+    "co": {
+      "aliases": ["co company"],
+      "properties": {
+        "about": "CO is an internal company.",
+        "category": "Internal",
+        "created": "2020"
+      }
+    },
+    "coll": {
+      "aliases": ["coll company"],
+      "properties": {
+        "about": "COLL is a toothpaste company.",
+        "category": "Toothpaste",
+        "created": "2021"
+      }
+    },
+    "cra": {
+      "aliases": ["cra company"],
+      "properties": {
+        "about": "CRA is a car company.",
+        "category": "Car",
+        "created": "2021"
+      }
+    },
+    "con": {
+      "aliases": ["con company"],
+      "properties": {
+        "about": "CON is an internal company.",
+        "category": "Internal",
+        "created": "2021"
+      }
+    },
+    "cf bank": {
+      "aliases": ["cfbank"],
+      "properties": {
+        "about": "CF Bank is a banking company.",
+        "category": "Banking",
+        "created": "2024"
+      }
+    },
+    "cg": {
+      "aliases": ["cg company"],
+      "properties": {
+        "about": "CG is an unknown type company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+    "damer": {
+      "aliases": ["damer company"],
+      "properties": {
+        "about": "DAMER is a cement company.",
+        "category": "Cement",
+        "created": "2020",
+        "under":"DEDF Group"
+      }
+    },
+    "dx": {
+      "aliases": ["dx company"],
+      "properties": {
+        "about": "DX is a medicine company.",
+        "category": "Medicine",
+        "created": "2021",
+        "under":"DEDF Group"
+      }
+    },
+    "dd": {
+      "aliases": ["dd company"],
+      "properties": {
+        "about": "DD is a mobile company.",
+        "category": "Mobile",
+        "created": "2022"
+      }
+    },
+    "ddg": {
+      "aliases": ["ddg company"],
+      "properties": {
+        "about": "DDG is a car company.",
+        "category": "Car",
+        "created": "2021"
+      }
+    },
+    "dedf group": {
+      "aliases": ["dedf"],
+      "properties": {
+        "about": "DEDF Group is a group company.",
+        "category": "Group",
+        "created": "2021",
+        "owner":"MGPLC"
+      }
+    },
+    "dock": {
+      "aliases": ["dock airlines"],
+      "properties": {
+        "about": "DOCK is an airlines company.",
+        "category": "Airlines",
+        "created": "2025"
+      }
+    },
+    "dtv": {
+      "aliases": ["dtv channel"],
+      "properties": {
+        "about": "DTV is a channel company.",
+        "category": "Channel",
+        "created": "2025"
+      }
+    },
+    "eletc": {
+      "aliases": ["eletc company"],
+      "properties": {
+        "about": "Eletc is a power company.",
+        "category": "Power",
+        "created": "2021"
+      }
+    },
+    "eox": {
+      "aliases": ["eox company"],
+      "properties": {
+        "about": "EOX is an unknown type company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+    "eco club": {
+      "aliases": ["eco team"],
+      "properties": {
+        "about": "Eco Club is a team company.",
+        "category": "Team",
+        "created": "2025"
+      }
+    },
+    "esm airlines": {
+      "aliases": ["esm airline"],
+      "properties": {
+        "about": "ESM Airlines is an airlines company.",
+        "category": "Airlines",
+        "created": "2022",
+        "owner":"MGPLC"
+      }
+    },
+    "fc studio": {
+      "aliases": ["fc comics"],
+      "properties": {
+        "about": "FC Studio is a comic company.",
+        "category": "Comic",
+        "created": "2023"
+      }
+    },
+    "fox": {
+      "aliases": ["fox company"],
+      "properties": {
+        "about": "FOX is an unknown type company.",
+        "category": "Unknown",
+        "created": "2024"
+      }
+    },
+    "gome": {
+      "aliases": ["gome company"],
+      "properties": {
+        "about": "GOME is a mobile parts company.",
+        "category": "Mobile Parts",
+        "created": "2024"
+      }
+    },
+    "gk industries": {
+      "aliases": ["gk industres"],
+      "properties": {
+        "about": "GK Industries is an oil and gas company.",
+        "category": "Oil and Gas",
+        "created": "2023"
+      }
+    },
     
-    <div class="search-container-row">
-        <div class="search-box">
-            <form onsubmit="event.preventDefault(); handleGlobalSearch();">
-                <input id="qInput" type="text" class="search-input" placeholder="Search on M Search">
-            </form>
-        </div>
+     "post": {
+      "aliases": ["post company"],
+      "properties": {
+        "about": "Post is a company.",
+        "category": "Post Company",
+        "created": "2021"
+      }
+    },
+
+    "pxo": {
+      "aliases": ["pxo"],
+      "properties": {
+        "about": "PXO is a car company.",
+        "category": "Car Company",
+        "created": "2021"
+      }
+    },
+
+    "proo": {
+      "aliases": ["proo"],
+      "properties": {
+        "about": "PROO is a car company.",
+        "category": "Car Company",
+        "created": "2021"
+      }
+    },
+
+    "rc": {
+      "aliases": ["rc"],
+      "properties": {
+        "about": "RC is a car company.",
+        "category": "Car Company",
+        "created": "2020"
+      }
+    },
+
+    "rvo": {
+      "aliases": ["rvo"],
+      "properties": {
+        "about": "RVO is a bike company.",
+        "category": "Bike Company",
+        "created": "2021"
+      }
+    },
+
+    "rock sten": {
+      "aliases": ["rock sten"],
+      "properties": {
+        "about": "Rock STEN is a soda company.",
+        "category": "Soda Company",
+        "created": "2025"
+      }
+    },
+
+    "rab": {
+      "aliases": ["rab"],
+      "properties": {
+        "about": "RAB is a company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+
+    "std soda": {
+      "aliases": ["std soda"],
+      "properties": {
+        "about": "STD Soda is a soda company.",
+        "category": "Soda Company",
+        "created": "2024"
+      }
+    },
+
+    "ssb": {
+      "aliases": ["ssb"],
+      "properties": {
+        "about": "SSB is a baking company.",
+        "full_name":"STATE SO BANK",
+        "category": "Baking Company",
+        "created": "2022"
+      }
+    },
+
+    "super m": {
+      "aliases": ["super m"],
+      "properties": {
+        "about": "SUPER M is a shopping company.",
+        "category": "Shopping Company",
+        "created": "2022"
+      }
+    },
+
+    "sory": {
+      "aliases": ["sory"],
+      "properties": {
+        "about": "SORY is a shopping company.",
+        "category": "Shopping Company",
+        "created": "2022"
+      }
+    },
+
+    "snow": {
+      "aliases": ["snow"],
+      "properties": {
+        "about": "Snow is a company.",
+        "category": "Unknown",
+        "created": "2021"
+      }
+    },
+
+    "ster": {
+      "aliases": ["ster"],
+      "properties": {
+        "about": "STER is a company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+
+    "vox": {
+      "aliases": ["vox"],
+      "properties": {
+        "about": "VOX is a company.",
+        "category": "Unknown",
+        "created": "2024"
+      }
+    },
+
+    "vic": {
+      "aliases": ["vic"],
+      "properties": {
+        "about": "VIC is a memory company.",
+        "category": "Memory Company",
+        "created": "2021"
+      }
+    },
+
+    "vol": {
+      "aliases": ["vol"],
+      "properties": {
+        "about": "VOL is a car company.",
+        "category": "Car Company",
+        "created": "2021"
+      }
+    },
+
+    "vit": {
+      "aliases": ["vit"],
+      "properties": {
+        "about": "VIT is a company.",
+        "category": "Unknown",
+        "created": "2022"
+      }
+    },
+
+    "ws company": {
+      "aliases": ["ws"],
+      "properties": {
+        "about": "WS is a channel company.",
+        "category": "Channel Company",
+        "created": "2025"
+      }
+    },
+
+    "x car": {
+      "aliases": ["x car"],
+      "properties": {
+        "about": "X CAR is a car company.",
+        "category": "Car Company",
+        "created": "2021"
+      }
+    },
+
+    "xot": {
+      "aliases": ["xot"],
+      "properties": {
+        "about": "XOT is a racing company.",
+        "category": "Racing Company",
+        "created": "Unknown"
+      }
+    },
+
+    "xfo": {
+      "aliases": ["xfo"],
+      "properties": {
+        "about": "XFO is a company.",
+        "category": "Unknown",
+        "created": "2023"
+      }
+    },
+
+    "x news": {
+      "aliases": ["x news"],
+      "properties": {
+        "about": "X NEWS is a news company.",
+        "category": "News Company",
+        "created": "2021"
+      }
+    },
+
+    "m desh": {
+      "aliases": ["mdesh"],
+      "properties": {
+        "about": "M Desh is a country.",
+        "category": "Country",
+        "capital": "MCity",
+        "continent":"M Continent"
+      }
+    },
+
+    "ron desh": {
+      "aliases": ["ron desh"],
+      "properties": {
+        "about": "Ron Desh is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"Ron Continent"
+      }
+    },
+
+    "i desh": {
+      "aliases": ["i desh"],
+      "properties": {
+        "about": "I Desh is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "x desh": {
+      "aliases": ["x desh"],
+      "properties": {
+        "about": "X Desh is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "e": {
+      "aliases": ["e"],
+      "properties": {
+        "about": "E is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "kot": {
+      "aliases": ["kot"],
+      "properties": {
+        "about": "Kot is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+  
+      }
+    },
+
+    "bc": {
+      "aliases": ["bc"],
+      "properties": {
+        "about": "BC is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "p desh": {
+      "aliases": ["p desh"],
+      "properties": {
+        "about": "P Desh is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
+
+    "snm": {
+      "aliases": ["snm"],
+      "properties": {
+        "about": "SNM is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
         
-        <div class="menu-trigger" onclick="openMenu()">&#9776;</div>
-    </div>
-</header>
+      }
+    },
 
-    <div id="sideMenu">
-        <div class="menu-header">
-            <span style="font-weight:bold; color:var(--blue);">MENU</span>
-            <span onclick="closeMenu()" style="cursor:pointer; font-size:26px;">&times;</span>
-        </div>
-        <div id="mainLinks">
-            <div class="menu-item" onclick="toggleTheme()"> Switch Theme Mode</div>
-            <div class="menu-item" onclick="showPane('devPane')"> Developer</div>
-            <div class="menu-item" onclick="showPane('legalPane')">Privacy & Legal Policy</div>
-            <div class="menu-item" onclick="showPane('historyPane')"> Search History</div>
-            <div class="menu-item" onclick="showPane('notePane')">Notes</div>
-        </div>
-        
-        <div id="historyPane" class="pane">
-            <div id="historyList"></div>
-            <button onclick="clearHistory()" style="margin-top:15px; width:100%; padding:10px; background:#ea4335; color:white; border:none; border-radius:5px; cursor:pointer;">Clear History</button>
-            <p onclick="backToMain()" style="text-align:center; color:var(--blue); cursor:pointer; margin-top:20px;">Back</p>
-        </div>
-        <div id="devPane" class="pane" style="text-align:center;">
-    <h3 style="color:var(--blue);">Developer Information</h3>
-    <p>Developed & Maintained by:</p>
-    <h2 style="margin:5px 0;">M.H (Mehdi Hasan)</h2>
-    <p style="font-size:14px; opacity:0.8;">Founder & Ceo of M search</p>
-    <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
-    <p style="font-size:12px;">M Search Project started in 2023.</p>
-    <p onclick="backToMain()" style="color:var(--blue); cursor:pointer; margin-top:20px;">Back</p>
-        </div>
-        <div id="legalPane" class="pane">
-    <h3 style="color:var(--blue); border-bottom:1px solid #333; padding-bottom:10px;">Legal & Privacy</h3>
-    
-    <div style="font-size:12px; line-height:1.6; color:#bdc1c6;">
-        <h4 style="color:white; margin-bottom:5px;">1. Non-Affiliation Disclaimer</h4>
-        <p>M Search is an independent aggregator developed by <b>Mehdi Hasan</b>. It is NOT affiliated with Google, Bing, or any other search corporation.</p>
+    "olo": {
+      "aliases": ["olo"],
+      "properties": {
+        "about": "OLO is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
 
-        <h4 style="color:white; margin-top:15px; margin-bottom:5px;">2. Aggregator Policy (Safe Harbor)</h4>
-        <p>We do not host or own the search results. Data is fetched via public APIs from third-party sources (Wikipedia/DuckDuckGo). We are not responsible for external content.</p>
+    "anasa": {
+      "aliases": ["anasa"],
+      "properties": {
+        "about": "Anasa is a country.",
+        "category": "Country",
+        "capital": "Unknown",
+        "continent":"EA Continent"
+      }
+    },
 
-        <h4 style="color:white; margin-top:15px; margin-bottom:5px;">3. Copyright & Fair Use</h4>
-        <p>All trademarks and logos belong to their respective owners. We provide clear attribution for every result under 'Fair Use' principles.</p>
+    "mri": {
+      "aliases": ["mri"],
+      "properties": {
+        "about": "MRI is an international group.",
+        "category": "International Group",
+        "created": "2019",
+        "member": "11",
+        "leader": "M Desh, Ron Desh, I Desh",
+        "headquarter": "M Desh"
+      }
+    },
 
-    </div>
+    "mrc": {
+      "aliases": ["mrc"],
+      "properties": {
+        "about": "MRC is an international group.",
+        "category": "International Group",
+        "created": "2019",
+        "member": "11",
+        "leader": "M Desh, Ron Desh",
+        "headquarter": "EA Continent"
+      }
+    },
 
-    <p onclick="backToMain()" style="text-align:center; color:var(--blue); cursor:pointer; margin-top:20px; font-weight:bold;">Back to Menu</p>
-        </div>
+    "sos": {
+      "aliases": ["sos"],
+      "properties": {
+        "about": "SOS is an app system.",
+        "full_name": "Super Of System",
+        "category": "App System",
+        "created": "2024"
+      }
+    },
 
-        <div id="notePane" class="pane">
-            <textarea id="noteArea" placeholder="Write your task or notes..." oninput="saveNote()"></textarea>
-            <p onclick="backToMain()" style="text-align:center; color:var(--blue); cursor:pointer; margin-top:20px;">Back</p>
-        </div>
-    </div>
+    "red triangle system": {
+      "aliases": ["red triangle"],
+      "properties": {
+        "about": "Red Triangle is an app system.",
+        "category": "App System",
+        "created": "2024",
+        "owner":"SOS"
+      }
+    },
 
-    <div class="tabs">
-        <div id="tab-web" class="tab active" onclick="setTab('web')">All</div>
-        <div id="tab-ai" class="tab" onclick="setTab('ai')">AI Assistant</div>
-        <div id="tab-img" class="tab" onclick="setTab('images')">Images</div>
-        <div id="tab-vid" class="tab" onclick="setTab('videos')">Videos</div>
-    </div>
+    "toms": {
+      "aliases": ["technology of mobile"],
+      "properties": {
+        "about": "Technology of Mobile is a system.",
+        "category": "Mobile Technology System",
+        "created": "2014",
+        "owner":"T COMPUTER"
+      }
+    },
 
-    <main id="resultsArea">
-        <div id="homeView" style="text-align:center; margin-top:100px;">
-            <h1 style="color:#4285F4; font-size:50px;">M Search</h1>
-            <p> A professional web search for Global Web Results, Images, and Videos.</p>
-        </div>
+    "toc": {
+      "aliases": ["technology of company"],
+      "properties": {
+        "about": "Technology of Company is a system.",
+        "category": "Company System",
+        "created": "2021",
+        "owner":"T COMPUTER"
+      }
+    },
 
-        <div id="aiChatView">
-            <div id="chatMessages">
-                <div class="msg bot-msg">Hello! I am M AI.</div>
-            </div>
-            <div class="chat-input-container">
-                <input type="text" id="chatInput" placeholder="Message M AI..." onkeypress="if(event.key==='Enter') sendChatMessage()">
-                <button class="send-btn" onclick="sendChatMessage()">Ask</button>
-            </div>
-        </div>
+    "tos": {
+      "aliases": ["technology of system"],
+      "properties": {
+        "about": "Technology of System is a build system.",
+        "category": "Build System",
+        "created": "2021",
+        "owner":"T COMPUTER"
+      }
+    },
 
-        <div id="searchContent"></div>
-    </main>
-    
-<script>
-        /* AAPKA EXACT ORIGINAL LOGIC */
-        function handleGlobalSearch() {
-            const query = document.getElementById("qInput").value.trim();
-            if(!query) return;
-            saveToHistory(query);
-            setTab('web');
-            startSearch('web');
-        }
+    "greenai": {
+      "aliases": ["greenai"],
+      "properties": {
+        "about": "GREENAI is a data system.",
+        "category": "Data System",
+        "created": "2024",
+        "owner":"ICWRA"
+      }
+    },
 
-        function setTab(type) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            const tabId = 'tab-' + (type === 'web' ? 'web' : type === 'images' ? 'img' : type === 'videos' ? 'vid' : 'ai');
-            document.getElementById(tabId).classList.add('active');
-            
-            document.getElementById("homeView").style.display = "none";
-            const aiView = document.getElementById("aiChatView");
-            const searchContent = document.getElementById("searchContent");
+    "cwi": {
+      "aliases": ["cwi"],
+      "properties": {
+        "about": "CWI is a data system.",
+        "category": "Data System",
+        "created": "2025"
+      }
+    },
 
-            if(type === 'ai') {
-                aiView.style.display = "flex";
-                searchContent.style.display = "none";
-            } else {
-                aiView.style.display = "none";
-                searchContent.style.display = "block";
-                const query = document.getElementById("qInput").value.trim();
-                if(query) startSearch(type);
-            }
-        }
+    "msi": {
+      "aliases": ["msi"],
+      "properties": {
+        "about": "MSI is a data system.",
+        "category": "Data System",
+        "created": "2025",
+        "owner":"M Search"
+      }
+    },
 
-        async function sendChatMessage() {
-            const input = document.getElementById("chatInput");
-            const msg = input.value.trim();
-            if(!msg) return;
+    "circul spin vote system": {
+      "aliases": ["circul spin vote system","csvs"],
+      "properties": {
+        "about": "Circul Spin is a voting system.",
+        "category": "Vote System",
+        "created": "2025",
+        "owner":"ECMD"
+      }
+    }
 
-            const box = document.getElementById("chatMessages");
-            box.innerHTML += `<div class="msg user-msg">${msg}</div>`;
-            input.value = "";
-            box.scrollTop = box.scrollHeight;
+  },
 
-            const loadingId = "bot-" + Date.now();
-            box.innerHTML += `<div class="msg bot-msg" id="${loadingId}"><p class="loading-dots">Thinking</p></div>`;
-            
-            try {
-                const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(msg)}`);
-                const data = await res.json();
-                document.getElementById(loadingId).innerHTML = data.extract || "I'm sorry, I don't have information on that yet.";
-            } catch {
-                document.getElementById(loadingId).innerHTML = "System Busy. Please try again.";
-            }
-            box.scrollTop = box.scrollHeight;
-        }
+  "intents": {
+    "about": ["about", "info", "information", "what is", "details"],
+    "founder": ["founder", "creator", "made by"],
+    "owner": ["owner", "owns", "owned by"],
+    "created": ["created", "create", "launch", "when created", "date", "create date", "founded"],
+    "category": ["category", "type", "kind"],
+    "company": ["companies", "company list", "apps list"],
+    "network": ["network", "value"],
+    "full_name": ["full name", "real name"],
+    "location": ["location", "located", "at"],
+    "capital": ["capital", "capital city"],
+    "member": ["member", "total member"],
+    "leader": ["leader"],
+    "under": ["under","taking"],
+    "continent": ["continent", "region", "area"],
+    "headquarter": ["headquarter", "hq"]
+  }
+  }
 
-        async function startSearch(type) {
-            const query = document.getElementById("qInput").value.trim();
-            if(!query) return;
-            
-            document.title = query + " - M Search";
-            document.getElementById("homeView").style.display = "none";
-            const area = document.getElementById("searchContent");
-            area.innerHTML = `<div style="text-align:center; margin-top:50px;"><p class="loading-dots">Searching</p></div>`;
+let selectedQuestion="";
+let historyList=[];
 
-            try {
-                if (type === 'web') {
-                    const [wikiData, ddgData] = await Promise.allSettled([
-                        fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&origin=*`).then(r => r.json()),
-                        fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1`).then(r => r.json())
-                    ]);
+/* 🔥 SMART SEARCH FUNCTION */
+function getSmartAnswer(q){
 
-                    let html = `<p style="color:#9aa0a6; font-size:13px; margin-bottom:20px;">"${query}"</p>`;
-                    if (wikiData.status === 'fulfilled' && wikiData.value.query) {
-                        wikiData.value.query.search.slice(0, 3).forEach(item => {
-                            html += `<div class="res-item">
-                                <span class="res-url">https://en.wikipedia.org/wiki/${item.title}</span>
-                                <a href="https://en.wikipedia.org/wiki/${item.title}" target="_blank" class="res-title"><span class="badge badge-ref">REF</span>${item.title}</a>
-                                <p class="res-snippet">${item.snippet}...</p>
-                            </div>`;
-                        });
-                    }
-                    if (ddgData.status === 'fulfilled' && ddgData.value.RelatedTopics) {
-                        ddgData.value.RelatedTopics.forEach(topic => {
-                            if (topic.Text && topic.FirstURL) {
-                                html += `<div class="res-item">
-                                    <span class="res-url">${topic.FirstURL}</span>
-                                    <a href="${topic.FirstURL}" target="_blank" class="res-title"><span class="badge badge-web">WEB</span>${topic.Text.split(' - ')[0]}</a>
-                                    <p class="res-snippet">${topic.Text}</p>
-                                </div>`;
-                            }
-                        });
-                    }
-                    area.innerHTML = html || "<p style='text-align:center;'>Try a different keyword.</p>";
-                } 
-                else if (type === 'images') {
-                    const imgRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&generator=images&titles=${query}&prop=imageinfo&iiprop=url&format=json&origin=*`);
-                    const imgData = await imgRes.json();
-                    let html = `<div class="image-grid">`;
-                    if (imgData.query && imgData.query.pages) {
-                        Object.values(imgData.query.pages).forEach(img => {
-                            if(img.imageinfo) html += `<div class="img-card"><img src="${img.imageinfo[0].url}" loading="lazy"><p>${img.title.replace('File:', '')}</p></div>`;
-                        });
-                        html += `</div>`;
-                        area.innerHTML = html;
-                    }
-                }
-                else if (type === 'videos') {
-                    area.innerHTML = `
-                        <div class="video-item">
-                            <div class="video-thumb"><img src="https://www.youtube.com/favicon.ico" width="20"></div>
-                            <div>
-                                <a href="https://www.youtube.com/results?search_query=${query}" target="_blank" class="res-title">YouTube Results for ${query}</a>
-                                <p class="res-snippet">Find top video content and tutorials globally.</p>
-                            </div>
-                        </div>
-                        <div class="video-item">
-                            <div class="video-thumb">M</div>
-                            <div>
-                                <a href="https://www.bing.com/videos/search?q=${query}" target="_blank" class="res-title">Web Video Index</a>
-                                <p class="res-snippet">Verified streams from multiple web partners.</p>
-                            </div>
-                        </div>
-                    `;
-                }
-            } catch (e) {
-                area.innerHTML = "<p style='text-align:center; color:#ff4444;'>Index Busy. Re-trying node connection...</p>";
-                setTimeout(() => startSearch(type), 2000);
-            }
-        }
+q=q.toLowerCase().trim();
 
-        /* M STUDIO FUNCTIONS */
-        function openMenu() { document.getElementById("sideMenu").classList.add("active"); }
-        function closeMenu() { document.getElementById("sideMenu").classList.remove("active"); backToMain(); }
-        function toggleTheme() { document.body.classList.toggle("light-mode"); }
-        function showPane(id) {
-            document.getElementById("mainLinks").style.display = "none";
-            document.querySelectorAll(".pane").forEach(p => p.style.display = "none");
-            document.getElementById(id).style.display = "flex";
-            if(id === 'historyPane') updateHistoryList();
-        }
-        function backToMain() {
-            document.getElementById("mainLinks").style.display = "block";
-            document.querySelectorAll(".pane").forEach(p => p.style.display = "none");
-        }
-        function saveToHistory(q) {
-            let h = JSON.parse(localStorage.getItem("mHist") || "[]");
-            h = h.filter(x => x !== q); h.unshift(q);
-            localStorage.setItem("mHist", JSON.stringify(h.slice(0, 15)));
-        }
-        function updateHistoryList() {
-            const list = document.getElementById("historyList");
-            const h = JSON.parse(localStorage.getItem("mHist") || "[]");
-            list.innerHTML = h.length ? "" : "<p style='opacity:0.5; text-align:center;'>History is empty</p>";
-            h.forEach(q => {
-                const d = document.createElement("div"); d.className = "history-entry"; d.innerText = q;
-                d.onclick = () => { document.getElementById("qInput").value = q; handleGlobalSearch(); closeMenu(); };
-                list.appendChild(d);
-            });
-        }
-        function clearHistory() { localStorage.removeItem("mHist"); updateHistoryList(); }
-        function saveNote() { localStorage.setItem("mNote", document.getElementById("noteArea").value); }
+let entities=smartData.entities;
+let intents=smartData.intents;
 
-        window.onload = () => {
-            const params = new URLSearchParams(window.location.search);
-            if(params.get('q')) {
-                document.getElementById("qInput").value = params.get('q');
-                handleGlobalSearch();
-            }
-        };
-    </script>
-</body>
-</html>
+for(let entityName in entities){
+
+let entity=entities[entityName];
+let names=[entityName];
+
+if(entity.aliases){
+names=names.concat(entity.aliases);
+}
+
+for(let name of names){
+
+if(q.includes(name.toLowerCase())){
+
+let props=entity.properties || {};
+
+for(let intentName in intents){
+
+let keywords=intents[intentName];
+
+for(let word of keywords){
+
+if(q.includes(word.toLowerCase())){
+if(props[intentName]){
+return props[intentName];
+}
+}
+
+}
+
+}
+
+return props.about || "Information not available";
+
+}
+
+}
+
+}
+
+return data[q] || "Answer not found";
+
+}
+
+/* ORIGINAL FUNCTIONS — UNCHANGED */
+
+function goPage(n){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+document.getElementById("page"+n).classList.add("show");
+}
+
+function search(){
+
+let q=document.getElementById("query").value.toLowerCase();
+
+if(q==="") return;
+
+selectedQuestion=q;
+
+historyList.unshift(q);
+
+saveHistory();
+
+document.getElementById("answer").innerText=getSmartAnswer(q);
+
+goPage(3);
+
+}
+
+function goBack(){
+goPage(2);
+document.getElementById("query").value=selectedQuestion;
+showSuggestions();
+}
+function showSuggestions() {
+let q = document.getElementById("query").value.toLowerCase();
+let h = document.getElementById("history");
+h.innerHTML = "";
+
+if (q === "") return;  
+
+// 1️⃣ Suggestions from original data  
+for (let key in data) {  
+    if (key.includes(q)) {  
+        let d = document.createElement("div");  
+        d.className = "history-item";  
+        d.innerText = key;  
+        d.onclick = function() {  
+            document.getElementById("query").value = key;  
+        };  
+        h.appendChild(d);  
+    }  
+}  
+
+// 2️⃣ Suggestions from smartData entities  
+let entities = smartData.entities;  
+for (let entityName in entities) {  
+    let entity = entities[entityName];  
+    let names = [entityName];  
+    if (entity.aliases) names = names.concat(entity.aliases);  
+
+    for (let name of names) {  
+        if (name.toLowerCase().includes(q)) {  
+            let d = document.createElement("div");  
+            d.className = "history-item";  
+            d.innerText = name;  
+            d.onclick = function() {  
+                document.getElementById("query").value = name;  
+            };  
+            h.appendChild(d);  
+        }  
+    }  
+}
+
+}
+
+function toggleMenu(){
+let m=document.getElementById("menuBox");
+m.style.display=m.style.display==="block"?"none":"block";
+}
+
+function toggleMode(){
+document.body.classList.toggle("light");
+}
+
+function openHistory(){
+document.getElementById("historyPage").style.display="block";
+renderFullHistory();
+}
+
+function closeHistory(){
+document.getElementById("historyPage").style.display="none";
+}
+
+function saveHistory(){
+localStorage.setItem("m_history",JSON.stringify(historyList));
+}
+
+function loadHistory(){
+let h=localStorage.getItem("m_history");
+if(h) historyList=JSON.parse(h);
+}
+
+function renderFullHistory(){
+let box=document.getElementById("fullHistoryContainer");
+box.innerHTML="";
+historyList.forEach(item=>{
+let d=document.createElement("div");
+d.className="history-item";
+d.innerText=item;
+box.appendChild(d);
+});
+}
+function clearHistory(){
+historyList=[];
+saveHistory();
+renderFullHistory();
+}
+
+loadHistory();
+
+setTimeout(()=>{
+document.getElementById("splash").style.display="none";
+},2000);
+
+</script>  </body>
+
+</html>        
