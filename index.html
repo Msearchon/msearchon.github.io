@@ -1241,6 +1241,101 @@ color:#1b1f24;
         "category": "Vote System",
         "created": "2025",
         "owner":"ECMD"
-      }
+                    } 
+            }
+        }
+    };
+
+    const input = document.getElementById('query');
+    const suggBox = document.getElementById('suggBox');
+    const resBox = document.getElementById('resultBox');
+
+    /* 2. ENGINE LOGIC */
+    input.addEventListener('input', () => {
+        let q = input.value.toLowerCase().trim();
+        if (q.length > 0) {
+            renderSuggestions(q);
+            processSearch(q);
+        } else {
+            suggBox.style.display = 'none';
+            resBox.style.display = 'none';
+        }
+    });
+
+    function processSearch(q) {
+        let found = false;
+        // Sort keys by length to prevent partial match errors
+        let keys = Object.keys(smartData.entities).sort((a,b) => b.length - a.length);
+
+        for (let key of keys) {
+            let entity = smartData.entities[key];
+            let names = [key, ...entity.aliases];
+
+            // Match exact entity name or name followed by space (for property search)
+            let match = names.find(n => q === n || q.startsWith(n + " "));
+
+            if (match) {
+                let props = entity.properties;
+                let label = "Entity Overview";
+                let content = props.about;
+
+                // Extract requested property
+                let remaining = q.replace(match, "").trim();
+                if (remaining !== "") {
+                    for (let p in props) {
+                        if (remaining.includes(p)) {
+                            label = p.toUpperCase() + " DATA";
+                            content = props[p];
+                            break;
+                        }
+                    }
+                }
+
+                updateUI(label, key.toUpperCase(), content);
+                found = true;
+                break;
+            }
+        }
+        if (!found) resBox.style.display = 'none';
     }
+
+    /* 3. SUGGESTION SYSTEM */
+    function renderSuggestions(q) {
+        let matches = Object.keys(smartData.entities).filter(k => k.includes(q));
+        if (matches.length > 0) {
+            suggBox.innerHTML = matches.map(m => `
+                <div class="s-item" onclick="selectSuggestion('${m}')">
+                    ${m.toUpperCase()}
+                </div>
+            `).join('');
+            suggBox.style.display = 'block';
+        } else {
+            suggBox.style.display = 'none';
+        }
+    }
+
+    function selectSuggestion(m) {
+        input.value = m;
+        suggBox.style.display = 'none';
+        processSearch(m);
+    }
+
+    function updateUI(label, title, body) {
+        document.getElementById('resType').innerText = label;
+        document.getElementById('resTitle').innerText = title;
+        document.getElementById('resBody').innerText = body;
+        resBox.style.display = 'block';
+    }
+
+    // Close suggestions on click outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-wrapper')) {
+            suggBox.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
+    
 
